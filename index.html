@@ -67,136 +67,102 @@
   </head>
 
   <body>
-    <div class="flex-vertical">
-      <a id="download-link" style="display: none"></a>
-      <input style="display: none" type="file" id="upload-button" value="Select Files" />
-      <div class="nav-1">
-        <button id="export-button" class="menu-item">Export JSON</button>
-        <button id="import-button" class="menu-item" value="tes">Import JSON</button>
-        <button id="reset-button" class="menu-item" value="tes">Reset</button>
-        <div>
-          <div class="feature-text">Model:</div>
-          <div>
-            <select name="menu-features" id="menu-features">
-              <option value="0">Cube</option>
-              <option value="1">Pyramid</option>
-              <option value="2">Thorus</option>
-            </select>
+    <div class="row">
+      <div class="column">
+          <button id="showHelp" style="width: 25%">HELP MENU</button>
+          <div id="modal" style="display: none">
+              <button id="closeHelp" style="width: 25%">CLOSE HELP MENU</button>
+              <h2>HELP</h2>
+              
           </div>
-        </div>
-        <div class="button-container">
-          <div class="feature-text">View:</div>
-          <div>
-            <select name="menu-features" id="menu-features-view">
-              <option value="0">Perspective</option>
-              <option value="1">Orthographic</option>
-              <option value="2">Oblique</option>
-            </select>
+          <div class="canvas-wrapper">
+            <canvas id="webgl"> Oops ... your browser doesn't support the HTML5 canvas element </canvas>
           </div>
-        </div>
+          <div style="padding:10px; background-color:#bbb;">
+              <label> Load Model: </label>
+              <button id="LoadButton">Load Button</button>
+              <br>
+              <p>Current model: <span id="currModel">None</span></p>
+              <button id="setDefaultView">Default View</button>
+          </div>
       </div>
-      <div class="canvas-wrapper">
-        <canvas id="webgl"> Oops ... your browser doesn't support the HTML5 canvas element </canvas>
+      <div class="column" style="padding:20px;">
+          <div>
+              <h1>Articulate Model</h1>
+          </div>
+
+          <br>
+          <div style="padding:10px; background-color:#bbb;">
+              <label for="jenisProyeksi">Jenis Proyeksi</label>
+              <select name="jenisProyeksi" id="jenisProyeksi">
+                  <option disabled selected value="default">Select jenis proyeksi</option>
+                  <option value="orthographic">orthographic</option>
+                  <option value="oblique">oblique</option>
+                  <option value="perspective">perspective</option>
+              </select>
+              <br>
+              <br>
+              <div>
+                  <label>Rotasi X: </label>
+                  <input type="range" min="1" max="100" value="50" step= 0.01 class="slider" id="rotasiX">
+                  <label>Rotasi Y: </label>
+                  <input type="range" min="1" max="100" value="50" step= 0.01 class="slider" id="rotasiY">
+                  <label>Rotasi Z: </label>
+                  <input type="range" min="1" max="100" value="50" step= 0.01 class="slider" id="rotasiZ">
+
+              </div>
+              <div>
+                  <label>Translasi X:</label>
+                  <input type="range" min="1" max="100" value="50" class="slider" id="translasiX">
+                  <label>Translasi Y:</label>
+                  <input type="range" min="1" max="100" value="50" class="slider" id="translasiY">
+                  <label>Translasi Z:</label>
+                  <input type="range" min="1" max="100" value="50" class="slider" id="translasiZ">
+              </div>
+              <div>
+                  <label>Scaling X:</label>
+                  <input type="range" min="-15" max="15" step= 0.01 value="1" class="slider" id="scalingX">
+                  <label>Scaling Y:</label>
+                  <input type="range" min="-15" max="15" step= 0.01 value="1" class="slider" id="scalingY">
+                  <label>Scaling Z:</label>
+                  <input type="range" min="-15" max="15" step= 0.01 value="1" class="slider" id="scalingZ">
+              </div>
+              <div>
+                  <label>Camera view radius</label>
+                  <input type="range" min="0" max="100" value="10" class="slider" id="cameraViewRad">
+                  <div>
+                      <label>Camera rotation X:</label>
+                      <input type="range" min="-360" max="360" value="0" class="slider" id="cameraRotationX">
+                      <label>Camera rotation Y:</label>
+                      <input type="range" min="-360" max="360" value="0" class="slider" id="cameraRotationY">
+                      <label>Camera rotation Z:</label>
+                      <input type="range" min="-360" max="360" value="0" class="slider" id="cameraRotationZ">
+                  </div> <br>
+                  <div>
+                      <label>Shading</label>
+                      <input type="checkbox" id="shaderStatus" name="shaderStatus">
+                  </div>
+
+              </div>
+              
+          </div>
       </div>
 
-      <div class="slidecontainer">
-        <div class="slider-text">Color</div>
-        <input type="color" id="colorpicker" value="#ff0000" />
-        <div class="slider-text">Shade</div>
-        <input type="checkbox" id="shading" />
-        <div class="slider-text">Rotation</div>
-        <div class="slide-group">
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="rotate-x" />
-            <p>Rotate X</p>
-          </div>
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="rotate-y" />
-            <p>Rotate Y</p>
-          </div>
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="rotate-z" />
-            <p>Rotate Z</p>
-          </div>
-        </div>
-        <div class="slider-text">Translation</div>
-        <div class="slide-group">
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="translate-x" />
-            <p>Translate X</p>
-          </div>
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="translate-y" />
-            <p>Translate Y</p>
-          </div>
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="translate-z" />
-            <p>Translate Z</p>
-          </div>
-        </div>
-        <div class="slider-text">Scaling</div>
-        <div class="slide-group">
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="scale-x" />
-            <p>Scale X</p>
-          </div>
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="scale-y" />
-            <p>Scale Y</p>
-          </div>
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="scale-z" />
-            <p>Scale Z</p>
-          </div>
-        </div>
-        <div class="slider-text">Lighting</div>
-        <div class="slide-group">
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="light-x" />
-            <p>Light X</p>
-          </div>
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="light-y" />
-            <p>Light Y</p>
-          </div>
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="light-z" />
-            <p>Light Z</p>
-          </div>
-        </div>
-        <div class="slide-group slide-kamera">
-          <div class="slide-item">
-            <input type="range" min="0" max="360" value="50" class="slider" id="camera" />
-            <p>Camera</p>
-          </div>
-          <div class="slide-item">
-            <input type="range" min="5" max="40" value="10" class="slider" id="zoom" />
-            <p>Zoom</p>
-          </div>
-        </div>
-      </div>
-      <div class="help">
-        <h2>Help</h2>
-      </div>
-      <textarea class="textarea" rows="20" cols="135" readonly>
-        - Untuk memilih salah satu dari 3 objek hollow, silahkan memilih salah satu objek dalam pilihan Feature.
-        - Untuk dapat memilih bagaimana projeksi objek hollow tersebut, dapat mencek salah satu opsi dari: 
-              1. Orthographic : Pararel proyeksi, yang akan memproyeksi objek 3d ke dalam bentuk 2d.
-              2. Oblique      : Sama seperti orthographic, namun saat sudut lihat tidak pas 90 derajat.
-              3. Perspective  : Memproyeksi objek 3d tetap dalam 3d sehingga semakin jauh objek, semakin kecil objek tersebut.
-        - Untuk merubah warna objek, terdapat menu "Color". Pengguna dapat mengklik bagian kotak berwarna dan memilih warna. 
-          Setelah itu, cukup mengklik pada bagian model kembali.
-        - Untuk menambahkan efek shading, terdapat menu "Shading". Ceklist menu untuk menyalakan dan uncek untuk mematikan
-        - Untuk melakukan rotasi, dapat menggeser salah satu slider yang tersedia di menu "Rotation". 
-          Terdapat 3 jenis rotasi, yaitu terhadap sumbu x, sumbu y, dan sumbu z.
-        - Untuk melakukan translasi, dapat menggeser salah satu slider yang tersedia di menu "Translation". 
-          Terdapat 3 jenis translasi, yaitu terhadap sumbu x, sumbu y, dan sumbu z.
-        - Untuk melakukan skalar, dapat menggeser salah satu slider yang tersedia di menu "Scaling". 
-          Terdapat 3 jenis skalar, yaitu terhadap sumbu x, sumbu y, dan sumbu z.
-        - Untuk merubah posisi kamera, dapat menggeser slider di bawah menu "Camera".
-        - Untuk merubah persentase zoom, dapat menggeser slider di bawah menu "Zoom".
-      </textarea>
-    </div>
+      <script type="module" src="loader/shader.js"></script>
+      <script type="module" src="script/script.js"></script>
+      <script type="module" src="lib/lib.js"></script>
+      <script>
+          document.getElementById("showHelp").addEventListener("click", function () {
+              modal.style.display = "block";
+              showHelp.style.display = "none";
+          });
+
+          document.getElementById("closeHelp").addEventListener("click", function () {
+              console.log("masuk");
+              modal.style.display = "none";
+              showHelp.style.display = "block";
+          });
+      </script>
   </body>
   <script src="src/model/object.mjs"></script>
   <script src="src/model/cube.mjs"></script>
