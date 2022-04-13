@@ -1,5 +1,3 @@
-//const { mat4 } = glMatrix;
-
 var left = -1.0;
 var right = 1.0;
 var top = 1.0;
@@ -27,7 +25,6 @@ function toggleShade() {
     uniformLocations: {
       projectionMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
       modelViewMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uModelViewMatrix"),
-      worldMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uWorldMatrix"),
       normalMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uNormalMatrix"),
       directionalVector: modelGL.gl.getUniformLocation(shaderProgram, "directionalVector"),
     },
@@ -61,16 +58,12 @@ function init() {
       vertexPosition: modelGL.gl.getAttribLocation(shaderProgram, "aVertexPosition"),
       vertexColor: modelGL.gl.getAttribLocation(shaderProgram, "aVertexColor"),
       vertexNormal: modelGL.gl.getAttribLocation(shaderProgram, "aVertexNormal"),
-      //vertexTexCoord: modelGL.gl.getAttribLocation(shaderProgram, "texcoord"),
     },
     uniformLocations: {
       projectionMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
       modelViewMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uModelViewMatrix"),
-      worldMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uWorldMatrix"),
       normalMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uNormalMatrix"),
       directionalVector: modelGL.gl.getUniformLocation(shaderProgram, "directionalVector"),
-      // uniformColor: modelGL.gl.getUniformLocation(shaderProgram, "u_color"),
-      // reverseLightDirectionLocation: modelGL.gl.getUniformLocation(shaderProgram, "u_reverseLightDirection"),
     },
   };
 
@@ -365,7 +358,7 @@ function drawScene() {
   mat4.translate(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to modelGL.translate
-    [0.0, 0.0, -12],
+    [0.0, 0.0, -8],
   ); // amount to modelGL.translate
 
   {
@@ -398,10 +391,6 @@ function drawScene() {
 
   // Tell WebGL to use our program when drawing
   modelGL.gl.useProgram(modelGL.programInfo.program);
-  //var cameraMatrix;
-
-  // // Set the color to use
-  // modelGL.gl.uniform4fv(programInfo.uniformLocations.uniformColor, [0.2, 1, 0.2, 1]); // green
 
   // // set the light direction.
   modelGL.gl.uniform3fv(
@@ -453,7 +442,6 @@ function drawScene() {
   ); // amount to modelGL.translate
 
   // Compute a view projection matrix
-  //mat4.multiply(projectionMatrix, projectionMatrix, modelViewMatrix);
 
   mat4.rotate(
     normalMatrix, // dest matrix
@@ -477,7 +465,6 @@ function drawScene() {
   // Set the shader uniforms
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
-  modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.worldMatrix, false, wMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
 
   {

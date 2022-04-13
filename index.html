@@ -14,7 +14,6 @@
       //attribute vec2 texcoord;
 
       uniform mat4 uNormalMatrix;
-      uniform mat4 uWorldMatrix;
       uniform mat4 uModelViewMatrix;
       uniform mat4 uProjectionMatrix;
 
@@ -24,7 +23,7 @@
       uniform highp vec3 directionalVector;
       //varying vec3 v_normal;
       void main(void) {
-        gl_Position = uProjectionMatrix * uModelViewMatrix * uWorldMatrix * aVertexPosition;
+        gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
         vColor = aVertexColor;
         //v_normal = a_normal;
         gl_PointSize = 3.0;

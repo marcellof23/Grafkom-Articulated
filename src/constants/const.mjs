@@ -4,7 +4,7 @@ var menu_index_view = 0;
 
 var cubeRotation = 0.0;
 var PyramidNumVertices = 246;
-var CubeVertices = 360;
+var CubeVertices = 108;
 var NumVertices = 360;
 var donutNumVertices = 960;
 const cubeFace = 6;
