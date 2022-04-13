@@ -5,6 +5,16 @@ class ModelGL {
 
     this.cubePoints = [];
     this.cubeColors = [];
+
+    this.programInfo;
+    this.buffers;
+    this.rot;
+    this.trans;
+    this.scale;
+    this.light;
+
+    this.menuIdx;
+    this.menuViewIdx;
   }
 
   load_data(data) {}
