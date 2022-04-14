@@ -17,45 +17,6 @@ function generateCubeVertice(modelGL) {
   modelGL.cubeNormals = getNormals(positions);
 }
 
-var positionss = [],
-  colorss = [];
-
-var vertices = [
-  vec4(-0.5, -0.5, 0.5, 0.5),
-  vec4(-0.5, 0.5, 0.5, 0.5),
-  vec4(0.5, 0.5, 0.5, 0.5),
-  vec4(0.5, -0.5, 0.5, 0.5),
-  vec4(-0.5, -0.5, -0.5, 0.5),
-  vec4(-0.5, 0.5, -0.5, 0.5),
-  vec4(0.5, 0.5, -0.5, 0.5),
-  vec4(0.5, -0.5, -0.5, 0.5),
-];
-
-var vertexColors = [
-  [0.0, 0.0, 0.0, 0.5], // black
-  [0.5, 0.0, 0.0, 0.5], // red
-  [0.5, 0.5, 0.0, 0.5], // yellow
-  [0.0, 0.5, 0.0, 0.5], // green
-  [0.0, 0.0, 0.5, 0.5], // blue
-  [0.5, 0.0, 0.5, 0.5], // magenta
-  [0.0, 0.5, 0.5, 0.5], // cyan
-  [0.5, 0.5, 0.5, 0.5], // white
-];
-
-function quads(a, b, c, d) {
-  var indices = [a, b, c, a, c, d];
-  for (var i = 0; i < indices.length; ++i) {
-    positionss.push(vertices[indices[i]]);
-    console.log(vertices[indices[i]]);
-    console.log(indices[i]);
-    modelGL.cubePoints.push(indices[i]);
-    //colors.push( vertexColors[indices[i]] );
-
-    // for solid colored faces use
-    modelGL.cubeColors.push(vertexColors[a]);
-  }
-}
-
 function cube() {
   quads(1, 0, 3, 2);
   quads(2, 3, 7, 6);

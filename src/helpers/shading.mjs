@@ -1,5 +1,5 @@
 function shading(modelMatrix, viewMatrix) {
-  var temp = multiply(modelMatrix, viewMatrix);
+  var temp = mult(modelMatrix, viewMatrix);
   var mvMatrix = [
     [0, 0, 0, 0],
     [0, 0, 0, 0],
@@ -14,17 +14,18 @@ function shading(modelMatrix, viewMatrix) {
     }
   }
 
-  normalMatrixes = math.inv(mvMatrix);
+  mat4.invert(normalMatrixes, flatten(mvMatrix));
+  mat4.transpose(normalMatrixes, normalMatrixes);
 
-  normalMatrixes = math.transpose(normalMatrixes);
   var normalVector = [];
   for (var i = 0; i < 4; i++) {
     for (var j = 0; j < 4; j++) {
-      normalVector.push(normalMatrixes[i][j]);
+      normalVector.push(normalMatrixes[i * 4 + j]);
     }
   }
-
+  console.log(normalVector);
   gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalVector);
+  console.log(modelGL.programInfo);
 }
 
 function updateShading() {
@@ -33,7 +34,6 @@ function updateShading() {
 }
 
 function checkShading(modelMatrix, viewMatrix) {
-  var isShading = true;
   if (isShading) {
     shading(modelMatrix, viewMatrix);
   } else {

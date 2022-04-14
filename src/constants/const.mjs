@@ -24,3 +24,6 @@ var modelViewMatrixLoc;
 var projectionMatrix;
 var modelViewMatrix;
 var normalMatrix;
+var viewMatrix;
+
+var isShading = false;

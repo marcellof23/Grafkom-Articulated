@@ -29,6 +29,7 @@ function toggleShade() {
     uniformLocations: {
       projectionMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
       modelViewMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uModelViewMatrix"),
+      viewMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uViewMatrix"),
       normalMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uNormalMatrix"),
       directionalVector: modelGL.gl.getUniformLocation(shaderProgram, "directionalVector"),
     },
@@ -66,6 +67,7 @@ function init() {
     uniformLocations: {
       projectionMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
       modelViewMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uModelViewMatrix"),
+      viewMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uViewMatrix"),
       normalMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uNormalMatrix"),
       directionalVector: modelGL.gl.getUniformLocation(shaderProgram, "directionalVector"),
     },
@@ -73,6 +75,7 @@ function init() {
 
   modelViewMatrixLoc = modelGL.gl.getUniformLocation(shaderProgram, "uModelViewMatrix");
 
+  viewMatrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -2, 1];
   modelGL.programInfo = programInfo;
 
   modelGL.aspect = modelGL.gl.canvas.clientWidth / modelGL.gl.canvas.clientHeight;
@@ -344,8 +347,8 @@ function drawScene() {
     mat4.ortho(projectionMatrix, -1, 1, -1, 1, -1.5, 20);
   }
 
-  mat4.invert(normalMatrix, modelViewMatrix);
-  mat4.transpose(normalMatrix, normalMatrix);
+  // mat4.invert(normalMatrix, modelViewMatrix);
+  // mat4.transpose(normalMatrix, normalMatrix);
 
   if (!modelGL.rot) {
     modelGL.rot = { x: 0, y: 0, z: 0 };
@@ -470,6 +473,7 @@ function drawScene() {
   traverse(torsoId, arrayToMat4(modelViewMatrix), projectionMatrix, normalMatrix);
 
   // Set the shader uniforms
+  modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.viewMatrix, false, viewMatrix);
   //modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
   //modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
   //modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
@@ -495,5 +499,8 @@ function main() {
 window.onload = main;
 
 document.getElementById("shading").addEventListener("change", function (event) {
-  toggleShade();
+  isShading = !isShading;
+  modelGL.buffers = initBuffers(modelGL.gl, modelGL.programInfo);
+  drawScene();
+  //toggleShade();
 });

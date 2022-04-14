@@ -34,8 +34,6 @@ var angle = 0;
 
 var theta = [0, 0, 0, 0, 0, 0, 180, 0, 180, 0, 0];
 
-var numVertices = 24;
-
 var stack = [];
 
 var figure = [];
@@ -43,6 +41,8 @@ var figure = [];
 var modelViewMatrices;
 var projectionMatrices;
 var normalMatrices;
+
+var view_matrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -2, 1];
 
 for (var i = 0; i < numNodes; i++) figure[i] = createNode(null, null, null, null);
 
@@ -154,8 +154,8 @@ function torso() {
   instanceMatrix = mult(instanceMatrix, scale4(torsoWidth, torsoHeight, torsoWidth));
   gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
-  modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
-  //checkShading(instanceMatrix, view_matrix);
+  //modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
+  checkShading(flatten(instanceMatrix), viewMatrix);
   for (var i = 0; i < 6; i++) gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
 }
 
