@@ -16,16 +16,6 @@ function generateCubeVertice(modelGL) {
   }
   modelGL.cubeNormals = getNormals(positions);
 }
-
-function cube() {
-  quads(1, 0, 3, 2);
-  quads(2, 3, 7, 6);
-  quads(3, 0, 4, 7);
-  quads(6, 5, 1, 2);
-  quads(4, 5, 6, 7);
-  quads(5, 4, 0, 1);
-}
-
 // prettier-ignore
 var positions = [
   // Front face

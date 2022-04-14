@@ -14,9 +14,6 @@ projectionMatrix = mat4.create();
 modelViewMatrix = mat4.create();
 normalMatrix = mat4.create();
 
-var headHeight = 3.5;
-var headWidth = 1.5;
-
 function toggleShade() {
   const shaderProgram = initShaders(modelGL.gl, "vertex-shader", "fragment-shader", "fragment-shader-no-shade");
   modelGL.programInfo = {
@@ -80,13 +77,13 @@ function init() {
 
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
+  modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.viewMatrix, false, viewMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
 
   modelGL.aspect = modelGL.gl.canvas.clientWidth / modelGL.gl.canvas.clientHeight;
   modelGL.ratio = modelGL.gl.canvas.width / modelGL.gl.canvas.height;
 
   if (menu_index == 0) {
-    //cube();
     generateCubeVertice(modelGL);
   } else if (menu_index == 1) {
     generatePyramidVertice(modelGL);
@@ -561,6 +558,6 @@ window.onload = main;
 document.getElementById("shading").addEventListener("change", function (event) {
   isShading = !isShading;
   modelGL.buffers = initBuffers(modelGL.gl, modelGL.programInfo);
-  drawScene();
+  //drawScene();
   //toggleShade();
 });

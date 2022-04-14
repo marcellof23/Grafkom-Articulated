@@ -1,4 +1,5 @@
 function shading(modelMatrix, viewMatrix) {
+  console.log(modelMatrix, viewMatrix);
   var temp = mult(modelMatrix, viewMatrix);
   var mvMatrix = [
     [0, 0, 0, 0],
@@ -25,6 +26,7 @@ function shading(modelMatrix, viewMatrix) {
   }
   console.log(normalVector);
   gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalVector);
+
   console.log(modelGL.programInfo);
 }
 

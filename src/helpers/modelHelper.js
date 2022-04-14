@@ -34,6 +34,8 @@ var angle = 0;
 
 var theta = [0, 0, 0, 0, 0, 0, 180, 0, 180, 0, 0];
 
+var numVertices = 24;
+
 var stack = [];
 
 var figure = [];
@@ -41,8 +43,6 @@ var figure = [];
 var modelViewMatrices;
 var projectionMatrices;
 var normalMatrices;
-
-var view_matrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -2, 1];
 
 for (var i = 0; i < numNodes; i++) figure[i] = createNode(null, null, null, null);
 
@@ -98,13 +98,13 @@ function initNodes(Id) {
       break;
 
     case leftUpperLegId:
-      m = translate(-(torsoWidth + upperLegWidth), 0.1 * upperLegHeight, 0.0);
+      m = translate(-(torsoWidth + upperLegWidth) + 0.75, 0.1 * upperLegHeight, 0.0);
       m = mult(m, rotate(theta[leftUpperLegId], 1, 0, 0));
       figure[leftUpperLegId] = createNode(m, leftUpperLeg, rightUpperLegId, leftLowerLegId);
       break;
 
     case rightUpperLegId:
-      m = translate(torsoWidth + upperLegWidth, 0.1 * upperLegHeight, 0.0);
+      m = translate(torsoWidth + upperLegWidth - 0.75, 0.1 * upperLegHeight, 0.0);
       m = mult(m, rotate(theta[rightUpperLegId], 1, 0, 0));
       figure[rightUpperLegId] = createNode(m, rightUpperLeg, null, rightLowerLegId);
       break;
