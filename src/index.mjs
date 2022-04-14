@@ -10,8 +10,9 @@ const fieldOfView = (45 * Math.PI) / 180; // in radians
 const zNear = 1;
 const zFar = 2000.0;
 
-var projectionMatrix = mat4.create();
-var modelViewMatrix = mat4.create();
+projectionMatrix = mat4.create();
+modelViewMatrix = mat4.create();
+normalMatrix = mat4.create();
 
 var headHeight = 3.5;
 var headWidth = 1.5;
@@ -343,7 +344,6 @@ function drawScene() {
     mat4.ortho(projectionMatrix, -1, 1, -1, 1, -1.5, 20);
   }
 
-  const normalMatrix = mat4.create();
   mat4.invert(normalMatrix, modelViewMatrix);
   mat4.transpose(normalMatrix, normalMatrix);
 
@@ -467,12 +467,12 @@ function drawScene() {
     [1, 0, 0],
   );
 
-  traverse(torsoId, arrayToMat4(modelViewMatrix), modelGL.gl);
+  traverse(torsoId, arrayToMat4(modelViewMatrix), projectionMatrix, normalMatrix);
 
   // Set the shader uniforms
-  modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
-  modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
-  modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
+  //modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
+  //modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
+  //modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
 
   {
     if (menu_index == 0) {

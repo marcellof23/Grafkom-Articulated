@@ -20,3 +20,7 @@ const up = vec3(0.0, 1.0, 0.0);
 var eye;
 
 var modelViewMatrixLoc;
+
+var projectionMatrix;
+var modelViewMatrix;
+var normalMatrix;
