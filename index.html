@@ -24,7 +24,8 @@
       uniform highp vec3 directionalVector;
       //varying vec3 v_normal;
       void main(void) {
-        gl_Position = uProjectionMatrix * uModelViewMatrix * uViewMatrix * aVertexPosition;
+        //gl_Position = uProjectionMatrix * uModelViewMatrix * uViewMatrix * aVertexPosition;
+        gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
         vColor = aVertexColor;
         gl_PointSize = 3.0;
         highp vec3 ambientLight = vec3(0.3, 0.3, 0.3);
@@ -86,143 +87,143 @@
       </div>
       <div class="canvas-wrapper">
         <canvas id="webgl"> Oops ... your browser doesn't support the HTML5 canvas element </canvas>
-      </div>
-
-      <div class="slidecontainer">
-        <div class="slider-text">Color</div>
-        <input type="color" id="colorpicker" value="#ff0000" />
-        <div class="slider-text">Shade</div>
-        <input type="checkbox" id="shading" />
-        <div class="slider-text">Rotation</div>
-        <div class="slide-group">
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="rotate-x" />
-            <p>Rotate X</p>
+        <div class="slidecontainer">
+          <div class="slider-text">Color</div>
+          <input type="color" id="colorpicker" value="#ff0000" />
+          <div class="slider-text">Shade</div>
+          <input type="checkbox" id="shading" />
+          <div class="slider-text">Rotation</div>
+          <div class="slide-group">
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="rotate-x" />
+              <p>Rotate X</p>
+            </div>
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="rotate-y" />
+              <p>Rotate Y</p>
+            </div>
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="rotate-z" />
+              <p>Rotate Z</p>
+            </div>
           </div>
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="rotate-y" />
-            <p>Rotate Y</p>
+          <div class="slider-text">Translation</div>
+          <div class="slide-group">
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="translate-x" />
+              <p>Translate X</p>
+            </div>
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="translate-y" />
+              <p>Translate Y</p>
+            </div>
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="translate-z" />
+              <p>Translate Z</p>
+            </div>
           </div>
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="rotate-z" />
-            <p>Rotate Z</p>
+          <div class="slider-text">Scaling</div>
+          <div class="slide-group">
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="scale-x" />
+              <p>Scale X</p>
+            </div>
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="scale-y" />
+              <p>Scale Y</p>
+            </div>
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="scale-z" />
+              <p>Scale Z</p>
+            </div>
+          </div>
+          <div class="slider-text">Lighting</div>
+          <div class="slide-group">
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="light-x" />
+              <p>Light X</p>
+            </div>
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="light-y" />
+              <p>Light Y</p>
+            </div>
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="light-z" />
+              <p>Light Z</p>
+            </div>
+          </div>
+          <div class="slide-group slide-kamera">
+            <div class="slide-item">
+              <input type="range" min="0" max="360" value="50" class="slider" id="camera" />
+              <p>Camera</p>
+            </div>
+            <div class="slide-item">
+              <input type="range" min="5" max="40" value="10" class="slider" id="zoom" />
+              <p>Zoom</p>
+            </div>
           </div>
         </div>
-        <div class="slider-text">Translation</div>
-        <div class="slide-group">
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="translate-x" />
-            <p>Translate X</p>
+        <div class="slide-group-sendi">
+          <div>
+            torso angle -180 <input id="slider0" type="range" min="-180" max="180" step="10" value="0" />
+            180
           </div>
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="translate-y" />
-            <p>Translate Y</p>
+          <br />
+          <div>
+            head2 angle -180 <input id="slider10" type="range" min="-180" max="180" step="10" value="0" />
+            180
           </div>
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="translate-z" />
-            <p>Translate Z</p>
-          </div>
-        </div>
-        <div class="slider-text">Scaling</div>
-        <div class="slide-group">
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="scale-x" />
-            <p>Scale X</p>
-          </div>
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="scale-y" />
-            <p>Scale Y</p>
-          </div>
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="scale-z" />
-            <p>Scale Z</p>
-          </div>
-        </div>
-        <div class="slider-text">Lighting</div>
-        <div class="slide-group">
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="light-x" />
-            <p>Light X</p>
-          </div>
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="light-y" />
-            <p>Light Y</p>
-          </div>
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="light-z" />
-            <p>Light Z</p>
-          </div>
-        </div>
-        <div class="slide-group slide-kamera">
-          <div class="slide-item">
-            <input type="range" min="0" max="360" value="50" class="slider" id="camera" />
-            <p>Camera</p>
-          </div>
-          <div class="slide-item">
-            <input type="range" min="5" max="40" value="10" class="slider" id="zoom" />
-            <p>Zoom</p>
-          </div>
-        </div>
-      </div>
+          <br />
 
-      <div>
-        torso angle -180 <input id="slider0" type="range" min="-180" max="180" step="10" value="0" />
-        180
-      </div>
-      <br />
-      <div>
-        head2 angle -180 <input id="slider10" type="range" min="-180" max="180" step="10" value="0" />
-        180
-      </div>
-      <br />
+          <div>
+            head1 angle -180 <input id="slider1" type="range" min="-180" max="180" step="10" value="0" />
+            180
+          </div>
+          <br />
 
-      <div>
-        head1 angle -180 <input id="slider1" type="range" min="-180" max="180" step="10" value="0" />
-        180
-      </div>
-      <br />
+          <div id="slider2">
+            left upper arm angle -180 <input id="slider2" type="range" min="-180" max="180" step="10" value="0" />
+            180
+          </div>
+          <br />
+          <div>
+            left lower arm angle -180 <input id="slider3" type="range" min="-180" max="180" step="10" value="0" />
+            180
+          </div>
+          <br />
+          <div>
+            right upper arm angle -180 <input id="slider4" type="range" min="-180" max="180" step="10" value="0" />
+            180
+          </div>
+          <br />
+          <div>
+            right lower arm angle -180 <input id="slider5" type="range" min="-180" max="180" step="10" value="0" />
+            180
+          </div>
+          <br />
+          <div>
+            left upper leg angle -180 <input id="slider6" type="range" min="-180" max="180" step="10" value="0" />
+            180
+          </div>
+          <br />
+          <div>
+            left lower leg angle -180 <input id="slider7" type="range" min="-180" max="180" step="10" value="0" />
+            180
+          </div>
+          <br />
+          <div>
+            right upper leg angle -180 <input id="slider8" type="range" min="-180" max="180" step="10" value="0" />
+            180
+          </div>
+          <br />
 
-      <div id="slider2">
-        left upper arm angle -180 <input id="slider2" type="range" min="-180" max="180" step="10" value="0" />
-        180
+          <div>
+            right lower leg angle -180 <input id="slider9" type="range" min="-180" max="180" step="10" value="0" />
+            180
+          </div>
+          <br />
+        </div>
       </div>
-      <br />
-      <div>
-        left lower arm angle -180 <input id="slider3" type="range" min="-180" max="180" step="10" value="0" />
-        180
-      </div>
-      <br />
-      <div>
-        right upper arm angle -180 <input id="slider4" type="range" min="-180" max="180" step="10" value="0" />
-        180
-      </div>
-      <br />
-      <div>
-        right lower arm angle -180 <input id="slider5" type="range" min="-180" max="180" step="10" value="0" />
-        180
-      </div>
-      <br />
-      <div>
-        left upper leg angle -180 <input id="slider6" type="range" min="-180" max="180" step="10" value="0" />
-        180
-      </div>
-      <br />
-      <div>
-        left lower leg angle -180 <input id="slider7" type="range" min="-180" max="180" step="10" value="0" />
-        180
-      </div>
-      <br />
-      <div>
-        right upper leg angle -180 <input id="slider8" type="range" min="-180" max="180" step="10" value="0" />
-        180
-      </div>
-      <br />
-
-      <div>
-        right lower leg angle -180 <input id="slider9" type="range" min="-180" max="180" step="10" value="0" />
-        180
-      </div>
-      <br />
 
       <div class="help">
         <h2>Help</h2>

@@ -38,6 +38,8 @@ body {
 
 .canvas-wrapper {
   margin-top: 2%;
+  display: flex;
+  flex-direction: row;
 }
 
 .flex-vertical {
