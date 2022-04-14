@@ -13,6 +13,9 @@ const zFar = 2000.0;
 var projectionMatrix = mat4.create();
 var modelViewMatrix = mat4.create();
 
+var headHeight = 3.5;
+var headWidth = 1.5;
+
 function toggleShade() {
   const shaderProgram = initShaders(modelGL.gl, "vertex-shader", "fragment-shader", "fragment-shader-no-shade");
   modelGL.programInfo = {
@@ -67,12 +70,15 @@ function init() {
     },
   };
 
+  modelViewMatrixLoc = modelGL.gl.getUniformLocation(shaderProgram, "uModelViewMatrix");
+
   modelGL.programInfo = programInfo;
 
   modelGL.aspect = modelGL.gl.canvas.clientWidth / modelGL.gl.canvas.clientHeight;
   modelGL.ratio = modelGL.gl.canvas.width / modelGL.gl.canvas.height;
 
   if (menu_index == 0) {
+    //cube();
     generateCubeVertice(modelGL);
   } else if (menu_index == 1) {
     generatePyramidVertice(modelGL);
@@ -109,9 +115,13 @@ function init() {
   modelGL.scale = scale;
   modelGL.light = light;
 
+  for (i = 0; i < numNodes; i++) initNodes(i);
+
   function render() {
     drawScene();
   }
+
+  render();
   requestAnimationFrame(render);
 
   // set listener to sliders
@@ -220,7 +230,6 @@ function init() {
   let formatJSONPrefix = "data:text/json;charset=utf-8,";
   const exportBtn = document.getElementById("export-button");
   exportBtn.addEventListener("click", () => {
-    console.log(modelGL);
     modelGL.menuIdx = menu_index;
     modelGL.menuViewIdx = menu_index_view;
 
@@ -249,8 +258,6 @@ function init() {
         var data = await JSON.parse(e.target.result);
         if (data) {
           modelGL.load_data(data);
-          console.log(data);
-          console.log(modelGL);
           mf.selectedIndex = modelGL.menuIdx;
           mfv.selectedIndex = modelGL.menuViewIdx;
           mf.click();
@@ -325,7 +332,8 @@ function drawScene() {
   modelViewMatrix = mat4.create();
 
   if (menu_index_view == 0) {
-    mat4.perspective(projectionMatrix, fieldOfView, modelGL.aspect, zNear, zFar);
+    mat4.ortho(projectionMatrix, -10.0, 10.0, -10.0, 10.0, -10.0, 10.0);
+    //mat4.perspective(projectionMatrix, fieldOfView, modelGL.aspect, zNear, zFar);
   } else if (menu_index_view == 1) {
     eye = vec3(0, 0, 1);
     mat4.lookAt(modelViewMatrix, eye, at, up);
@@ -358,7 +366,7 @@ function drawScene() {
   mat4.translate(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to modelGL.translate
-    [0.0, 0.0, -8],
+    [0, 0, 0],
   ); // amount to modelGL.translate
 
   {
@@ -398,19 +406,16 @@ function drawScene() {
     normalizeVector([modelGL.light.x, modelGL.light.y, 1 + modelGL.light.z]),
   );
 
-  mat4.rotateY(modelViewMatrix, modelViewMatrix, cameraAngleRadians);
+  // mat4.rotateY(modelViewMatrix, modelViewMatrix, cameraAngleRadians);
 
-  mat4.translate(modelViewMatrix, modelViewMatrix, [0, 0, radius * 1.5]);
+  // mat4.translate(modelViewMatrix, modelViewMatrix, [0, 0, radius * 0.6]);
 
-  // Make a view matrix from the camera matrix
-  mat4.invert(modelViewMatrix, modelViewMatrix);
+  // // Make a view matrix from the camera matrix
+  // mat4.invert(modelViewMatrix, modelViewMatrix);
 
   var viewProjectionMatrix = new Float32Array(16);
   mat4.identity(viewProjectionMatrix);
   mat4.multiply(viewProjectionMatrix, projectionMatrix, modelViewMatrix);
-
-  var wMatrix = new Float32Array(16);
-  mat4.identity(wMatrix);
 
   mat4.rotate(
     modelViewMatrix, // dest matrix
@@ -462,6 +467,8 @@ function drawScene() {
     [1, 0, 0],
   );
 
+  traverse(torsoId, arrayToMat4(modelViewMatrix), modelGL.gl);
+
   // Set the shader uniforms
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
@@ -469,13 +476,14 @@ function drawScene() {
 
   {
     if (menu_index == 0) {
-      NumVertices = CubeVertices;
+      NumOfVertices = CubeVertices;
     } else if (menu_index == 1) {
-      NumVertices = PyramidNumVertices;
+      NumOfVertices = PyramidNumVertices;
     } else if (menu_index == 2) {
-      NumVertices = donutNumVertices;
+      NumOfVertices = donutNumVertices;
     }
-    modelGL.gl.drawElements(modelGL.gl.TRIANGLES, NumVertices, modelGL.gl.UNSIGNED_SHORT, 0);
+    console.log(NumOfVertices);
+    //modelGL.gl.drawElements(modelGL.gl.TRIANGLES, NumOfVertices, modelGL.gl.UNSIGNED_SHORT, 0);
   }
 }
 

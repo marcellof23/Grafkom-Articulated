@@ -17,8 +17,56 @@ function generateCubeVertice(modelGL) {
   modelGL.cubeNormals = getNormals(positions);
 }
 
+var positionss = [],
+  colorss = [];
+
+var vertices = [
+  vec4(-0.5, -0.5, 0.5, 1.0),
+  vec4(-0.5, 0.5, 0.5, 1.0),
+  vec4(0.5, 0.5, 0.5, 1.0),
+  vec4(0.5, -0.5, 0.5, 1.0),
+  vec4(-0.5, -0.5, -0.5, 1.0),
+  vec4(-0.5, 0.5, -0.5, 1.0),
+  vec4(0.5, 0.5, -0.5, 1.0),
+  vec4(0.5, -0.5, -0.5, 1.0),
+];
+
+var vertexColors = [
+  [0.0, 0.0, 0.0, 1.0], // black
+  [1.0, 0.0, 0.0, 1.0], // red
+  [1.0, 1.0, 0.0, 1.0], // yellow
+  [0.0, 1.0, 0.0, 1.0], // green
+  [0.0, 0.0, 1.0, 1.0], // blue
+  [1.0, 0.0, 1.0, 1.0], // magenta
+  [0.0, 1.0, 1.0, 1.0], // cyan
+  [1.0, 1.0, 1.0, 1.0], // white
+];
+
+function quads(a, b, c, d) {
+  var indices = [a, b, c, a, c, d];
+  for (var i = 0; i < indices.length; ++i) {
+    positionss.push(vertices[indices[i]]);
+    console.log(vertices[indices[i]]);
+    console.log(indices[i]);
+    modelGL.cubePoints.push(indices[i]);
+    //colors.push( vertexColors[indices[i]] );
+
+    // for solid colored faces use
+    modelGL.cubeColors.push(vertexColors[a]);
+  }
+}
+
+function cube() {
+  quads(1, 0, 3, 2);
+  quads(2, 3, 7, 6);
+  quads(3, 0, 4, 7);
+  quads(6, 5, 1, 2);
+  quads(4, 5, 6, 7);
+  quads(5, 4, 0, 1);
+}
+
 // prettier-ignore
-const positions = [
+var positions = [
   // Front face
   -1.0, -1.0,  1.0,
    1.0, -1.0,  1.0,
@@ -131,5 +179,3 @@ const positions = [
    0.6,  0.6,  0.6,
    0.6,  0.6, 0.6,
 ];
-
-positions = positions.map((x) => x * 0.3);

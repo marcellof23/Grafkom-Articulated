@@ -48,6 +48,8 @@ function initBuffers(gl) {
   if (menu_index == 0) {
     arr_position = positions;
     arr_colors = modelGL.cubeColors;
+    console.log(arr_position);
+    console.log(arr_colors);
     arr_indices = modelGL.cubePoints;
     arr_normals = modelGL.cubeNormals;
   } else if (menu_index == 1) {
@@ -75,17 +77,6 @@ function initBuffers(gl) {
   gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(arr_normals), gl.STATIC_DRAW);
 
-  // var texBuffer, normalBuffer;
-  // if (menu_index == 2) {
-  //   texBuffer = gl.createBuffer();
-  //   gl.bindBuffer(gl.ARRAY_BUFFER, texBuffer);
-  //   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(modelGL.donutTexCoords), gl.STATIC_DRAW);
-
-  //   normalBuffer = gl.createBuffer();
-  //   gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
-  //   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(modelGL.donutNormals), gl.STATIC_DRAW);
-  // }
-
   const indexBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(arr_indices), gl.STATIC_DRAW);
@@ -94,7 +85,6 @@ function initBuffers(gl) {
     position: positionBuffer,
     color: colorBuffer,
     indices: indexBuffer,
-    // texcoords: texBuffer,
     normal: normalBuffer,
   };
 }
