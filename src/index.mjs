@@ -393,7 +393,7 @@ function drawScene() {
   modelViewMatrix = mat4.create();
 
   if (menu_index_view == 0) {
-    mat4.ortho(projectionMatrix, -10.0, 10.0, -10.0, 10.0, -10.0, 10.0);
+    mat4.ortho(projectionMatrix, -10.0, 15.0, -10.0, 10.0, -10.0, 10.0);
     //mat4.perspective(projectionMatrix, fieldOfView, modelGL.aspect, zNear, zFar);
   } else if (menu_index_view == 1) {
     eye = vec3(0, 0, 1);

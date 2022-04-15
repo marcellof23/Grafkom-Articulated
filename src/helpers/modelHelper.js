@@ -112,10 +112,10 @@ function initNodes(Id) {
       break;
 
     case NECK_ID:
-      m = translate(0.0, torsoHeight - neckHeight + 3.5, 0.0);
+      m = translate(1.0, torsoHeight - neckHeight + 3.5, 0.0);
       m = mult(m, rotate(theta[NECK_ID], 1, 0, 0));
       m = mult(m, rotate(theta[HEAD2_ID], 0, 1, 0));
-      m = mult(m, translate(0.0, -1 * neckHeight, 0.0));
+      m = mult(m, translate(5, -1 * neckHeight, 0.0));
       figure[NECK_ID] = createNode(m, neck, LEFT_FRONT_LEG_ID, HEAD_ID);
       break;
 
@@ -124,9 +124,7 @@ function initNodes(Id) {
     case HEAD2_ID:
       m = translate(0.0, 0.2 * headHeight, 0.0);
       m = mult(m, rotate(theta[HEAD1_ID], 1, 0, 0));
-      //  m = mult(m, rotate(theta[HEAD2_ID], 0, 1, 0));
       m = mult(m, translate(0.0, -0.8 * headHeight, 0.0));
-      //figure[HEAD_ID] = createNode(m, head, LEFT_FRONT_LEG_ID, null);
       figure[HEAD_ID] = createNode(m, head, null, null);
       break;
     case LEFT_FRONT_LEG_ID:
