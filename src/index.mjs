@@ -388,7 +388,6 @@ function init() {
   shadingButton.addEventListener('change', () => {
     console.log("anjing")
     console.log(shadingButton.checked);
-    drawScene();
   })
 
   render();
