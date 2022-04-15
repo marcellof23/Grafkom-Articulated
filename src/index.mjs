@@ -67,6 +67,7 @@ function init() {
       viewMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uViewMatrix"),
       normalMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uNormalMatrix"),
       directionalVector: modelGL.gl.getUniformLocation(shaderProgram, "directionalVector"),
+      isShading: modelGL.gl.getUniformLocation(shaderProgram, "uShading"),
     },
   };
 
@@ -269,6 +270,9 @@ function init() {
     initNodes(RIGHT_BACK_FOOT_ID);
     requestAnimationFrame(render);
   });
+
+  // shading button
+  var shadingButton = document.getElementById("shading");
 
   document.getElementById("colorpicker").addEventListener("change", function (e) {
     colorRgb = hexToRgb(document.getElementById("colorpicker").value);
@@ -543,7 +547,11 @@ function drawScene() {
   //modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
   //modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
   //modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
-
+  
+  modelGL.gl.uniform1i(
+      programInfo.uniformLocations.isShading,
+      shadingButton.checked
+  );
   {
     if (menu_index == 0) {
       NumOfVertices = CubeVertices;
@@ -564,9 +572,12 @@ function main() {
 
 window.onload = main;
 
-document.getElementById("shading").addEventListener("change", function (event) {
-  isShading = !isShading;
-  modelGL.buffers = initBuffers(modelGL.gl, modelGL.programInfo);
-  //drawScene();
-  //toggleShade();
-});
+// document.getElementById("shading").addEventListener("change", function (event) {
+//   isShading = !isShading;
+//   modelGL.buffers = initBuffers(modelGL.gl, modelGL.programInfo);
+//   //drawScene();
+//   //toggleShade();
+// });
+
+
+
