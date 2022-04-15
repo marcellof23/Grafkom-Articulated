@@ -204,62 +204,71 @@ function init() {
     requestAnimationFrame(render);
   });
 
-  document.getElementById("slider0").onchange = function (event) {
-    theta[torsoId] = event.target.value;
-    initNodes(torsoId);
+  document.getElementById("slider0").addEventListener("input", function (e) {
+    theta[TORSO_ID] = e.target.value;
+    initNodes(TORSO_ID);
     requestAnimationFrame(render);
-  };
-  document.getElementById("slider1").onchange = function (event) {
-    theta[head1Id] = event.target.value;
-    initNodes(head1Id);
-    requestAnimationFrame(render);
-  };
+  });
 
-  document.getElementById("slider2").onchange = function (event) {
-    theta[leftUpperArmId] = event.target.value;
-    initNodes(leftUpperArmId);
+  document.getElementById("slider1").addEventListener("input", function (e) {
+    theta[NECK_ID] = e.target.value;
+    initNodes(NECK_ID);
     requestAnimationFrame(render);
-  };
-  document.getElementById("slider3").onchange = function (event) {
-    theta[leftLowerArmId] = event.target.value;
-    initNodes(leftLowerArmId);
-    requestAnimationFrame(render);
-  };
+  });
 
-  document.getElementById("slider4").onchange = function (event) {
-    theta[rightUpperArmId] = event.target.value;
-    initNodes(rightUpperArmId);
+  document.getElementById("slider2").addEventListener("input", function (e) {
+    theta[HEAD_ID] = e.target.value;
+    initNodes(HEAD_ID);
     requestAnimationFrame(render);
-  };
-  document.getElementById("slider5").onchange = function (event) {
-    theta[rightLowerArmId] = event.target.value;
-    initNodes(rightLowerArmId);
+  });
+
+  document.getElementById("slider3").addEventListener("input", function (e) {
+    theta[LEFT_FRONT_LEG_ID] = e.target.value;
+    initNodes(LEFT_FRONT_LEG_ID);
     requestAnimationFrame(render);
-  };
-  document.getElementById("slider6").onchange = function (event) {
-    theta[leftUpperLegId] = event.target.value;
-    initNodes(leftUpperLegId);
-  };
-  document.getElementById("slider7").onchange = function (event) {
-    theta[leftLowerLegId] = event.target.value;
-    initNodes(leftLowerLegId);
+  });
+
+  document.getElementById("slider4").addEventListener("input", function (e) {
+    theta[LEFT_FRONT_FOOT_ID] = e.target.value;
+    initNodes(LEFT_FRONT_FOOT_ID);
     requestAnimationFrame(render);
-  };
-  document.getElementById("slider8").onchange = function (event) {
-    theta[rightUpperLegId] = event.target.value;
-    initNodes(rightUpperLegId);
+  });
+
+  document.getElementById("slider5").addEventListener("input", function (e) {
+    theta[RIGHT_FRONT_LEG_ID] = e.target.value;
+    initNodes(RIGHT_FRONT_LEG_ID);
     requestAnimationFrame(render);
-  };
-  document.getElementById("slider9").onchange = function (event) {
-    theta[rightLowerLegId] = event.target.value;
-    initNodes(rightLowerLegId);
+  });
+
+  document.getElementById("slider6").addEventListener("input", function (e) {
+    theta[RIGHT_FRONT_FOOT_ID] = e.target.value;
+    initNodes(RIGHT_FRONT_FOOT_ID);
     requestAnimationFrame(render);
-  };
-  document.getElementById("slider10").onchange = function (event) {
-    theta[head2Id] = event.target.value;
-    initNodes(head2Id);
+  });
+
+  document.getElementById("slider7").addEventListener("input", function (e) {
+    theta[LEFT_BACK_LEG_ID] = e.target.value;
+    initNodes(LEFT_BACK_LEG_ID);
     requestAnimationFrame(render);
-  };
+  });
+
+  document.getElementById("slider8").addEventListener("input", function (e) {
+    theta[LEFT_BACK_FOOT_ID] = e.target.value;
+    initNodes(LEFT_BACK_FOOT_ID);
+    requestAnimationFrame(render);
+  });
+
+  document.getElementById("slider9").addEventListener("input", function (e) {
+    theta[RIGHT_BACK_LEG_ID] = e.target.value;
+    initNodes(RIGHT_BACK_LEG_ID);
+    requestAnimationFrame(render);
+  });
+
+  document.getElementById("slider10").addEventListener("input", function (e) {
+    theta[RIGHT_BACK_FOOT_ID] = e.target.value;
+    initNodes(RIGHT_BACK_FOOT_ID);
+    requestAnimationFrame(render);
+  });
 
   document.getElementById("colorpicker").addEventListener("change", function (e) {
     colorRgb = hexToRgb(document.getElementById("colorpicker").value);
@@ -527,7 +536,7 @@ function drawScene() {
     [1, 0, 0],
   );
 
-  traverse(torsoId, arrayToMat4(modelViewMatrix), projectionMatrix, normalMatrix);
+  traverse(TORSO_ID, arrayToMat4(modelViewMatrix), projectionMatrix, normalMatrix);
 
   // Set the shader uniforms
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.viewMatrix, false, viewMatrix);
