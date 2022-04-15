@@ -120,7 +120,7 @@ function init() {
   modelGL.scale = scale;
   modelGL.light = light;
 
-  for (i = 0; i < numNodes; i++) initNodes(i);
+  for (i = 21; i < 31; i++) initNodes(i);
 
   function render() {
     drawScene();
@@ -204,60 +204,61 @@ function init() {
     requestAnimationFrame(render);
   });
 
-  document.getElementById("slider0").onchange = function (event) {
-    theta[torsoId] = event.target.value;
-    initNodes(torsoId);
+  document.getElementById("slider0").addEventListener("input", function (e) {
+    theta2[torsoId2 - 21] = e.target.value;
+    initNodes(torsoId2);
     requestAnimationFrame(render);
-  };
+  });
+
   document.getElementById("slider1").onchange = function (event) {
-    theta[head1Id] = event.target.value;
-    initNodes(head1Id);
+    theta2[headId2 - 21] = event.target.value;
+    initNodes(headId2);
     requestAnimationFrame(render);
   };
 
   document.getElementById("slider2").onchange = function (event) {
-    theta[leftUpperArmId] = event.target.value;
-    initNodes(leftUpperArmId);
+    theta2[leftUpperArmId2 - 21] = event.target.value;
+    initNodes(leftUpperArmId2);
     requestAnimationFrame(render);
   };
   document.getElementById("slider3").onchange = function (event) {
-    theta[leftLowerArmId] = event.target.value;
-    initNodes(leftLowerArmId);
+    theta2[leftLowerArmId2 - 21] = event.target.value;
+    initNodes(leftLowerArmId2);
     requestAnimationFrame(render);
   };
 
   document.getElementById("slider4").onchange = function (event) {
-    theta[rightUpperArmId] = event.target.value;
-    initNodes(rightUpperArmId);
+    theta2[rightUpperArmId2 - 21] = event.target.value;
+    initNodes(rightUpperArmId2);
     requestAnimationFrame(render);
   };
   document.getElementById("slider5").onchange = function (event) {
-    theta[rightLowerArmId] = event.target.value;
-    initNodes(rightLowerArmId);
+    theta2[rightLowerArmId2 - 21] = event.target.value;
+    initNodes(rightLowerArmId2);
     requestAnimationFrame(render);
   };
   document.getElementById("slider6").onchange = function (event) {
-    theta[leftUpperLegId] = event.target.value;
-    initNodes(leftUpperLegId);
+    theta2[leftUpperLegId2 - 21] = event.target.value;
+    initNodes(leftUpperLegId2);
   };
   document.getElementById("slider7").onchange = function (event) {
-    theta[leftLowerLegId] = event.target.value;
-    initNodes(leftLowerLegId);
+    theta2[leftLowerLegId2 - 21] = event.target.value;
+    initNodes(leftLowerLegId2);
     requestAnimationFrame(render);
   };
   document.getElementById("slider8").onchange = function (event) {
-    theta[rightUpperLegId] = event.target.value;
-    initNodes(rightUpperLegId);
+    theta2[rightUpperLegId2] = event.target.value;
+    initNodes(rightUpperLegId2);
     requestAnimationFrame(render);
   };
   document.getElementById("slider9").onchange = function (event) {
-    theta[rightLowerLegId] = event.target.value;
+    theta2[rightLowerLegId] = event.target.value;
     initNodes(rightLowerLegId);
     requestAnimationFrame(render);
   };
   document.getElementById("slider10").onchange = function (event) {
-    theta[head2Id] = event.target.value;
-    initNodes(head2Id);
+    theta2[headId2] = event.target.value;
+    initNodes(headId2);
     requestAnimationFrame(render);
   };
 
@@ -527,7 +528,7 @@ function drawScene() {
     [1, 0, 0],
   );
 
-  traverse(torsoId, arrayToMat4(modelViewMatrix), projectionMatrix, normalMatrix);
+  traverse(torsoId2, arrayToMat4(modelViewMatrix), projectionMatrix, normalMatrix);
 
   // Set the shader uniforms
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.viewMatrix, false, viewMatrix);
