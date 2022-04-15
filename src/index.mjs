@@ -14,26 +14,30 @@ projectionMatrix = mat4.create();
 modelViewMatrix = mat4.create();
 normalMatrix = mat4.create();
 
-function toggleShade() {
-  const shaderProgram = initShaders(modelGL.gl, "vertex-shader", "fragment-shader", "fragment-shader-no-shade");
-  modelGL.programInfo = {
-    program: shaderProgram,
-    attribLocations: {
-      vertexPosition: modelGL.gl.getAttribLocation(shaderProgram, "aVertexPosition"),
-      vertexColor: modelGL.gl.getAttribLocation(shaderProgram, "aVertexColor"),
-      vertexNormal: modelGL.gl.getAttribLocation(shaderProgram, "aVertexNormal"),
-    },
-    uniformLocations: {
-      projectionMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
-      modelViewMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uModelViewMatrix"),
-      viewMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uViewMatrix"),
-      normalMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uNormalMatrix"),
-      directionalVector: modelGL.gl.getUniformLocation(shaderProgram, "directionalVector"),
-    },
-  };
-  modelGL.buffers = initBuffers(modelGL.gl, modelGL.programInfo);
-  drawScene();
-}
+// shading button
+var shadingButton = document.getElementById("shading");
+
+
+// function toggleShade() {
+//   const shaderProgram = initShaders(modelGL.gl, "vertex-shader", "fragment-shader");
+//   modelGL.programInfo = {
+//     program: shaderProgram,
+//     attribLocations: {
+//       vertexPosition: modelGL.gl.getAttribLocation(shaderProgram, "aVertexPosition"),
+//       vertexColor: modelGL.gl.getAttribLocation(shaderProgram, "aVertexColor"),
+//       vertexNormal: modelGL.gl.getAttribLocation(shaderProgram, "aVertexNormal"),
+//     },
+//     uniformLocations: {
+//       projectionMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
+//       modelViewMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uModelViewMatrix"),
+//       viewMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uViewMatrix"),
+//       normalMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uNormalMatrix"),
+//       directionalVector: modelGL.gl.getUniformLocation(shaderProgram, "directionalVector"),
+//     },
+//   };
+//   modelGL.buffers = initBuffers(modelGL.gl, modelGL.programInfo);
+//   drawScene();
+// }
 
 function init() {
   // Retrieve  canvas element
@@ -52,7 +56,7 @@ function init() {
   modelGL.gl.viewport(0, 0, modelGL.gl.canvas.width, modelGL.gl.canvas.height);
 
   // Initialize shaders
-  var shaderProgram = initShaders(modelGL.gl, "vertex-shader", "fragment-shader", "fragment-shader-no-shade");
+  var shaderProgram = initShaders(modelGL.gl, "vertex-shader", "fragment-shader");
 
   var programInfo = {
     program: shaderProgram,
@@ -80,6 +84,7 @@ function init() {
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.viewMatrix, false, viewMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
+
 
   modelGL.aspect = modelGL.gl.canvas.clientWidth / modelGL.gl.canvas.clientHeight;
   modelGL.ratio = modelGL.gl.canvas.width / modelGL.gl.canvas.height;
@@ -262,9 +267,6 @@ function init() {
     requestAnimationFrame(render);
   };
 
-  // shading button
-  var shadingButton = document.getElementById("shading");
-
   document.getElementById("colorpicker").addEventListener("change", function (e) {
     colorRgb = hexToRgb(document.getElementById("colorpicker").value);
     menu_index = mf.selectedIndex;
@@ -373,6 +375,12 @@ function init() {
 
     drawScene();
   });
+
+  shadingButton.addEventListener('change', () => {
+    console.log("anjing")
+    console.log(shadingButton.checked);
+    drawScene();
+  })
 
   render();
   requestAnimationFrame(render);
@@ -535,14 +543,19 @@ function drawScene() {
 
   // Set the shader uniforms
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.viewMatrix, false, viewMatrix);
-  //modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
-  //modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
-  //modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
+  modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
+  modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
+  modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
   
+  console.log("anjing2")
+  console.log(shadingButton.checked)
   modelGL.gl.uniform1i(
-      programInfo.uniformLocations.isShading,
-      shadingButton.checked
+      modelGL.programInfo.uniformLocations.isShading,
+      shadingButton.checked,
   );
+
+
+  console.log(shadingButton.checked);
   {
     if (menu_index == 0) {
       NumOfVertices = CubeVertices;

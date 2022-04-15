@@ -1,18 +1,18 @@
-function initShaders(gl, vertexShaderId, fragmentShaderId, fragmentShaderId2) {
+function initShaders(gl, vertexShaderId, fragmentShaderId) {
   var vertShdr;
   var fragShdr;
 
   var vertElem = document.getElementById(vertexShaderId);
   var fragElem = document.getElementById(fragmentShaderId);
-  var fragElemNoShade = document.getElementById(fragmentShaderId2);
+  // var fragElemNoShade = document.getElementById(fragmentShaderId2);
 
   vertShdr = buildShader(gl, vertElem.text, gl.VERTEX_SHADER);
   fragShdr = buildShader(gl, fragElem.text, gl.FRAGMENT_SHADER);
-  if (document.getElementById("shading").checked) {
-    fragShdr = buildShader(gl, fragElem.text, gl.FRAGMENT_SHADER);
-  } else {
-    fragShdr = buildShader(gl, fragElemNoShade.text, gl.FRAGMENT_SHADER);
-  }
+  // if (document.getElementById("shading").checked) {
+  //   fragShdr = buildShader(gl, fragElem.text, gl.FRAGMENT_SHADER);
+  // } else {
+  //   fragShdr = buildShader(gl, fragElemNoShade.text, gl.FRAGMENT_SHADER);
+  // }
 
   var program = gl.createProgram();
   gl.attachShader(program, vertShdr);

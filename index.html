@@ -48,17 +48,11 @@
         if (uShading) {
           gl_FragColor = vec4(vColor.rgb * vLighting, vColor.a);
         } else {
-              gl_FragColor = vColor;
+          gl_FragColor = vColor;
         }
       }
     </script>
-    <script id="fragment-shader-no-shade" type="x-shader/x-fragment">
-      precision mediump float;
-      varying lowp vec4 vColor;
-      void main(void) {
-        gl_FragColor = vColor;
-      }
-    </script>
+    
     <title>Document</title>
   </head>
 
