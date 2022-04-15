@@ -547,11 +547,11 @@ function drawScene() {
   //modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
   //modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
   //modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
-  
-  modelGL.gl.uniform1i(
-      programInfo.uniformLocations.isShading,
-      shadingButton.checked
-  );
+
+  // modelGL.gl.uniform1i(
+  //     programInfo.uniformLocations.isShading,
+  //     shadingButton.checked
+  // );
   {
     if (menu_index == 0) {
       NumOfVertices = CubeVertices;
@@ -578,6 +578,3 @@ window.onload = main;
 //   //drawScene();
 //   //toggleShade();
 // });
-
-
-
