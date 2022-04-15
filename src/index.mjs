@@ -67,7 +67,7 @@ function init() {
       viewMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uViewMatrix"),
       normalMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uNormalMatrix"),
       directionalVector: modelGL.gl.getUniformLocation(shaderProgram, "directionalVector"),
-      isShading: gl.getUniformLocation(shaderProgram, "uShading"),
+      isShading: modelGL.gl.getUniformLocation(shaderProgram, "uShading"),
     },
   };
 
