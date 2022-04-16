@@ -96,7 +96,7 @@ WebGLUtils = (function () {
 /**
  * Provides requestAnimationFrame in a cross browser way.
  */
-window.requestAnimFrame = (function () {
+window.requestAnimFrames = (function () {
   return (
     window.requestAnimationFrame ||
     window.webkitRequestAnimationFrame ||
@@ -104,7 +104,7 @@ window.requestAnimFrame = (function () {
     window.oRequestAnimationFrame ||
     window.msRequestAnimationFrame ||
     function (/* function FrameRequestCallback */ callback, /* DOMElement Element */ element) {
-      window.setTimeout(callback, 2000 / 60);
+      window.setTimeout(callback, 1000 / 60);
     }
   );
 })();
