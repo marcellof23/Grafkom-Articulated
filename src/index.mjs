@@ -80,16 +80,12 @@ function init() {
     },
   };
 
-  texture = loadTexture(modelGL.gl, "/src/cubetexture.png");
   modelViewMatrixLoc = modelGL.gl.getUniformLocation(shaderProgram, "uModelViewMatrix");
 
   viewMatrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -2, 1];
   modelGL.programInfo = programInfo;
 
-  modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
-  modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
-  modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.viewMatrix, false, viewMatrix);
-  modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
+  texture = loadTexture(modelGL.gl, "/src/cubetexture.png");
 
   modelGL.aspect = modelGL.gl.canvas.clientWidth / modelGL.gl.canvas.clientHeight;
   modelGL.ratio = modelGL.gl.canvas.width / modelGL.gl.canvas.height;
@@ -118,7 +114,7 @@ function init() {
     }
 
     modelGL.buffers = initBuffers(modelGL.gl);
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
 
   var trans = { x: 0, y: 0, z: 0 };
@@ -138,143 +134,143 @@ function init() {
   document.getElementById("rotate-x").addEventListener("input", function (e) {
     var rotation = (parseInt(document.getElementById("rotate-x").value) - 50) / 50;
     modelGL.rot.x = rotation;
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
   document.getElementById("rotate-y").addEventListener("input", function (e) {
     var rotation = (parseInt(document.getElementById("rotate-y").value) - 50) / 50;
     modelGL.rot.y = rotation;
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
   document.getElementById("rotate-z").addEventListener("input", function (e) {
     var rotation = (parseInt(document.getElementById("rotate-z").value) - 50) / 50;
     modelGL.rot.z = rotation;
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
 
   document.getElementById("translate-x").addEventListener("input", function (e) {
     var translate = (5 * (parseInt(document.getElementById("translate-x").value) - 50)) / 100;
     modelGL.trans.x = translate;
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
   document.getElementById("translate-y").addEventListener("input", function (e) {
     var translate = (5 * (parseInt(document.getElementById("translate-y").value) - 50)) / 100;
     modelGL.trans.y = translate;
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
   document.getElementById("translate-z").addEventListener("input", function (e) {
     var translate = (5 * (parseInt(document.getElementById("translate-z").value) - 50)) / 100;
     modelGL.trans.z = translate;
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
 
   document.getElementById("scale-x").addEventListener("input", function (e) {
     var scaler = (parseInt(document.getElementById("scale-x").value) - 50) / 100;
     modelGL.scale.x = scaler;
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
   document.getElementById("scale-y").addEventListener("input", function (e) {
     var scaler = (parseInt(document.getElementById("scale-y").value) - 50) / 100;
     modelGL.scale.y = scaler;
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
   document.getElementById("scale-z").addEventListener("input", function (e) {
     var scaler = (parseInt(document.getElementById("scale-z").value) - 50) / 100;
     modelGL.scale.z = scaler;
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
 
   document.getElementById("light-x").addEventListener("input", function (e) {
     var lighter = (parseInt(document.getElementById("light-x").value) - 50) / 100;
     modelGL.light.x = lighter;
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
   document.getElementById("light-y").addEventListener("input", function (e) {
     var lighter = (parseInt(document.getElementById("light-y").value) - 50) / 100;
     modelGL.light.y = lighter;
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
   document.getElementById("light-z").addEventListener("input", function (e) {
     var lighter = (parseInt(document.getElementById("light-z").value) - 50) / 100;
     modelGL.light.z = lighter;
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
 
   document.getElementById("camera").addEventListener("input", function (e) {
     var scaler = parseInt(document.getElementById("camera").value);
     cameraAngleRadians = degToRad(scaler);
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
 
   document.getElementById("zoom").addEventListener("input", function (e) {
     var scaler = parseInt(document.getElementById("zoom").value);
     radius = scaler;
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
 
   document.getElementById("slider0").addEventListener("input", function (e) {
     theta[TORSO_ID] = e.target.value;
     initNodes(TORSO_ID);
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
 
   document.getElementById("slider1").addEventListener("input", function (e) {
     theta[NECK_ID] = e.target.value;
     initNodes(NECK_ID);
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
 
   document.getElementById("slider2").addEventListener("input", function (e) {
     theta[HEAD_ID] = e.target.value;
     initNodes(HEAD_ID);
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
 
   document.getElementById("slider3").addEventListener("input", function (e) {
     theta[LEFT_FRONT_LEG_ID] = e.target.value;
     initNodes(LEFT_FRONT_LEG_ID);
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
 
   document.getElementById("slider4").addEventListener("input", function (e) {
     theta[LEFT_FRONT_FOOT_ID] = e.target.value;
     initNodes(LEFT_FRONT_FOOT_ID);
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
 
   document.getElementById("slider5").addEventListener("input", function (e) {
     theta[RIGHT_FRONT_LEG_ID] = e.target.value;
     initNodes(RIGHT_FRONT_LEG_ID);
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
 
   document.getElementById("slider6").addEventListener("input", function (e) {
     theta[RIGHT_FRONT_FOOT_ID] = e.target.value;
     initNodes(RIGHT_FRONT_FOOT_ID);
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
 
   document.getElementById("slider7").addEventListener("input", function (e) {
     theta[LEFT_BACK_LEG_ID] = e.target.value;
     initNodes(LEFT_BACK_LEG_ID);
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
 
   document.getElementById("slider8").addEventListener("input", function (e) {
     theta[LEFT_BACK_FOOT_ID] = e.target.value;
     initNodes(LEFT_BACK_FOOT_ID);
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
 
   document.getElementById("slider9").addEventListener("input", function (e) {
     theta[RIGHT_BACK_LEG_ID] = e.target.value;
     initNodes(RIGHT_BACK_LEG_ID);
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
 
   document.getElementById("slider10").addEventListener("input", function (e) {
     theta[RIGHT_BACK_FOOT_ID] = e.target.value;
     initNodes(RIGHT_BACK_FOOT_ID);
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
 
   document.getElementById("colorpicker").addEventListener("change", function (e) {
@@ -291,13 +287,13 @@ function init() {
     }
 
     modelGL.buffers = initBuffers(modelGL.gl);
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
 
   mfv = document.getElementById("menu-features-view");
   mfv.addEventListener("click", () => {
     menu_index_view = mfv.selectedIndex;
-    //requestAnimationFrame(render);
+    requestAnimationFrame(render);
   });
 
   // Set event listener for export button
@@ -337,7 +333,7 @@ function init() {
           mf.click();
           mfv.click();
           drawScene();
-          //requestAnimationFrame(render);
+          requestAnimationFrame(render);
         }
       } catch (err) {
         alert(`invalid json file\n${err}`);
@@ -392,7 +388,7 @@ function init() {
   });
 
   render();
-  //requestAnimationFrame(render);
+  requestAnimationFrame(render);
 }
 
 var time_old = 0;
@@ -411,7 +407,7 @@ async function render() {
     initNodes(i);
   }
 
-  //requestAnimFrames(render);
+  // requestAnimFrames(render);
 }
 
 function quad(a, b, c, d) {
@@ -512,6 +508,12 @@ function drawScene() {
     modelGL.gl.enableVertexAttribArray(modelGL.programInfo.attribLocations.textureCoord);
   }
 
+  // Tell WebGL which indices to use to index the vertices
+  modelGL.gl.bindBuffer(modelGL.gl.ELEMENT_ARRAY_BUFFER, modelGL.buffers.indices);
+
+  // Tell WebGL to use our program when drawing
+  modelGL.gl.useProgram(modelGL.programInfo.program);
+
   // Tell WebGL we want to affect texture unit 0
   modelGL.gl.activeTexture(modelGL.gl.TEXTURE0);
 
@@ -520,12 +522,6 @@ function drawScene() {
 
   // Tell the shader we bound the texture to texture unit 0
   modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uSampler, 0);
-
-  // Tell WebGL which indices to use to index the vertices
-  modelGL.gl.bindBuffer(modelGL.gl.ELEMENT_ARRAY_BUFFER, modelGL.buffers.indices);
-
-  // Tell WebGL to use our program when drawing
-  modelGL.gl.useProgram(modelGL.programInfo.program);
 
   // // set the light direction.
   modelGL.gl.uniform3fv(

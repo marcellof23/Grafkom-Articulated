@@ -105,6 +105,6 @@ function initBuffers(gl) {
     color: colorBuffer,
     indices: indexBuffer,
     normal: normalBuffer,
-    texture: textureCoordBuffer,
+    textureCoord: textureCoordBuffer,
   };
 }
