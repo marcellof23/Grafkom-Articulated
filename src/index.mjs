@@ -24,6 +24,8 @@ var setAnimeForward = true;
 var shadingButton = document.getElementById("shading");
 var textureButton = document.getElementById("texture-btn");
 
+menu_index = 0;
+
 function init() {
   // Retrieve  canvas element
   modelGL.canvas = document.getElementById("webgl");
@@ -73,32 +75,9 @@ function init() {
   modelGL.aspect = modelGL.gl.canvas.clientWidth / modelGL.gl.canvas.clientHeight;
   modelGL.ratio = modelGL.gl.canvas.width / modelGL.gl.canvas.height;
 
-  if (menu_index == 0) {
-    generateCubeVertice(modelGL);
-  } else if (menu_index == 1) {
-    generatePyramidVertice(modelGL);
-  } else if (menu_index == 2) {
-    donut.makeVerts(modelGL);
-  }
+  generateCubeVertice(modelGL);
   var buffers = initBuffers(modelGL.gl);
   modelGL.buffers = buffers;
-
-  mf = document.getElementById("menu-features");
-  mf.addEventListener("click", () => {
-    menu_index = mf.selectedIndex;
-    modelGL.cubePoints = [];
-    modelGL.cubeColors = [];
-    if (menu_index == 0) {
-      generateCubeVertice(modelGL);
-    } else if (menu_index == 1) {
-      generatePyramidVertice(modelGL);
-    } else if (menu_index == 2) {
-      donut.makeVerts(modelGL);
-    }
-
-    modelGL.buffers = initBuffers(modelGL.gl);
-    //requestAnimationFrame(render);
-  });
 
   var trans = { x: 0, y: 0, z: 0 };
   var rot = { x: 0, y: 0, z: 0 };
@@ -258,24 +237,12 @@ function init() {
 
   document.getElementById("colorpicker").addEventListener("change", function (e) {
     colorRgb = hexToRgb(document.getElementById("colorpicker").value);
-    menu_index = mf.selectedIndex;
     modelGL.cubePoints = [];
     modelGL.cubeColors = [];
-    if (menu_index == 0) {
-      generateCubeVertice(modelGL);
-    } else if (menu_index == 1) {
-      generatePyramidVertice(modelGL);
-    } else if (menu_index == 2) {
-      donut.makeVerts(modelGL);
-    }
+
+    generateCubeVertice(modelGL);
 
     modelGL.buffers = initBuffers(modelGL.gl);
-    //requestAnimationFrame(render);
-  });
-
-  mfv = document.getElementById("menu-features-view");
-  mfv.addEventListener("click", () => {
-    menu_index_view = mfv.selectedIndex;
     //requestAnimationFrame(render);
   });
 
@@ -283,9 +250,6 @@ function init() {
   let formatJSONPrefix = "data:text/json;charset=utf-8,";
   const exportBtn = document.getElementById("export-button");
   exportBtn.addEventListener("click", () => {
-    modelGL.menuIdx = menu_index;
-    modelGL.menuViewIdx = menu_index_view;
-
     var string_data = formatJSONPrefix + encodeURIComponent(JSON.stringify(modelGL));
     var download_button = document.getElementById("download-link");
     download_button.setAttribute("href", string_data);
@@ -408,17 +372,7 @@ function drawScene() {
   projectionMatrix = mat4.create();
   modelViewMatrix = mat4.create();
 
-  if (menu_index_view == 0) {
-    mat4.ortho(projectionMatrix, -10.0, 15.0, -10.0, 10.0, -10.0, 10.0);
-    //mat4.perspective(projectionMatrix, fieldOfView, modelGL.aspect, zNear, zFar);
-  } else if (menu_index_view == 1) {
-    eye = vec3(0, 0, 1);
-    mat4.lookAt(modelViewMatrix, eye, at, up);
-    mat4.ortho(projectionMatrix, -1, 1, -1, 1, -1, 20);
-  } else if (menu_index_view == 2) {
-    modelViewMatrix = mat4.oblique(modelViewMatrix, 45, 120);
-    mat4.ortho(projectionMatrix, -1, 1, -1, 1, -1.5, 20);
-  }
+  mat4.ortho(projectionMatrix, -10.0, 15.0, -10.0, 10.0, -10.0, 10.0);
 
   if (!modelGL.rot) {
     modelGL.rot = { x: 0, y: 0, z: 0 };
@@ -565,13 +519,7 @@ function drawScene() {
   modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.isShading, shadingButton.checked);
   modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.isTexture, textureButton.checked);
   {
-    if (menu_index == 0) {
-      NumOfVertices = CubeVertices;
-    } else if (menu_index == 1) {
-      NumOfVertices = PyramidNumVertices;
-    } else if (menu_index == 2) {
-      NumOfVertices = donutNumVertices;
-    }
+    NumOfVertices = CubeVertices;
     //modelGL.gl.drawElements(modelGL.gl.TRIANGLES, NumOfVertices, modelGL.gl.UNSIGNED_SHORT, 0);
   }
 }
