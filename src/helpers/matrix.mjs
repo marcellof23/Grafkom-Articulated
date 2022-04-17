@@ -25,7 +25,6 @@ function scale$5(out, a, v) {
 }
 
 function translate$1(out, a, v) {
-  console.log(a, v);
   var x = v[0],
     y = v[1],
     z = v[2];

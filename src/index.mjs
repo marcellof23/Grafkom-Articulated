@@ -15,6 +15,7 @@ modelViewMatrix = mat4.create();
 normalMatrix = mat4.create();
 
 var angleSpeed = 1.5;
+var texture;
 
 var setAnimeForward = true;
 // shading button
@@ -66,6 +67,7 @@ function init() {
       vertexPosition: modelGL.gl.getAttribLocation(shaderProgram, "aVertexPosition"),
       vertexColor: modelGL.gl.getAttribLocation(shaderProgram, "aVertexColor"),
       vertexNormal: modelGL.gl.getAttribLocation(shaderProgram, "aVertexNormal"),
+      textureCoord: modelGL.gl.getAttribLocation(shaderProgram, "aTextureCoord"),
     },
     uniformLocations: {
       projectionMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
@@ -74,6 +76,7 @@ function init() {
       normalMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uNormalMatrix"),
       directionalVector: modelGL.gl.getUniformLocation(shaderProgram, "directionalVector"),
       isShading: modelGL.gl.getUniformLocation(shaderProgram, "uShading"),
+      uSampler: modelGL.gl.getUniformLocation(shaderProgram, "uSampler"),
     },
   };
 
@@ -81,6 +84,8 @@ function init() {
 
   viewMatrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -2, 1];
   modelGL.programInfo = programInfo;
+
+  texture = loadTexture(modelGL.gl, "/src/dogfur.jpeg");
 
   modelGL.aspect = modelGL.gl.canvas.clientWidth / modelGL.gl.canvas.clientHeight;
   modelGL.ratio = modelGL.gl.canvas.width / modelGL.gl.canvas.height;
@@ -388,20 +393,21 @@ function init() {
 
 var time_old = 0;
 
-function render() {
+async function render() {
   drawScene();
-  for (var i = 1; i < 9; i++) {
+  for (var i = 1; i < 10; i++) {
+    console.log(theta);
     theta[i] += angleSpeed;
     if (theta[i] > initTheta[i] + 30 || theta[i] < initTheta[i] - 30) {
       angleSpeed *= -1.0;
     }
   }
 
-  for (var i = 1; i < 9; i++) {
+  for (var i = 1; i < 10; i++) {
     initNodes(i);
   }
 
-  //requestAnimFrames(render);
+  requestAnimFrames(render);
 }
 
 function quad(a, b, c, d) {
@@ -434,9 +440,6 @@ function drawScene() {
     mat4.ortho(projectionMatrix, -1, 1, -1, 1, -1.5, 20);
   }
 
-  // mat4.invert(normalMatrix, modelViewMatrix);
-  // mat4.transpose(normalMatrix, normalMatrix);
-
   if (!modelGL.rot) {
     modelGL.rot = { x: 0, y: 0, z: 0 };
   }
@@ -452,12 +455,6 @@ function drawScene() {
   if (!modelGL.scale) {
     modelGL.scale = { x: 0, y: 0, z: 0 };
   }
-
-  mat4.translate(
-    modelViewMatrix, // dest matrix
-    modelViewMatrix, // matrix to modelGL.translate
-    [0, 0, 0],
-  ); // amount to modelGL.translate
 
   {
     modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, modelGL.buffers.position);
@@ -484,11 +481,26 @@ function drawScene() {
     modelGL.gl.enableVertexAttribArray(modelGL.programInfo.attribLocations.vertexColor);
   }
 
+  {
+    modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, modelGL.buffers.textureCoord);
+    modelGL.gl.vertexAttribPointer(modelGL.programInfo.attribLocations.textureCoord, 2, modelGL.gl.FLOAT, false, 0, 0);
+    modelGL.gl.enableVertexAttribArray(modelGL.programInfo.attribLocations.textureCoord);
+  }
+
   // Tell WebGL which indices to use to index the vertices
   modelGL.gl.bindBuffer(modelGL.gl.ELEMENT_ARRAY_BUFFER, modelGL.buffers.indices);
 
   // Tell WebGL to use our program when drawing
   modelGL.gl.useProgram(modelGL.programInfo.program);
+
+  // Tell WebGL we want to affect texture unit 0
+  modelGL.gl.activeTexture(modelGL.gl.TEXTURE0);
+
+  // Bind the texture to texture unit 0
+  modelGL.gl.bindTexture(modelGL.gl.TEXTURE_2D, texture);
+
+  // Tell the shader we bound the texture to texture unit 0
+  modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uSampler, 0);
 
   // // set the light direction.
   modelGL.gl.uniform3fv(
@@ -522,7 +534,7 @@ function drawScene() {
   mat4.rotate(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to rotate
-    modelGL.rot.x, // amount to rotate in radians
+    modelGL.rot.x + 0.3, // amount to rotate in radians
     [1, 0, 0],
   );
   mat4.translate(
@@ -577,7 +589,6 @@ function drawScene() {
     } else if (menu_index == 2) {
       NumOfVertices = donutNumVertices;
     }
-    console.log(NumOfVertices);
     //modelGL.gl.drawElements(modelGL.gl.TRIANGLES, NumOfVertices, modelGL.gl.UNSIGNED_SHORT, 0);
   }
 }
