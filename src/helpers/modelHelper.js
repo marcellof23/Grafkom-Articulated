@@ -97,7 +97,6 @@ function createNode(matrixTransform, render, sibling, child) {
 }
 
 function initNodes(Id) {
-  console.log(Id);
   var m = matrix4();
   switch (Id) {
     case TORSO_ID:
@@ -250,8 +249,7 @@ function torso() {
   instanceMatrix = mult(instanceMatrix, scale4(torsoWidth, torsoHeight, torsoWidth));
   gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
-  //modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
-  checkShading(flatten(instanceMatrix), viewMatrix);
+  modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
   for (var i = 0; i < 6; i++) gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
 }
 
@@ -265,7 +263,6 @@ function head() {
 }
 
 function neck() {
-  console.log("punten");
   instanceMatrix = mult(modelViewMatrices, translate(0.0, 0.5 * neckHeight, 0.0));
   instanceMatrix = mult(instanceMatrix, scale4(neckWidth, neckHeight, neckWidth));
   gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));

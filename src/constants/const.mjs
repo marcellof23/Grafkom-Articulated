@@ -19,13 +19,6 @@ const at = vec3(0.0, 0.0, 0.0);
 const up = vec3(0.0, 1.0, 0.0);
 var eye;
 
-var modelViewMatrixLoc;
-
-var projectionMatrix;
-var modelViewMatrix;
-var normalMatrix;
-var viewMatrix;
-
 var isShading = false;
 
 var headHeight = 3.5;

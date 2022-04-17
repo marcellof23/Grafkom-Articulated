@@ -9,6 +9,7 @@
       attribute vec4 aVertexPosition;
       attribute vec4 aVertexColor;
       attribute vec3 aVertexNormal;
+      attribute vec2 aTextureCoord;
 
       //attribute vec3 a_normal;
       //attribute vec2 texcoord;
@@ -19,6 +20,7 @@
       uniform mat4 uViewMatrix;
 
       varying lowp vec4 vColor;
+      varying highp vec2 vTextureCoord;
 
       varying highp vec3 vLighting;
       uniform highp vec3 directionalVector;
@@ -35,6 +37,8 @@
 
         highp float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);
         vLighting = ambientLight + (directionalLightColor * directional);
+
+        vTextureCoord = aTextureCoord;
       }
     </script>
     <script id="fragment-shader" type="x-shader/x-fragment">
@@ -43,16 +47,29 @@
 
       varying highp vec3 vLighting;
 
+      varying highp vec2 vTextureCoord;
+
+      uniform float vIsTexture;
+      uniform sampler2D uSampler;
+
       uniform bool uShading;
       void main(void) {
-        if (uShading) {
-          gl_FragColor = vec4(vColor.rgb * vLighting, vColor.a);
-        } else {
-          gl_FragColor = vColor;
+      //  if (uShading) {
+      //    gl_FragColor = vec4(vColor.rgb * vLighting, vColor.a);
+      //  } else {
+      //    gl_FragColor = vColor;
+      //  }
+
+        vec4 texelColor = texture2D(uSampler, vTextureCoord);
+        if(uShading){
+          gl_FragColor = vec4(texelColor.rgb * vLighting, 1.);
+        }
+        else {
+          gl_FragColor = vec4(vColor.rgb * vLighting,  1.);
         }
       }
     </script>
-    
+
     <title>Document</title>
   </head>
 
@@ -251,6 +268,7 @@
   <script src="src/model/object.mjs"></script>
   <script src="src/helpers/mv.mjs"></script>
   <script src="src/model/cube.mjs"></script>
+  <script src="src/helpers/texture.mjs"></script>
   <script src="src/helpers/shading.mjs"></script>
   <script src="src/helpers/modelHelper.js"></script>
   <script src="src/helpers/matrix.mjs"></script>

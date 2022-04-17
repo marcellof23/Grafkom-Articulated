@@ -19,3 +19,10 @@ class ModelGL {
 
   load_data(data) {}
 }
+
+var modelViewMatrixLoc;
+
+var projectionMatrix;
+var modelViewMatrix;
+var normalMatrix;
+var viewMatrix;
