@@ -488,12 +488,18 @@ function drawScene() {
     normalizeVector([modelGL.light.x, modelGL.light.y, 1 + modelGL.light.z]),
   );
 
-  // mat4.rotateY(modelViewMatrix, modelViewMatrix, cameraAngleRadians);
+  mat4.rotateY(modelViewMatrix, modelViewMatrix, cameraAngleRadians);
 
-  // mat4.translate(modelViewMatrix, modelViewMatrix, [0, 0, radius * 0.6]);
+  // mat4.translate(modelViewMatrix, modelViewMatrix, [0, 0, radius * 0.005]);
+  mat4.scale(
+    modelViewMatrix, // dest matrix
+    modelViewMatrix, // matrix to modelGL.translate
+    [radius * 0.1, radius * 0.1, radius * 0.1],
+  );
+  console.log(radius);
 
-  // // Make a view matrix from the camera matrix
-  // mat4.invert(modelViewMatrix, modelViewMatrix);
+  // Make a view matrix from the camera matrix
+  mat4.invert(modelViewMatrix, modelViewMatrix);
 
   var viewProjectionMatrix = new Float32Array(16);
   mat4.identity(viewProjectionMatrix);
