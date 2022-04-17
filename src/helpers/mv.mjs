@@ -1,28 +1,10 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Angel.js
-//
-//////////////////////////////////////////////////////////////////////////////
-
-//----------------------------------------------------------------------------
-//
-//  Helper functions
-//
-
 function _argumentsToArray(args) {
   return [].concat.apply([], Array.prototype.slice.apply(args));
 }
 
-//----------------------------------------------------------------------------
-
 function radians(degrees) {
   return (degrees * Math.PI) / 180.0;
 }
-
-//----------------------------------------------------------------------------
-//
-//  Vector Constructors
-//
 
 function vec2() {
   var result = _argumentsToArray(arguments);
@@ -69,11 +51,6 @@ function vec4() {
   return result.splice(0, 4);
 }
 
-//----------------------------------------------------------------------------
-//
-//  Matrix Constructors
-//
-
 function mat2() {
   var v = _argumentsToArray(arguments);
 
@@ -96,8 +73,6 @@ function mat2() {
 
   return m;
 }
-
-//----------------------------------------------------------------------------
 
 function mat3() {
   var v = _argumentsToArray(arguments);
@@ -123,8 +98,6 @@ function mat3() {
 
   return m;
 }
-
-//----------------------------------------------------------------------------
 
 function matrix4() {
   var v = _argumentsToArray(arguments);
@@ -152,11 +125,6 @@ function matrix4() {
 
   return m;
 }
-
-//----------------------------------------------------------------------------
-//
-//  Generic Mathematical Operations for Vectors and Matrices
-//
 
 function equal(u, v) {
   if (u.length != v.length) {
@@ -186,8 +154,6 @@ function equal(u, v) {
 
   return true;
 }
-
-//----------------------------------------------------------------------------
 
 function add(u, v) {
   var result = [];
@@ -225,8 +191,6 @@ function add(u, v) {
   }
 }
 
-//----------------------------------------------------------------------------
-
 function subtract(u, v) {
   var result = [];
 
@@ -262,8 +226,6 @@ function subtract(u, v) {
     return result;
   }
 }
-
-//----------------------------------------------------------------------------
 
 function mult(u, v) {
   var result = [];
@@ -324,11 +286,6 @@ function arrayToMat4(matrix) {
   return m;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Basic Transformation Matrix Generators
-//
-
 function translate(x, y, z) {
   if (Array.isArray(x) && x.length == 3) {
     z = x[2];
@@ -343,8 +300,6 @@ function translate(x, y, z) {
 
   return result;
 }
-
-//----------------------------------------------------------------------------
 
 function rotate(angle, axis) {
   if (!Array.isArray(axis)) {
@@ -371,8 +326,6 @@ function rotate(angle, axis) {
   return result;
 }
 
-//----------------------------------------------------------------------------
-
 function scale(x, y, z) {
   if (Array.isArray(x) && x.length == 3) {
     z = x[2];
@@ -387,11 +340,6 @@ function scale(x, y, z) {
 
   return result;
 }
-
-//----------------------------------------------------------------------------
-//
-//  ModelView Matrix Generators
-//
 
 function lookAt(eye, at, up) {
   if (!Array.isArray(eye) || eye.length != 3) {
@@ -421,11 +369,6 @@ function lookAt(eye, at, up) {
   return result;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Projection Matrix Generators
-//
-
 function ortho(left, right, bottom, top, near, far) {
   if (left == right) {
     throw "ortho(): left and right are equal";
@@ -452,8 +395,6 @@ function ortho(left, right, bottom, top, near, far) {
   return result;
 }
 
-//----------------------------------------------------------------------------
-
 function perspective(fovy, aspect, near, far) {
   var f = 1.0 / Math.tan(radians(fovy) / 2);
   var d = far - near;
@@ -468,11 +409,6 @@ function perspective(fovy, aspect, near, far) {
 
   return result;
 }
-
-//----------------------------------------------------------------------------
-//
-//  Matrix Functions
-//
 
 function transposes(m) {
   if (!m.matrix) {
@@ -492,11 +428,6 @@ function transposes(m) {
   return result;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Vector Functions
-//
-
 function dot(u, v) {
   if (u.length != v.length) {
     throw "dot(): vectors are not the same dimension";
@@ -510,8 +441,6 @@ function dot(u, v) {
   return sum;
 }
 
-//----------------------------------------------------------------------------
-
 function negate(u) {
   var result = [];
   for (var i = 0; i < u.length; ++i) {
@@ -520,8 +449,6 @@ function negate(u) {
 
   return result;
 }
-
-//----------------------------------------------------------------------------
 
 function cross(u, v) {
   if (!Array.isArray(u) || u.length < 3) {
@@ -537,13 +464,9 @@ function cross(u, v) {
   return result;
 }
 
-//----------------------------------------------------------------------------
-
 function length(u) {
   return Math.sqrt(dot(u, u));
 }
-
-//----------------------------------------------------------------------------
 
 function normalize(u, excludeLastComponent) {
   if (excludeLastComponent) {
@@ -567,8 +490,6 @@ function normalize(u, excludeLastComponent) {
   return u;
 }
 
-//----------------------------------------------------------------------------
-
 function mix(u, v, s) {
   if (typeof s !== "number") {
     throw "mix: the last paramter " + s + " must be a number";
@@ -586,11 +507,6 @@ function mix(u, v, s) {
   return result;
 }
 
-//----------------------------------------------------------------------------
-//
-// Vector and Matrix functions
-//
-
 function scale(s, u) {
   if (!Array.isArray(u)) {
     throw "scale: second parameter " + u + " is not a vector";
@@ -603,11 +519,6 @@ function scale(s, u) {
 
   return result;
 }
-
-//----------------------------------------------------------------------------
-//
-//
-//
 
 function flatten(v) {
   if (v.matrix === true) {
@@ -639,8 +550,6 @@ function flatten(v) {
 
   return floats;
 }
-
-//----------------------------------------------------------------------------
 
 var sizeof = {
   vec2: new Float32Array(flatten(vec2())).byteLength,

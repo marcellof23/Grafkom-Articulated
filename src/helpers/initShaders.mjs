@@ -63,8 +63,6 @@ function initBuffers(gl) {
   if (menu_index == 0) {
     arr_position = positions;
     arr_colors = modelGL.cubeColors;
-    console.log(arr_position);
-    console.log(arr_colors);
     arr_indices = modelGL.cubePoints;
     arr_normals = modelGL.cubeNormals;
   } else if (menu_index == 1) {

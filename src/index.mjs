@@ -5,6 +5,8 @@ var bottom = -1.0;
 
 var mf, mfv;
 
+const timer = (ms) => new Promise((res) => setTimeout(res, ms));
+
 const fieldOfView = (45 * Math.PI) / 180; // in radians
 
 const zNear = 1;
@@ -20,27 +22,7 @@ var texture;
 var setAnimeForward = true;
 // shading button
 var shadingButton = document.getElementById("shading");
-
-// function toggleShade() {
-//   const shaderProgram = initShaders(modelGL.gl, "vertex-shader", "fragment-shader");
-//   modelGL.programInfo = {
-//     program: shaderProgram,
-//     attribLocations: {
-//       vertexPosition: modelGL.gl.getAttribLocation(shaderProgram, "aVertexPosition"),
-//       vertexColor: modelGL.gl.getAttribLocation(shaderProgram, "aVertexColor"),
-//       vertexNormal: modelGL.gl.getAttribLocation(shaderProgram, "aVertexNormal"),
-//     },
-//     uniformLocations: {
-//       projectionMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
-//       modelViewMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uModelViewMatrix"),
-//       viewMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uViewMatrix"),
-//       normalMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uNormalMatrix"),
-//       directionalVector: modelGL.gl.getUniformLocation(shaderProgram, "directionalVector"),
-//     },
-//   };
-//   modelGL.buffers = initBuffers(modelGL.gl, modelGL.programInfo);
-//   drawScene();
-// }
+var textureButton = document.getElementById("texture-btn");
 
 function init() {
   // Retrieve  canvas element
@@ -76,6 +58,7 @@ function init() {
       normalMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uNormalMatrix"),
       directionalVector: modelGL.gl.getUniformLocation(shaderProgram, "directionalVector"),
       isShading: modelGL.gl.getUniformLocation(shaderProgram, "uShading"),
+      isTexture: modelGL.gl.getUniformLocation(shaderProgram, "uTexture"),
       uSampler: modelGL.gl.getUniformLocation(shaderProgram, "uSampler"),
     },
   };
@@ -85,7 +68,7 @@ function init() {
   viewMatrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -2, 1];
   modelGL.programInfo = programInfo;
 
-  texture = loadTexture(modelGL.gl, "/src/dogfur.jpeg");
+  texture = loadTexture(modelGL.gl, "/assets/dogfur.jpeg");
 
   modelGL.aspect = modelGL.gl.canvas.clientWidth / modelGL.gl.canvas.clientHeight;
   modelGL.ratio = modelGL.gl.canvas.width / modelGL.gl.canvas.height;
@@ -382,11 +365,6 @@ function init() {
     drawScene();
   });
 
-  shadingButton.addEventListener("change", () => {
-    console.log("anjing");
-    console.log(shadingButton.checked);
-  });
-
   render();
   //requestAnimationFrame(render);
 }
@@ -395,8 +373,8 @@ var time_old = 0;
 
 async function render() {
   drawScene();
+  console.log("punten");
   for (var i = 1; i < 10; i++) {
-    console.log(theta);
     theta[i] += angleSpeed;
     if (theta[i] > initTheta[i] + 30 || theta[i] < initTheta[i] - 30) {
       angleSpeed *= -1.0;
@@ -407,7 +385,9 @@ async function render() {
     initNodes(i);
   }
 
-  requestAnimFrames(render);
+  await timer(100);
+  render();
+  //requestAnimationFrame(render);
 }
 
 function quad(a, b, c, d) {
@@ -576,11 +556,8 @@ function drawScene() {
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
-
-  console.log(shadingButton.checked);
   modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.isShading, shadingButton.checked);
-
-  console.log(shadingButton.checked);
+  modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.isTexture, textureButton.checked);
   {
     if (menu_index == 0) {
       NumOfVertices = CubeVertices;

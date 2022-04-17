@@ -1,5 +1,4 @@
 function shading(modelMatrix, viewMatrix) {
-  console.log(modelMatrix, viewMatrix);
   var temp = mult(modelMatrix, viewMatrix);
   var mvMatrix = [
     [0, 0, 0, 0],

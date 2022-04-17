@@ -53,20 +53,20 @@
       uniform sampler2D uSampler;
 
       uniform bool uShading;
+      uniform bool uTexture;
       void main(void) {
-      //  gl_FragColor = texture2D(uSampler, vTextureCoord);
-      //  if (uShading) {
-      //    gl_FragColor = vec4(vColor.rgb * vLighting, vColor.a);
-      //  } else {
-      //    gl_FragColor = vColor;
-      //  }
+      if (uShading) {
+        gl_FragColor = vec4(vColor.rgb * vLighting, vColor.a);
+      } else {
+        gl_FragColor = vColor;
+      }
 
        vec4 texelColor = texture2D(uSampler, vTextureCoord);
-       if(uShading){
+       if(uTexture){
          gl_FragColor = vec4(texelColor.rgb * vLighting, 1.);
        }
        else {
-         gl_FragColor = vec4(vColor.rgb * vLighting,  1.);
+         gl_FragColor = gl_FragColor;
         }
       }
     </script>
@@ -116,6 +116,8 @@
           <input type="color" id="colorpicker" value="#ff0000" />
           <div class="slider-text">Shade</div>
           <input type="checkbox" id="shading" />
+          <div class="slider-text">Texture</div>
+          <input type="checkbox" id="texture-btn" />
           <div class="slider-text">Rotation</div>
           <div class="slide-group">
             <div class="slide-item">
