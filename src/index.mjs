@@ -207,6 +207,16 @@ function init() {
     //requestAnimationFrame(render);
   });
 
+
+  document.getElementById("textureBump").onclick = function () {
+    setTextureType(2, modelGL.gl);
+    console.log("anjengg")
+  };
+
+
+
+
+
   document.getElementById("slider0").addEventListener("input", function (e) {
     theta[TORSO_ID] = e.target.value;
     initNodes(TORSO_ID);
@@ -395,18 +405,19 @@ var time_old = 0;
 
 function render() {
   drawScene();
-  for (var i = 1; i < 9; i++) {
-    theta[i] += angleSpeed;
-    if (theta[i] > initTheta[i] + 30 || theta[i] < initTheta[i] - 30) {
-      angleSpeed *= -1.0;
-    }
-  }
+  // for (var i = 1; i < 9; i++) {
+  //   theta[i] += angleSpeed;
+  //   if (theta[i] > initTheta[i] + 30 || theta[i] < initTheta[i] - 30) {
+  //     angleSpeed *= -1.0;
+  //   }
+  // }
 
   for (var i = 1; i < 9; i++) {
     initNodes(i);
   }
 
   requestAnimFrames(render);
+  
 }
 
 function quad(a, b, c, d) {
@@ -570,10 +581,10 @@ function drawScene() {
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
 
-  console.log(shadingButton.checked);
+  // console.log(shadingButton.checked);
   modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.isShading, shadingButton.checked);
 
-  console.log(shadingButton.checked);
+  // console.log(shadingButton.checked);
   {
     if (menu_index == 0) {
       NumOfVertices = CubeVertices;
@@ -582,7 +593,7 @@ function drawScene() {
     } else if (menu_index == 2) {
       NumOfVertices = donutNumVertices;
     }
-    console.log(NumOfVertices);
+    // console.log(NumOfVertices);
     //modelGL.gl.drawElements(modelGL.gl.TRIANGLES, NumOfVertices, modelGL.gl.UNSIGNED_SHORT, 0);
   }
 }
@@ -600,3 +611,73 @@ window.onload = main;
 //   //drawScene();
 //   //toggleShade();
 // });
+
+
+// Set the texture mapping mode of object
+function setTextureType(value, gl){
+  switch(value) {
+      case 0:
+          this.loadTexture('../assets/images/Wooden.jpg');
+          break;
+      case 1:
+          this.loadEnvironmentTexture();
+          break;
+      case 2:
+          this.loadTexture('Bumped.png', gl);
+          console.log("anjengggggggg")
+          break;
+  }
+}
+
+
+function loadTexture(url, gl) {
+  // gl = modelGL.gl;
+  const texture = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+
+  // Because images have to be download over the internet
+  // they might take a moment until they are ready.
+  // Until then put a single pixel in the texture so we can
+  // use it immediately. When the image has finished downloading
+  // we'll update the texture with the contents of the image.
+  const level = 0;
+  const internalFormat = gl.RGBA;
+  const width = 1;
+  const height = 1;
+  const border = 0;
+  const srcFormat = gl.RGBA;
+  const srcType = gl.UNSIGNED_BYTE;
+  const pixel = new Uint8Array([0, 0, 255, 255]);  // opaque blue
+  gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
+              width, height, border, srcFormat, srcType,
+              pixel);
+
+  const image = new Image();
+  image.onload = () => {
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
+                      srcFormat, srcType, image);
+  
+      // WebGL1 has different requirements for power of 2 images
+      // vs non power of 2 images so check if the image is a
+      // power of 2 in both dimensions.
+      if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+          // Yes, it's a power of 2. Generate mips.
+          gl.generateMipmap(gl.TEXTURE_2D);
+      } else {
+          // No, it's not a power of 2. Turn of mips and set
+          // wrapping to clamp to edge
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      }
+  };
+  console.log(image)
+  image.src = url;
+  console.log(texture);
+  return texture;
+}
+
+function isPowerOf2(value) {
+  return (value & (value - 1)) == 0;
+}
