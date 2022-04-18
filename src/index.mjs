@@ -351,12 +351,7 @@ var time_old = 0;
 async function render() {
   drawScene();
   console.log("punten");
-  for (var i = 1; i < 10; i++) {
-    theta[i] += angleSpeed;
-    if (theta[i] > initTheta[i] + 30 || theta[i] < initTheta[i] - 30) {
-      angleSpeed *= -1.0;
-    }
-  }
+  
 
   for (var i = 1; i < 10; i++) {
     initNodes(i);
@@ -535,6 +530,13 @@ function drawScene() {
     NumOfVertices = CubeVertices;
     //modelGL.gl.drawElements(modelGL.gl.TRIANGLES, NumOfVertices, modelGL.gl.UNSIGNED_SHORT, 0);
   }
+
+  for (var i = 1; i < 10; i++) {
+    theta[i] += angleSpeed;
+    if (theta[i] > initTheta[i] + 30 || theta[i] < initTheta[i] - 30) {
+      angleSpeed *= -1.0;
+    }
+  }
 }
 
 function main() {
@@ -550,3 +552,4 @@ window.onload = main;
 //   //drawScene();
 //   //toggleShade();
 // });
+
