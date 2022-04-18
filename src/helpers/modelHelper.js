@@ -100,8 +100,50 @@ function createNode(matrixTransform, render, sibling, child) {
   return node;
 }
 
-function initNodes(Id) {
+function setUpVariable(myJSON){
+  console.log(myJSON)
+  torsoHeight = myJSON.torsoHeight;
+  torsoWidth = myJSON.torsoWidth;
+  upperArmHeight = myJSON.upperArmHeight;
+  lowerArmHeight = myJSON.lowerArmHeight;
+  upperArmWidth =  myJSON.upperArmWidth;
+  lowerArmWidth = myJSON.lowerArmWidth;
+  upperLegWidth = myJSON.upperLegWidth;
+  lowerLegWidth = myJSON.lowerLegWidth;
+  lowerLegHeight = myJSON.lowerLegHeight;
+  upperLegHeight = myJSON.upperLegHeight;
+  headHeight = myJSON.headHeight;
+  headWidth = myJSON.headWidth;
+  neckHeight = myJSON.neckHeight;
+  neckWidth = myJSON.neckWidth;
+
+  torsoHeight2 = myJSON.torsoHeight2;
+  torsoWidth2 = myJSON.torsoWidth2;
+  upperArmHeight2 = myJSON.upperArmHeight2;
+  lowerArmHeight2 = myJSON.lowerArmHeight2;
+  upperArmWidth2 = myJSON.upperArmWidth2;
+  lowerArmWidth2 = myJSON.lowerArmWidth2;
+  upperLegWidth2 = myJSON.upperLegWidth2;
+  lowerLegWidth2 = myJSON.lowerLegWidth2;
+  lowerLegHeight2 = myJSON.lowerLegHeight2;
+  upperLegHeight2 = myJSON.upperLegHeight2;
+  headHeight2 = myJSON.headHeight2;
+  headWidth2 = myJSON.headWidth2;
+
+  numNodes = myJSON.numNodes;
+  numAngles = myJSON.numAngles;
+  angle = myJSON.angle;
+  initTheta = myJSON.initTheta;
+  theta = myJSON.theta;
+  theta2 = myJSON.theta2;
+
+}
+
+
+function initNodes(Id, myJSON) {
   var m = matrix4();
+
+  // setUpVariable(myJSON)
   switch (Id) {
     case TORSO_ID:
       m = rotate(theta[GLOBAL_ANGLE_ID], 0, 0, 1);
