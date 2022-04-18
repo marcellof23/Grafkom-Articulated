@@ -252,6 +252,8 @@ function init() {
     texture = setTextureType(2);
   };
 
+  document.getElementById("save").onclick = function () { save()};
+
   // Set event listener for export button
   let formatJSONPrefix = "data:text/json;charset=utf-8,";
   const exportBtn = document.getElementById("export-button");
