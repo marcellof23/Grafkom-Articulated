@@ -70,7 +70,7 @@ function init() {
   viewMatrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -2, 1];
   modelGL.programInfo = programInfo;
 
-  texture = loadTexture(modelGL.gl, "/assets/Bumped.png");
+  texture = loadTexture(modelGL.gl, "/assets/bump.jpg");
 
   modelGL.aspect = modelGL.gl.canvas.clientWidth / modelGL.gl.canvas.clientHeight;
   modelGL.ratio = modelGL.gl.canvas.width / modelGL.gl.canvas.height;

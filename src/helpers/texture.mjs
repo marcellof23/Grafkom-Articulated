@@ -8,7 +8,7 @@ function setTextureType(value) {
           this.loadEnvironmentTexture();
           break;
       case 2:
-          texture = this.loadTexture(gl, "/assets/Bumped.png");
+          texture = this.loadTexture(gl, "/assets/bump.jpg");
           break;
   }
   return texture;
