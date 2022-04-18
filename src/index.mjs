@@ -24,6 +24,10 @@ var setAnimeForward = true;
 var shadingButton = document.getElementById("shading");
 var textureButton = document.getElementById("texture-btn");
 
+var torsoStart = 0;
+var idxStart = 1;
+var idxEnd = 11;
+
 menu_index = 0;
 
 function init() {
@@ -89,7 +93,7 @@ function init() {
   modelGL.scale = scale;
   modelGL.light = light;
 
-  for (i = 0; i < numNodes; i++) initNodes(i);
+  for (i = torsoStart; i < numNodes; i++) initNodes(i);
 
   // set listener to sliders
 
@@ -170,20 +174,44 @@ function init() {
   });
 
   document.getElementById("slider0").addEventListener("input", function (e) {
-    theta[TORSO_ID] = e.target.value;
-    initNodes(TORSO_ID);
+    var id;
+    if (menu_index == 0) {
+      id = TORSO_ID;
+    } else if (menu_index == 1) {
+      id = torsoId2;
+    } else if (menu_index == 2) {
+      id = torsoId2;
+    }
+    theta[id] = e.target.value;
+    //initNodes(TORSO_ID);
     //requestAnimationFrame(render);
   });
 
   document.getElementById("slider1").addEventListener("input", function (e) {
-    theta[NECK_ID] = e.target.value;
-    initNodes(NECK_ID);
+    var id;
+    if (menu_index == 0) {
+      id = NECK_ID;
+    } else if (menu_index == 1) {
+      id = NECK_ID;
+    } else if (menu_index == 2) {
+      id = NECK_ID;
+    }
+    theta[id] = e.target.value;
+    //initNodes(NECK_ID);
     //requestAnimationFrame(render);
   });
 
   document.getElementById("slider2").addEventListener("input", function (e) {
-    theta[HEAD_ID] = e.target.value;
-    initNodes(HEAD_ID);
+    var id;
+    if (menu_index == 0) {
+      id = HEAD_ID;
+    } else if (menu_index == 1) {
+      id = headId2;
+    } else if (menu_index == 2) {
+      id = headId2;
+    }
+    theta[id] = e.target.value;
+    //initNodes(HEAD_ID);
     //requestAnimationFrame(render);
   });
 
@@ -246,8 +274,6 @@ function init() {
     //requestAnimationFrame(render);
   });
 
-
-  
   // JavaScript for Texture View Button
   document.getElementById("textureImage").onclick = function () {
     texture = setTextureType(0);
@@ -258,6 +284,24 @@ function init() {
   document.getElementById("textureBump").onclick = function () {
     texture = setTextureType(2);
   };
+
+  mf = document.getElementById("menu-features");
+  mf.addEventListener("click", () => {
+    menu_index = mf.selectedIndex;
+    if (menu_index == 0) {
+      torsoStart = 0;
+      idxStart = 1;
+      idxEnd = 11;
+    } else if (menu_index == 1) {
+      torsoStart = 15;
+      idxStart = 16;
+      idxEnd = 26;
+    } else if (menu_index == 2) {
+      torsoStart = 0;
+      idxStart = 1;
+      idxEnd = 1;
+    }
+  });
 
   // Set event listener for export button
   let formatJSONPrefix = "data:text/json;charset=utf-8,";
@@ -351,9 +395,8 @@ var time_old = 0;
 async function render() {
   drawScene();
   console.log("punten");
-  
 
-  for (var i = 1; i < 10; i++) {
+  for (var i = idxStart; i < idxEnd; i++) {
     initNodes(i);
   }
 
@@ -476,7 +519,7 @@ function drawScene() {
   mat4.rotate(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to rotate
-    modelGL.rot.y, // amount to rotate in radians
+    modelGL.rot.y + 0.4, // amount to rotate in radians
     [0, 1, 0],
   );
   mat4.rotate(
@@ -517,7 +560,7 @@ function drawScene() {
     [1, 0, 0],
   );
 
-  traverse(TORSO_ID, arrayToMat4(modelViewMatrix), projectionMatrix, normalMatrix);
+  traverse(torsoStart, arrayToMat4(modelViewMatrix), projectionMatrix, normalMatrix);
 
   // Set the shader uniforms
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.viewMatrix, false, viewMatrix);
@@ -531,7 +574,7 @@ function drawScene() {
     //modelGL.gl.drawElements(modelGL.gl.TRIANGLES, NumOfVertices, modelGL.gl.UNSIGNED_SHORT, 0);
   }
 
-  for (var i = 1; i < 10; i++) {
+  for (var i = idxStart; i < idxEnd; i++) {
     theta[i] += angleSpeed;
     if (theta[i] > initTheta[i] + 30 || theta[i] < initTheta[i] - 30) {
       angleSpeed *= -1.0;
@@ -552,4 +595,3 @@ window.onload = main;
 //   //drawScene();
 //   //toggleShade();
 // });
-

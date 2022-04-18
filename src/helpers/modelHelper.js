@@ -18,16 +18,17 @@ var GLOBAL_ANGLE_ID = 12;
 var GLOBAL_X_COORDINATE = 13;
 var GLOBAL_Y_COORDINATE = 14;
 
-var torsoId2 = 21;
-var headId2 = 22;
-var leftUpperArmId2 = 23;
-var leftLowerArmId2 = 24;
-var rightUpperArmId2 = 25;
-var rightLowerArmId2 = 26;
-var leftUpperLegId2 = 27;
-var leftLowerLegId2 = 28;
-var rightUpperLegId2 = 29;
-var rightLowerLegId2 = 30;
+var torsoId2 = 15;
+var headId2 = 16;
+var leftUpperArmId2 = 17;
+var leftLowerArmId2 = 18;
+var rightUpperArmId2 = 19;
+var rightLowerArmId2 = 20;
+var leftUpperLegId2 = 21;
+var leftLowerLegId2 = 22;
+var rightUpperLegId2 = 23;
+var rightLowerLegId2 = 24;
+var headId22 = 25;
 
 var torsoHeight = 8.0;
 var torsoWidth = 3.0;
@@ -57,17 +58,26 @@ var upperLegHeight2 = 3.0;
 var headHeight2 = 1.5;
 var headWidth2 = 1.0;
 
-var numNodes = 11;
+var torsoHeights = [8.0, 5.0];
+var torsoWidths = [3.0, 2.5];
+var upperArmHeights = [5.0, 3.0];
+var lowerArmHeights = [2.0, 2.0];
+var upperArmWidths = [1.3, 0.5];
+var lowerArmWidths = [0.8, 0.5];
+var upperLegWidths = [1.3, 0.5];
+var lowerLegWidths = [0.8, 0.5];
+var lowerLegHeights = [2.0, 2.0];
+var upperLegHeights = [5.0, 3.0];
+var headHeights = [3.5, 1.5];
+var headWidths = [1.5, 1.0];
+
+var numNodes = 25;
 var numAngles = 11;
 var angle = 0;
 
-var initTheta = [
-  90, 120, 90, 70, 10, 80, 10, 90, 40, 70, 30, 0, -90, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 180, 0, 180, 0, 0, 120,
-];
-var theta = [
-  90, 120, 90, 70, 10, 80, 10, 90, 40, 70, 30, 0, -90, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 180, 0, 180, 0, 0, 120,
-];
-var theta2 = [0, 0, 0, 0, 0, 0, 180, 0, 180, 0, 0, 120];
+var initTheta = [90, 120, 90, 70, 10, 80, 10, 90, 40, 70, 30, 0, -90, 0, 0, 0, 0, 0, 0, 0, 0, 180, 0, 180, 0, 0];
+var theta = [90, 120, 90, 70, 10, 80, 10, 90, 40, 70, 30, 0, -90, 0, 0, 0, 0, 0, 0, 0, 0, 180, 0, 180, 0, 0];
+var theta2 = [0, 0, 0, 0, 0, 0, 180, 0, 180, 0, 0];
 
 var stack = [];
 
@@ -77,7 +87,7 @@ var modelViewMatrices;
 var projectionMatrices;
 var normalMatrices;
 
-for (var i = 0; i < 31; i++) figure[i] = createNode(null, null, null, null);
+for (var i = 0; i < 26; i++) figure[i] = createNode(null, null, null, null);
 
 function scale4(a, b, c) {
   var result = matrix4();
@@ -172,63 +182,64 @@ function initNodes(Id) {
       break;
 
     case torsoId2:
-      m = rotate(theta2[torsoId2 - 21], 0, 1, 0);
+      m = rotate(theta[torsoId2], 0, 1, 0);
       figure[torsoId2] = createNode(m, torso, null, headId2);
       break;
 
+    case headId22:
     case headId2:
       m = translate(0.0, torsoHeight2 + 0.5 * headHeight2, 0.0);
-      m = mult(m, rotate(theta2[headId2 - 21], 1, 0, 0));
-      m = mult(m, rotate(theta2[headId2 - 21], 0, 1, 0));
+      m = mult(m, rotate(theta[headId2], 1, 0, 0));
+      m = mult(m, rotate(theta[headId2], 0, 1, 0));
       m = mult(m, translate(0.0, -0.5 * headHeight2, 0.0));
       figure[headId2] = createNode(m, head, leftUpperArmId2, null);
       break;
 
     case leftUpperArmId2:
       m = translate(-(torsoWidth2 + upperArmWidth2), 0.9 * torsoHeight2, 0.0);
-      m = mult(m, rotate(theta2[leftUpperArmId2 - 21], 1, 0, 0));
+      m = mult(m, rotate(theta[leftUpperArmId2], 1, 0, 0));
       figure[leftUpperArmId2] = createNode(m, leftUpperArm, rightUpperArmId2, leftLowerArmId2);
       break;
 
     case rightUpperArmId2:
       m = translate(torsoWidth2 + upperArmWidth2, 0.9 * torsoHeight2, 0.0);
-      m = mult(m, rotate(theta2[rightUpperArmId2 - 21], 1, 0, 0));
+      m = mult(m, rotate(theta[rightUpperArmId2], 1, 0, 0));
       figure[rightUpperArmId2] = createNode(m, rightUpperArm, leftUpperLegId2, rightLowerArmId2);
       break;
 
     case leftUpperLegId2:
       m = translate(-(torsoWidth2 + upperLegWidth2) + 0.75, 0.1 * upperLegHeight2, 0.0);
-      m = mult(m, rotate(theta2[leftUpperLegId2 - 21], 1, 0, 0));
+      m = mult(m, rotate(theta[leftUpperLegId2], 1, 0, 0));
       figure[leftUpperLegId2] = createNode(m, leftUpperLeg, rightUpperLegId2, leftLowerLegId2);
       break;
 
     case rightUpperLegId2:
-      m = translate(torsoWidth2 + upperLegWidth - 0.75, 0.1 * upperLegHeight2, 0.0);
-      m = mult(m, rotate(theta2[rightUpperLegId2 - 21], 1, 0, 0));
+      m = translate(torsoWidth2 + upperLegWidth2 - 0.75, 0.1 * upperLegHeight2, 0.0);
+      m = mult(m, rotate(theta[rightUpperLegId2], 1, 0, 0));
       figure[rightUpperLegId2] = createNode(m, rightUpperLeg, null, rightLowerLegId2);
       break;
 
     case leftLowerArmId2:
       m = translate(0.0, upperArmHeight2, 0.0);
-      m = mult(m, rotate(theta2[leftLowerArmId2 - 21], 1, 0, 0));
+      m = mult(m, rotate(theta[leftLowerArmId2], 1, 0, 0));
       figure[leftLowerArmId2] = createNode(m, leftLowerArm, null, null);
       break;
 
     case rightLowerArmId2:
       m = translate(0.0, upperArmHeight2, 0.0);
-      m = mult(m, rotate(theta[rightLowerArmId2 - 21], 1, 0, 0));
+      m = mult(m, rotate(theta[rightLowerArmId2], 1, 0, 0));
       figure[rightLowerArmId2] = createNode(m, rightLowerArm, null, null);
       break;
 
     case leftLowerLegId2:
       m = translate(0.0, upperLegHeight2, 0.0);
-      m = mult(m, rotate(theta[leftLowerLegId2 - 21], 1, 0, 0));
+      m = mult(m, rotate(theta[leftLowerLegId2], 1, 0, 0));
       figure[leftLowerLegId2] = createNode(m, leftLowerLeg, null, null);
       break;
 
     case rightLowerLegId2:
       m = translate(0.0, upperLegHeight2, 0.0);
-      m = mult(m, rotate(theta2[rightLowerLegId2 - 21], 1, 0, 0));
+      m = mult(m, rotate(theta[rightLowerLegId2], 1, 0, 0));
       figure[rightLowerLegId2] = createNode(m, rightLowerLeg, null, null);
       break;
   }
@@ -249,8 +260,11 @@ function traverse(Id, modelViewMatrixes, projectionMatrixes, normalMatrixes) {
 }
 
 function torso() {
-  instanceMatrix = mult(modelViewMatrices, translate(0.0, 0.5 * torsoHeight, 0.0));
-  instanceMatrix = mult(instanceMatrix, scale4(torsoWidth, torsoHeight, torsoWidth));
+  instanceMatrix = mult(modelViewMatrices, translate(0.0, 0.5 * torsoHeights[menu_index], 0.0));
+  instanceMatrix = mult(
+    instanceMatrix,
+    scale4(torsoWidths[menu_index], torsoHeights[menu_index], torsoWidths[menu_index]),
+  );
   gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
@@ -258,8 +272,11 @@ function torso() {
 }
 
 function head() {
-  instanceMatrix = mult(modelViewMatrices, translate(0.0, 0.5 * headHeight, 0.0));
-  instanceMatrix = mult(instanceMatrix, scale4(headWidth, headHeight, headWidth));
+  instanceMatrix = mult(modelViewMatrices, translate(0.0, 0.5 * headHeights[menu_index], 0.0));
+  instanceMatrix = mult(
+    instanceMatrix,
+    scale4(headWidths[menu_index], headHeights[menu_index], headWidths[menu_index]),
+  );
   gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
@@ -276,8 +293,11 @@ function neck() {
 }
 
 function leftUpperArm() {
-  instanceMatrix = mult(modelViewMatrices, translate(0.0, 0.5 * upperArmHeight, 0.0));
-  instanceMatrix = mult(instanceMatrix, scale4(upperArmWidth, upperArmHeight, upperArmWidth));
+  instanceMatrix = mult(modelViewMatrices, translate(0.0, 0.5 * upperArmHeights[menu_index], 0.0));
+  instanceMatrix = mult(
+    instanceMatrix,
+    scale4(upperArmWidths[menu_index], upperArmHeights[menu_index], upperArmWidths[menu_index]),
+  );
   gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
@@ -285,8 +305,11 @@ function leftUpperArm() {
 }
 
 function leftLowerArm() {
-  instanceMatrix = mult(modelViewMatrices, translate(0.0, 0.5 * lowerArmHeight, 0.0));
-  instanceMatrix = mult(instanceMatrix, scale4(lowerArmWidth, lowerArmHeight, lowerArmWidth));
+  instanceMatrix = mult(modelViewMatrices, translate(0.0, 0.5 * lowerArmHeights[menu_index], 0.0));
+  instanceMatrix = mult(
+    instanceMatrix,
+    scale4(lowerArmWidths[menu_index], lowerArmHeights[menu_index], lowerArmWidths[menu_index]),
+  );
   gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
@@ -294,8 +317,11 @@ function leftLowerArm() {
 }
 
 function rightUpperArm() {
-  instanceMatrix = mult(modelViewMatrices, translate(0.0, 0.5 * upperArmHeight, 0.0));
-  instanceMatrix = mult(instanceMatrix, scale4(upperArmWidth, upperArmHeight, upperArmWidth));
+  instanceMatrix = mult(modelViewMatrices, translate(0.0, 0.5 * upperArmHeights[menu_index], 0.0));
+  instanceMatrix = mult(
+    instanceMatrix,
+    scale4(upperArmWidths[menu_index], upperArmHeights[menu_index], upperArmWidths[menu_index]),
+  );
   gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
@@ -303,8 +329,11 @@ function rightUpperArm() {
 }
 
 function rightLowerArm() {
-  instanceMatrix = mult(modelViewMatrices, translate(0.0, 0.5 * lowerArmHeight, 0.0));
-  instanceMatrix = mult(instanceMatrix, scale4(lowerArmWidth, lowerArmHeight, lowerArmWidth));
+  instanceMatrix = mult(modelViewMatrices, translate(0.0, 0.5 * lowerArmHeights[menu_index], 0.0));
+  instanceMatrix = mult(
+    instanceMatrix,
+    scale4(lowerArmWidths[menu_index], lowerArmHeights[menu_index], lowerArmWidths[menu_index]),
+  );
   gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
@@ -312,8 +341,11 @@ function rightLowerArm() {
 }
 
 function leftUpperLeg() {
-  instanceMatrix = mult(modelViewMatrices, translate(0.0, 0.5 * upperLegHeight, 0.0));
-  instanceMatrix = mult(instanceMatrix, scale4(upperLegWidth, upperLegHeight, upperLegWidth));
+  instanceMatrix = mult(modelViewMatrices, translate(0.0, 0.5 * upperLegHeights[menu_index], 0.0));
+  instanceMatrix = mult(
+    instanceMatrix,
+    scale4(upperLegWidths[menu_index], upperLegHeights[menu_index], upperLegWidths[menu_index]),
+  );
   gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
@@ -321,8 +353,11 @@ function leftUpperLeg() {
 }
 
 function leftLowerLeg() {
-  instanceMatrix = mult(modelViewMatrices, translate(0.0, 0.5 * lowerLegHeight, 0.0));
-  instanceMatrix = mult(instanceMatrix, scale4(lowerLegWidth, lowerLegHeight, lowerLegWidth));
+  instanceMatrix = mult(modelViewMatrices, translate(0.0, 0.5 * lowerLegHeights[menu_index], 0.0));
+  instanceMatrix = mult(
+    instanceMatrix,
+    scale4(lowerLegWidths[menu_index], lowerLegHeights[menu_index], lowerLegWidths[menu_index]),
+  );
   gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
@@ -330,8 +365,11 @@ function leftLowerLeg() {
 }
 
 function rightUpperLeg() {
-  instanceMatrix = mult(modelViewMatrices, translate(0.0, 0.5 * upperLegHeight, 0.0));
-  instanceMatrix = mult(instanceMatrix, scale4(upperLegWidth, upperLegHeight, upperLegWidth));
+  instanceMatrix = mult(modelViewMatrices, translate(0.0, 0.5 * upperLegHeights[menu_index], 0.0));
+  instanceMatrix = mult(
+    instanceMatrix,
+    scale4(upperLegWidths[menu_index], upperLegHeights[menu_index], upperLegWidths[menu_index]),
+  );
   gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
@@ -339,8 +377,11 @@ function rightUpperLeg() {
 }
 
 function rightLowerLeg() {
-  instanceMatrix = mult(modelViewMatrices, translate(0.0, 0.5 * lowerLegHeight, 0.0));
-  instanceMatrix = mult(instanceMatrix, scale4(lowerLegWidth, lowerLegHeight, lowerLegWidth));
+  instanceMatrix = mult(modelViewMatrices, translate(0.0, 0.5 * lowerLegHeights[menu_index], 0.0));
+  instanceMatrix = mult(
+    instanceMatrix,
+    scale4(lowerLegWidths[menu_index], lowerLegHeights[menu_index], lowerLegWidths[menu_index]),
+  );
   gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
