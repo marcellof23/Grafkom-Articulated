@@ -45,6 +45,73 @@ function init() {
   // Initialize shaders
   var shaderProgram = initShaders(modelGL.gl, "vertex-shader", "fragment-shader");
 
+
+
+  //get data from text
+  document
+  .getElementById("LoadButton")
+  .addEventListener("click", function () {
+      var input = document.createElement("input");
+      input.type = "file";
+      input.accept = ".json";
+
+      input.onchange = e => {
+          var f = e.target.files[0];
+          var read = new FileReader();
+          read.readAsText(f, 'UTF-8');
+
+          read.onload = readerEvent => {
+              var arrfile = readerEvent.target.result;
+
+              const myJSON = JSON.parse(arrfile);
+              console.log(myJSON);
+              // pos = myJSON.positions;
+              // top = myJSON.topology;
+              // col = myJSON.colors;
+              // shape = myJSON.shape;
+
+              modelGL.gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
+              modelGL.gl.clearDepth(1.0);
+              modelGL.gl.clear(modelGL.gl.COLOR_BUFFER_BIT | modelGL.gl.DEPTH_BUFFER_BIT); // Clear everything
+              // resetAll();
+
+              generateCubeVertice(modelGL);
+              var buffers = initBuffers(modelGL.gl);
+              modelGL.buffers = buffers;
+
+              var trans = { x: 0, y: 0, z: 0 };
+              var rot = { x: 0, y: 0, z: 0 };
+              var scale = { x: 0, y: 0, z: 0 };
+              var light = { x: 0, y: 0, z: 0 };
+
+              modelGL.trans = trans;
+              modelGL.rot = rot;
+              modelGL.scale = scale;
+              modelGL.light = light;
+
+              for (i = 0; i < numNodes; i++) initNodes(i);
+              
+              // const buffers = initBuffers(gl, pos, top, col);
+              // newPos = [-0.0, 0.0, -6.0]
+              // function render() {
+              //     drawScene(gl, programInfo, buffers, top);
+              //     requestAnimationFrame(render);
+              // }
+              // requestAnimationFrame(render);
+              render()
+              // document.getElementById("currModel").innerHTML = shape;
+          }
+
+      }
+      input.click();
+      
+  });
+
+
+
+
+
+
   var programInfo = {
     program: shaderProgram,
     attribLocations: {
@@ -75,21 +142,7 @@ function init() {
   modelGL.aspect = modelGL.gl.canvas.clientWidth / modelGL.gl.canvas.clientHeight;
   modelGL.ratio = modelGL.gl.canvas.width / modelGL.gl.canvas.height;
 
-  generateCubeVertice(modelGL);
-  var buffers = initBuffers(modelGL.gl);
-  modelGL.buffers = buffers;
-
-  var trans = { x: 0, y: 0, z: 0 };
-  var rot = { x: 0, y: 0, z: 0 };
-  var scale = { x: 0, y: 0, z: 0 };
-  var light = { x: 0, y: 0, z: 0 };
-
-  modelGL.trans = trans;
-  modelGL.rot = rot;
-  modelGL.scale = scale;
-  modelGL.light = light;
-
-  for (i = 0; i < numNodes; i++) initNodes(i);
+  
 
   // set listener to sliders
 
@@ -169,72 +222,9 @@ function init() {
     //requestAnimationFrame(render);
   });
 
-  document.getElementById("slider0").addEventListener("input", function (e) {
-    theta[TORSO_ID] = e.target.value;
-    initNodes(TORSO_ID);
-    //requestAnimationFrame(render);
-  });
 
-  document.getElementById("slider1").addEventListener("input", function (e) {
-    theta[NECK_ID] = e.target.value;
-    initNodes(NECK_ID);
-    //requestAnimationFrame(render);
-  });
-
-  document.getElementById("slider2").addEventListener("input", function (e) {
-    theta[HEAD_ID] = e.target.value;
-    initNodes(HEAD_ID);
-    //requestAnimationFrame(render);
-  });
-
-  document.getElementById("slider3").addEventListener("input", function (e) {
-    theta[LEFT_FRONT_LEG_ID] = e.target.value;
-    initNodes(LEFT_FRONT_LEG_ID);
-    //requestAnimationFrame(render);
-  });
-
-  document.getElementById("slider4").addEventListener("input", function (e) {
-    theta[LEFT_FRONT_FOOT_ID] = e.target.value;
-    initNodes(LEFT_FRONT_FOOT_ID);
-    //requestAnimationFrame(render);
-  });
-
-  document.getElementById("slider5").addEventListener("input", function (e) {
-    theta[RIGHT_FRONT_LEG_ID] = e.target.value;
-    initNodes(RIGHT_FRONT_LEG_ID);
-    //requestAnimationFrame(render);
-  });
-
-  document.getElementById("slider6").addEventListener("input", function (e) {
-    theta[RIGHT_FRONT_FOOT_ID] = e.target.value;
-    initNodes(RIGHT_FRONT_FOOT_ID);
-    //requestAnimationFrame(render);
-  });
-
-  document.getElementById("slider7").addEventListener("input", function (e) {
-    theta[LEFT_BACK_LEG_ID] = e.target.value;
-    initNodes(LEFT_BACK_LEG_ID);
-    //requestAnimationFrame(render);
-  });
-
-  document.getElementById("slider8").addEventListener("input", function (e) {
-    theta[LEFT_BACK_FOOT_ID] = e.target.value;
-    initNodes(LEFT_BACK_FOOT_ID);
-    //requestAnimationFrame(render);
-  });
-
-  document.getElementById("slider9").addEventListener("input", function (e) {
-    theta[RIGHT_BACK_LEG_ID] = e.target.value;
-    initNodes(RIGHT_BACK_LEG_ID);
-    //requestAnimationFrame(render);
-  });
-
-  document.getElementById("slider10").addEventListener("input", function (e) {
-    theta[RIGHT_BACK_FOOT_ID] = e.target.value;
-    initNodes(RIGHT_BACK_FOOT_ID);
-    //requestAnimationFrame(render);
-  });
-
+  setUpSlider()
+  
   document.getElementById("colorpicker").addEventListener("change", function (e) {
     colorRgb = hexToRgb(document.getElementById("colorpicker").value);
     modelGL.cubePoints = [];
@@ -342,7 +332,7 @@ function init() {
     drawScene();
   });
 
-  render();
+  // render();
   //requestAnimationFrame(render);
 }
 
@@ -350,7 +340,7 @@ var time_old = 0;
 
 async function render() {
   drawScene();
-  console.log("punten");
+  // console.log("punten");
   
 
   for (var i = 1; i < 10; i++) {
@@ -458,7 +448,7 @@ function drawScene() {
     modelViewMatrix, // matrix to modelGL.translate
     [radius * 0.1, radius * 0.1, radius * 0.1],
   );
-  console.log(radius);
+  // console.log(radius);
 
   // Make a view matrix from the camera matrix
   mat4.invert(modelViewMatrix, modelViewMatrix);
@@ -531,12 +521,12 @@ function drawScene() {
     //modelGL.gl.drawElements(modelGL.gl.TRIANGLES, NumOfVertices, modelGL.gl.UNSIGNED_SHORT, 0);
   }
 
-  for (var i = 1; i < 10; i++) {
-    theta[i] += angleSpeed;
-    if (theta[i] > initTheta[i] + 30 || theta[i] < initTheta[i] - 30) {
-      angleSpeed *= -1.0;
-    }
-  }
+  // for (var i = 1; i < 10; i++) {
+  //   theta[i] += angleSpeed;
+  //   if (theta[i] > initTheta[i] + 30 || theta[i] < initTheta[i] - 30) {
+  //     angleSpeed *= -1.0;
+  //   }
+  // }
 }
 
 function main() {
@@ -552,4 +542,73 @@ window.onload = main;
 //   //drawScene();
 //   //toggleShade();
 // });
+
+function setUpSlider(){
+  document.getElementById("slider0").addEventListener("input", function (e) {
+    theta[TORSO_ID] = e.target.value;
+    initNodes(TORSO_ID);
+    //requestAnimationFrame(render);
+  });
+
+  document.getElementById("slider1").addEventListener("input", function (e) {
+    theta[NECK_ID] = e.target.value;
+    initNodes(NECK_ID);
+    //requestAnimationFrame(render);
+  });
+
+  document.getElementById("slider2").addEventListener("input", function (e) {
+    theta[HEAD_ID] = e.target.value;
+    initNodes(HEAD_ID);
+    //requestAnimationFrame(render);
+  });
+
+  document.getElementById("slider3").addEventListener("input", function (e) {
+    theta[LEFT_FRONT_LEG_ID] = e.target.value;
+    initNodes(LEFT_FRONT_LEG_ID);
+    //requestAnimationFrame(render);
+  });
+
+  document.getElementById("slider4").addEventListener("input", function (e) {
+    theta[LEFT_FRONT_FOOT_ID] = e.target.value;
+    initNodes(LEFT_FRONT_FOOT_ID);
+    //requestAnimationFrame(render);
+  });
+
+  document.getElementById("slider5").addEventListener("input", function (e) {
+    theta[RIGHT_FRONT_LEG_ID] = e.target.value;
+    initNodes(RIGHT_FRONT_LEG_ID);
+    //requestAnimationFrame(render);
+  });
+
+  document.getElementById("slider6").addEventListener("input", function (e) {
+    theta[RIGHT_FRONT_FOOT_ID] = e.target.value;
+    initNodes(RIGHT_FRONT_FOOT_ID);
+    //requestAnimationFrame(render);
+  });
+
+  document.getElementById("slider7").addEventListener("input", function (e) {
+    theta[LEFT_BACK_LEG_ID] = e.target.value;
+    initNodes(LEFT_BACK_LEG_ID);
+    //requestAnimationFrame(render);
+  });
+
+  document.getElementById("slider8").addEventListener("input", function (e) {
+    theta[LEFT_BACK_FOOT_ID] = e.target.value;
+    initNodes(LEFT_BACK_FOOT_ID);
+    //requestAnimationFrame(render);
+  });
+
+  document.getElementById("slider9").addEventListener("input", function (e) {
+    theta[RIGHT_BACK_LEG_ID] = e.target.value;
+    initNodes(RIGHT_BACK_LEG_ID);
+    //requestAnimationFrame(render);
+  });
+
+  document.getElementById("slider10").addEventListener("input", function (e) {
+    theta[RIGHT_BACK_FOOT_ID] = e.target.value;
+    initNodes(RIGHT_BACK_FOOT_ID);
+    //requestAnimationFrame(render);
+  });
+
+}
 
