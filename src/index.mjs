@@ -66,6 +66,7 @@ function init() {
       vertexPosition: modelGL.gl.getAttribLocation(shaderProgram, "aVertexPosition"),
       vertexColor: modelGL.gl.getAttribLocation(shaderProgram, "aVertexColor"),
       vertexNormal: modelGL.gl.getAttribLocation(shaderProgram, "aVertexNormal"),
+      textureCoord: modelGL.gl.getAttribLocation(shaderProgram, "aTextureCoord"),
     },
     uniformLocations: {
       projectionMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
@@ -74,6 +75,8 @@ function init() {
       normalMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uNormalMatrix"),
       directionalVector: modelGL.gl.getUniformLocation(shaderProgram, "directionalVector"),
       isShading: modelGL.gl.getUniformLocation(shaderProgram, "uShading"),
+      isTexture: modelGL.gl.getUniformLocation(shaderProgram, "uTexture"),
+      uSampler: modelGL.gl.getUniformLocation(shaderProgram, "uSampler"),
     },
   };
 
@@ -81,6 +84,8 @@ function init() {
 
   viewMatrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -2, 1];
   modelGL.programInfo = programInfo;
+
+  texture = setTextureType(2, modelGL.gl);
 
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
@@ -500,11 +505,27 @@ function drawScene() {
     modelGL.gl.enableVertexAttribArray(modelGL.programInfo.attribLocations.vertexColor);
   }
 
+  {
+    modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, modelGL.buffers.textureCoord);
+    modelGL.gl.vertexAttribPointer(modelGL.programInfo.attribLocations.textureCoord, 2, modelGL.gl.FLOAT, false, 0, 0);
+    modelGL.gl.enableVertexAttribArray(modelGL.programInfo.attribLocations.textureCoord);
+  }
+
   // Tell WebGL which indices to use to index the vertices
   modelGL.gl.bindBuffer(modelGL.gl.ELEMENT_ARRAY_BUFFER, modelGL.buffers.indices);
 
   // Tell WebGL to use our program when drawing
   modelGL.gl.useProgram(modelGL.programInfo.program);
+
+  // Tell WebGL we want to affect texture unit 0
+  modelGL.gl.activeTexture(modelGL.gl.TEXTURE0);
+
+  // Bind the texture to texture unit 0
+  modelGL.gl.bindTexture(modelGL.gl.TEXTURE_2D, texture);
+
+  // Tell the shader we bound the texture to texture unit 0
+  modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uSampler, 0);
+ 
 
   // // set the light direction.
   modelGL.gl.uniform3fv(
@@ -583,7 +604,7 @@ function drawScene() {
 
   // console.log(shadingButton.checked);
   modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.isShading, shadingButton.checked);
-
+  modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.isTexture, true);
   // console.log(shadingButton.checked);
   {
     if (menu_index == 0) {
@@ -613,71 +634,71 @@ window.onload = main;
 // });
 
 
-// Set the texture mapping mode of object
-function setTextureType(value, gl){
-  switch(value) {
-      case 0:
-          this.loadTexture('../assets/images/Wooden.jpg');
-          break;
-      case 1:
-          this.loadEnvironmentTexture();
-          break;
-      case 2:
-          this.loadTexture('Bumped.png', gl);
-          console.log("anjengggggggg")
-          break;
-  }
-}
+// // Set the texture mapping mode of object
+// function setTextureType(value, gl){
+//   switch(value) {
+//       case 0:
+//           this.loadTexture('../assets/images/Wooden.jpg');
+//           break;
+//       case 1:
+//           this.loadEnvironmentTexture();
+//           break;
+//       case 2:
+//           this.loadTexture('Bumped.png', gl);
+//           console.log("anjengggggggg")
+//           break;
+//   }
+// }
 
 
-function loadTexture(url, gl) {
-  // gl = modelGL.gl;
-  const texture = gl.createTexture();
-  gl.bindTexture(gl.TEXTURE_2D, texture);
+// function loadTexture(url, gl) {
+//   // gl = modelGL.gl;
+//   const texture = gl.createTexture();
+//   gl.bindTexture(gl.TEXTURE_2D, texture);
 
-  // Because images have to be download over the internet
-  // they might take a moment until they are ready.
-  // Until then put a single pixel in the texture so we can
-  // use it immediately. When the image has finished downloading
-  // we'll update the texture with the contents of the image.
-  const level = 0;
-  const internalFormat = gl.RGBA;
-  const width = 1;
-  const height = 1;
-  const border = 0;
-  const srcFormat = gl.RGBA;
-  const srcType = gl.UNSIGNED_BYTE;
-  const pixel = new Uint8Array([0, 0, 255, 255]);  // opaque blue
-  gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
-              width, height, border, srcFormat, srcType,
-              pixel);
+//   // Because images have to be download over the internet
+//   // they might take a moment until they are ready.
+//   // Until then put a single pixel in the texture so we can
+//   // use it immediately. When the image has finished downloading
+//   // we'll update the texture with the contents of the image.
+//   const level = 0;
+//   const internalFormat = gl.RGBA;
+//   const width = 1;
+//   const height = 1;
+//   const border = 0;
+//   const srcFormat = gl.RGBA;
+//   const srcType = gl.UNSIGNED_BYTE;
+//   const pixel = new Uint8Array([0, 0, 255, 255]);  // opaque blue
+//   gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
+//               width, height, border, srcFormat, srcType,
+//               pixel);
 
-  const image = new Image();
-  image.onload = () => {
-      gl.bindTexture(gl.TEXTURE_2D, texture);
-      gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
-                      srcFormat, srcType, image);
+//   const image = new Image();
+//   image.onload = () => {
+//       gl.bindTexture(gl.TEXTURE_2D, texture);
+//       gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
+//                       srcFormat, srcType, image);
   
-      // WebGL1 has different requirements for power of 2 images
-      // vs non power of 2 images so check if the image is a
-      // power of 2 in both dimensions.
-      if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
-          // Yes, it's a power of 2. Generate mips.
-          gl.generateMipmap(gl.TEXTURE_2D);
-      } else {
-          // No, it's not a power of 2. Turn of mips and set
-          // wrapping to clamp to edge
-          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-      }
-  };
-  console.log(image)
-  image.src = url;
-  console.log(texture);
-  return texture;
-}
+//       // WebGL1 has different requirements for power of 2 images
+//       // vs non power of 2 images so check if the image is a
+//       // power of 2 in both dimensions.
+//       if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+//           // Yes, it's a power of 2. Generate mips.
+//           gl.generateMipmap(gl.TEXTURE_2D);
+//       } else {
+//           // No, it's not a power of 2. Turn of mips and set
+//           // wrapping to clamp to edge
+//           gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+//           gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+//           gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+//       }
+//   };
+//   console.log(image)
+//   image.src = url;
+//   console.log(texture);
+//   return texture;
+// }
 
-function isPowerOf2(value) {
-  return (value & (value - 1)) == 0;
-}
+// function isPowerOf2(value) {
+//   return (value & (value - 1)) == 0;
+// }
