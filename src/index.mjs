@@ -70,7 +70,7 @@ function init() {
   viewMatrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -2, 1];
   modelGL.programInfo = programInfo;
 
-  texture = loadTexture(modelGL.gl, "/assets/dogfur.jpeg");
+  texture = loadTexture(modelGL.gl, "/assets/Bumped.png");
 
   modelGL.aspect = modelGL.gl.canvas.clientWidth / modelGL.gl.canvas.clientHeight;
   modelGL.ratio = modelGL.gl.canvas.width / modelGL.gl.canvas.height;
@@ -245,6 +245,19 @@ function init() {
     modelGL.buffers = initBuffers(modelGL.gl);
     //requestAnimationFrame(render);
   });
+
+
+  
+  // JavaScript for Texture View Button
+  document.getElementById("textureImage").onclick = function () {
+    texture = setTextureType(0);
+  };
+  document.getElementById("textureEnvirontment").onclick = function () {
+    texture = setTextureType(1);
+  };
+  document.getElementById("textureBump").onclick = function () {
+    texture = setTextureType(2);
+  };
 
   // Set event listener for export button
   let formatJSONPrefix = "data:text/json;charset=utf-8,";

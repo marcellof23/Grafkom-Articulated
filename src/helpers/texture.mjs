@@ -1,3 +1,19 @@
+function setTextureType(value) {
+  let texture;
+  switch(value) {
+      case 0:
+          texture = this.loadTexture(gl, "/assets/dogfur.jpeg");
+          break;
+      case 1:
+          this.loadEnvironmentTexture();
+          break;
+      case 2:
+          texture = this.loadTexture(gl, "/assets/Bumped.png");
+          break;
+  }
+  return texture;
+}
+
 function loadTexture(gl, url) {
   const texture = gl.createTexture();
   gl.bindTexture(gl.TEXTURE_2D, texture);
