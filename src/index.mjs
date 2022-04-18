@@ -505,11 +505,11 @@ function drawScene() {
     modelGL.gl.enableVertexAttribArray(modelGL.programInfo.attribLocations.vertexColor);
   }
 
-  {
-    modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, modelGL.buffers.textureCoord);
-    modelGL.gl.vertexAttribPointer(modelGL.programInfo.attribLocations.textureCoord, 2, modelGL.gl.FLOAT, false, 0, 0);
-    modelGL.gl.enableVertexAttribArray(modelGL.programInfo.attribLocations.textureCoord);
-  }
+  // {
+  //   modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, modelGL.buffers.textureCoord);
+  //   modelGL.gl.vertexAttribPointer(modelGL.programInfo.attribLocations.textureCoord, 2, modelGL.gl.FLOAT, false, 0, 0);
+  //   modelGL.gl.enableVertexAttribArray(modelGL.programInfo.attribLocations.textureCoord);
+  // }
 
   // Tell WebGL which indices to use to index the vertices
   modelGL.gl.bindBuffer(modelGL.gl.ELEMENT_ARRAY_BUFFER, modelGL.buffers.indices);
