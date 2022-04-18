@@ -23,3 +23,5 @@ var isShading = false;
 
 var headHeight = 3.5;
 var headWidth = 1.5;
+
+var menu_index = 0;
