@@ -144,7 +144,7 @@ function init() {
   viewMatrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -2, 1];
   modelGL.programInfo = programInfo;
 
-  texture = loadTexture(modelGL.gl, "/assets/bump.jpg");
+  // texture = loadTexture(modelGL.gl, "/assets/bump.jpg");
 
   modelGL.aspect = modelGL.gl.canvas.clientWidth / modelGL.gl.canvas.clientHeight;
   modelGL.ratio = modelGL.gl.canvas.width / modelGL.gl.canvas.height;
@@ -268,31 +268,31 @@ function init() {
       idxStart = 16;
       idxEnd = 26;
     } else if (menu_index == 2) {
-      torsoStart = 0;
-      idxStart = 1;
-      idxEnd = 1;
+      torsoStart = 27;
+      idxStart = 28;
+      idxEnd = 38;
     }
   });
 
   // Set event listener for export button
   let formatJSONPrefix = "data:text/json;charset=utf-8,";
-  const exportBtn = document.getElementById("export-button");
-  exportBtn.addEventListener("click", () => {
-    var string_data = formatJSONPrefix + encodeURIComponent(JSON.stringify(modelGL));
-    var download_button = document.getElementById("download-link");
-    download_button.setAttribute("href", string_data);
-    download_button.setAttribute("download", "data.json");
-    download_button.click();
-  });
+  // const exportBtn = document.getElementById("export-button");
+  // exportBtn.addEventListener("click", () => {
+  //   var string_data = formatJSONPrefix + encodeURIComponent(JSON.stringify(modelGL));
+  //   var download_button = document.getElementById("download-link");
+  //   download_button.setAttribute("href", string_data);
+  //   download_button.setAttribute("download", "data.json");
+  //   download_button.click();
+  // });
 
-  const importBtn = document.getElementById("import-button");
-  importBtn.addEventListener("click", () => {
-    if (window.FileList && window.FileReader && window.File) {
-      uploadBtn.click();
-    } else {
-      alert("file upload not supported by your browser!");
-    }
-  });
+  // const importBtn = document.getElementById("import-button");
+  // importBtn.addEventListener("click", () => {
+  //   if (window.FileList && window.FileReader && window.File) {
+  //     uploadBtn.click();
+  //   } else {
+  //     alert("file upload not supported by your browser!");
+  //   }
+  // });
 
   const uploadBtn = document.getElementById("upload-button");
   uploadBtn.addEventListener("change", async (e) => {
