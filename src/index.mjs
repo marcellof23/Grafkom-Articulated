@@ -32,6 +32,10 @@ var idxEnd = 11;
 
 menu_index = 0;
 
+var fieldOfViewRadians = degToRad(60);
+var modelXRotationRadians = degToRad(0);
+var modelYRotationRadians = degToRad(0);
+
 let textureMenu = 2;
 
 function init() {
@@ -262,15 +266,69 @@ function init() {
   // JavaScript for Texture View Button
   document.getElementById("textureImage").onclick = function () {
     textureMenu = 0;
-    texture = setTextureType(0);
+    texture = setTextureType(modelGL.gl, 0);
   };
   document.getElementById("textureEnvirontment").onclick = function () {
     textureMenu = 1;
-    texture = setTextureType(1);
+    texture = gl.createTexture();
+    const faceInfos = [
+      {
+        target: modelGL.gl.TEXTURE_CUBE_MAP_POSITIVE_X,
+        url: "resources/images/computer-history-museum/pos-x.jpg",
+      },
+      {
+        target: modelGL.gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
+        url: "resources/images/computer-history-museum/neg-x.jpg",
+      },
+      {
+        target: modelGL.gl.TEXTURE_CUBE_MAP_POSITIVE_Y,
+        url: "resources/images/computer-history-museum/pos-y.jpg",
+      },
+      {
+        target: modelGL.gl.TEXTURE_CUBE_MAP_NEGATIVE_Y,
+        url: "resources/images/computer-history-museum/neg-y.jpg",
+      },
+      {
+        target: modelGL.gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
+        url: "resources/images/computer-history-museum/pos-z.jpg",
+      },
+      {
+        target: modelGL.gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
+        url: "resources/images/computer-history-museum/neg-z.jpg",
+      },
+    ];
+
+    faceInfos.forEach((faceInfo) => {
+      const { target, url } = faceInfo;
+
+      // Upload the canvas to the cubemap face.
+      const level = 0;
+      const internalFormat = gl.RGBA;
+      const width = 512;
+      const height = 512;
+      const format = modelGL.gl.RGBA;
+      const type = modelGL.gl.UNSIGNED_BYTE;
+
+      // setup each face so it's immediately renderable
+      modelGL.gl.texImage2D(target, level, internalFormat, width, height, 0, format, type, null);
+
+      // Asynchronously load an image
+      const image = new Image();
+      image.src = url;
+      image.addEventListener("load", function () {
+        // Now that the image has loaded upload it to the texture.
+        modelGL.gl.bindTexture(modelGL.gl.TEXTURE_CUBE_MAP, texture);
+        modelGL.gl.texImage2D(target, level, internalFormat, format, type, image);
+        modelGL.gl.generateMipmap(modelGL.gl.TEXTURE_CUBE_MAP);
+      });
+    });
+
+    modelGL.gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
+    modelGL.gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
   };
   document.getElementById("textureBump").onclick = function () {
     textureMenu = 2;
-    texture = setTextureType(2);
+    texture = setTextureType(modelGL.gl, 2);
   };
 
   mf = document.getElementById("menu-features");
@@ -562,7 +620,7 @@ function drawScene() {
   //  Mapping
   if (textureButton.checked) {
     if (textureMenu == 0) {
-      console.log("image mapping")
+      console.log("image mapping");
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uTexture, 1);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType1, 0);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType2, 0);

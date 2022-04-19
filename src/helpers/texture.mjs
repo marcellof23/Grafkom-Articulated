@@ -1,4 +1,4 @@
-function setTextureType(value) {
+function setTextureType(gl, value) {
   let texture;
   switch (value) {
     case 0:

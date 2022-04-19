@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="shortcut icon" href="#" />
-  <link rel="stylesheet" href="style/main.css" />
-  <script id="vertex-shader" type="x-shader/x-vertex">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="#" />
+    <link rel="stylesheet" href="style/main.css" />
+    <script id="vertex-shader" type="x-shader/x-vertex">
       precision mediump float;
       attribute vec4 aVertexPosition;
       attribute vec4 aVertexColor;
@@ -40,6 +39,16 @@
       varying vec3 ts_view_pos;
       varying vec3 ts_frag_pos;
 
+      attribute vec4 a_position;
+      attribute vec3 a_normal;
+
+      uniform mat4 u_projection;
+      uniform mat4 u_view;
+      uniform mat4 u_world;
+
+      varying vec3 v_worldPosition;
+      varying vec3 v_worldNormal;
+
       mat3 transpose(in mat3 inMatrix)
       {
           vec3 i0 = inMatrix[0];
@@ -63,17 +72,27 @@
           gl_PointSize = 3.0;
           highp vec3 ambientLight = vec3(0.3, 0.3, 0.3);
           highp vec3 directionalLightColor = vec3(1, 1, 1);
-  
+
           highp vec4 transformedNormal = uNormalMatrix * vec4(aVertexNormal, 1.0);
-  
+
           highp float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);
           vLighting = ambientLight + (directionalLightColor * directional);
-  
+
           vTextureCoord = aTextureCoord;
-        } else if (textureType1 == 2) {
+        } else if (textureType1 == 1) {
+          // Multiply the position by the matrix.
+          gl_Position = u_projection * u_view * u_world * a_position;
+
+          // send the view position to the fragment shader
+          v_worldPosition = (u_world * a_position).xyz;
+
+          // orient the normals and pass to the fragment shader
+          v_worldNormal = mat3(u_world) * a_normal;
+        }
+        else if (textureType1 == 2) {
           gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
           ts_frag_pos = vec3(uModelViewMatrix * aVertexPosition);
-          
+
           vec3 t = normalize(mat3(uNormalMatrix) * aVertexTangent);
           vec3 b = normalize(mat3(uNormalMatrix) * aVertexBitangent);
           vec3 n = normalize(mat3(uNormalMatrix) * aVertexNormal);
@@ -86,10 +105,10 @@
 
           vTextureCoord = aTextureCoord;
         }
-        
+
       }
     </script>
-  <script id="fragment-shader" type="x-shader/x-fragment">
+    <script id="fragment-shader" type="x-shader/x-fragment">
       precision mediump float;
       varying lowp vec4 vColor;
 
@@ -106,7 +125,7 @@
 
       uniform bool uShading;
       uniform bool uTexture;
-      
+
       // The position of the camera
       uniform vec3 uWorldCameraPosition;
       uniform int textureType2;
@@ -117,206 +136,205 @@
       varying vec3 ts_frag_pos;
 
       void main(void) {
-        if (textureType2 == 0) {
           if (uShading) {
             gl_FragColor = vec4(vColor.rgb * vLighting, vColor.a);
           } else {
             gl_FragColor = vColor;
           }
-    
+
            vec4 texelColor = texture2D(uSampler, vTextureCoord);
            if(uTexture){
-             gl_FragColor = vec4(texelColor.rgb * vLighting, 1.);
-           }
+             if(textureType2 == 0)
+              gl_FragColor = vec4(texelColor.rgb * vLighting, 1.);
+             else if(textureType2 == 2) {
+              vec3 light_dir = normalize(ts_light_pos - ts_frag_pos);
+              vec3 view_dir = normalize(ts_view_pos - ts_frag_pos);
+              vec3 albedo = texture2D(uSampler, vTextureCoord).rgb;
+              vec3 ambient = 0.3 * albedo;
+              vec3 norm = normalize(texture2D(uSampler, vTextureCoord).rgb * 2.0 - 1.0);
+              float diffuse = max(dot(light_dir, norm), 0.0);
+              gl_FragColor = vec4((diffuse * albedo + ambient), 1.0);
+             }
+            }
            else {
              gl_FragColor = gl_FragColor;
-            }
-        } else if (textureType2 == 2) {
-          vec3 light_dir = normalize(ts_light_pos - ts_frag_pos);
-          vec3 view_dir = normalize(ts_view_pos - ts_frag_pos);
-          vec3 albedo = texture2D(uSampler, vTextureCoord).rgb;
-          vec3 ambient = 0.3 * albedo;
-          vec3 norm = normalize(texture2D(uSampler, vTextureCoord).rgb * 2.0 - 1.0);
-          float diffuse = max(dot(light_dir, norm), 0.0);
-          gl_FragColor = vec4(diffuse * albedo + ambient, 1.0);
-        }
-      
+          }
       }
     </script>
 
-  <title>Document</title>
-</head>
+    <title>Document</title>
+  </head>
 
-<body style="height:auto;">
-  <div class="flex-vertical">
-    <a id="download-link" style="display: none"></a>
-    <input style="display: none" type="file" id="upload-button" value="Select Files" />
-    <div class="nav-1">
-      <button id="LoadButton" class="menu-item">Import JSON</button>
-      <button id="save" class="menu-item" value="tes">Export JSON</button>
-      <button id="reset-button" class="menu-item" value="tes">Reset</button>
-      <div class="button-container"></div>
-    </div>
-    <div class="canvas-wrapper">
-      <canvas id="webgl"> Oops ... your browser doesn't support the HTML5 canvas element </canvas>
-      <div class="slidecontainer">
-        <div class="slider-text">Color</div>
-        <input type="color" id="colorpicker" value="#ff0000" />
-        <div class="slider-text">Model</div>
-        <select name="menu-features" id="menu-features">
-          <option value="0">Dog</option>
-          <option value="1">Robot</option>
-          <option value="2">Giraffe</option>
-        </select>
-        <div class="slider-text">Shade</div>
-        <input type="checkbox" id="shading" />
-        <div class="slider-text">Texture</div>
-        <input type="checkbox" id="texture-btn" />
-        <div class="slider-text">Animation</div>
-        <input type="checkbox" id="animation-btn" />
-        <div class="slider-text">Rotation</div>
-        <div class="slide-group">
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="rotate-x" />
-            <p>Rotate X</p>
+  <body style="height: auto">
+    <div class="flex-vertical">
+      <a id="download-link" style="display: none"></a>
+      <input style="display: none" type="file" id="upload-button" value="Select Files" />
+      <div class="nav-1">
+        <button id="LoadButton" class="menu-item">Import JSON</button>
+        <button id="save" class="menu-item" value="tes">Export JSON</button>
+        <button id="reset-button" class="menu-item" value="tes">Reset</button>
+        <div class="button-container"></div>
+      </div>
+      <div class="canvas-wrapper">
+        <canvas id="webgl"> Oops ... your browser doesn't support the HTML5 canvas element </canvas>
+        <div class="slidecontainer">
+          <div class="slider-text">Color</div>
+          <input type="color" id="colorpicker" value="#ff0000" />
+          <div class="slider-text">Model</div>
+          <select name="menu-features" id="menu-features">
+            <option value="0">Dog</option>
+            <option value="1">Robot</option>
+            <option value="2">Giraffe</option>
+          </select>
+          <div class="slider-text">Shade</div>
+          <input type="checkbox" id="shading" />
+          <div class="slider-text">Texture</div>
+          <input type="checkbox" id="texture-btn" />
+          <div class="slider-text">Animation</div>
+          <input type="checkbox" id="animation-btn" />
+          <div class="slider-text">Rotation</div>
+          <div class="slide-group">
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="rotate-x" />
+              <p>Rotate X</p>
+            </div>
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="rotate-y" />
+              <p>Rotate Y</p>
+            </div>
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="rotate-z" />
+              <p>Rotate Z</p>
+            </div>
           </div>
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="rotate-y" />
-            <p>Rotate Y</p>
+          <div class="slider-text">Translation</div>
+          <div class="slide-group">
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="translate-x" />
+              <p>Translate X</p>
+            </div>
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="translate-y" />
+              <p>Translate Y</p>
+            </div>
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="translate-z" />
+              <p>Translate Z</p>
+            </div>
           </div>
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="rotate-z" />
-            <p>Rotate Z</p>
+          <div class="slider-text">Scaling</div>
+          <div class="slide-group">
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="scale-x" />
+              <p>Scale X</p>
+            </div>
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="scale-y" />
+              <p>Scale Y</p>
+            </div>
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="scale-z" />
+              <p>Scale Z</p>
+            </div>
+          </div>
+          <div class="slider-text">Lighting</div>
+          <div class="slide-group">
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="light-x" />
+              <p>Light X</p>
+            </div>
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="light-y" />
+              <p>Light Y</p>
+            </div>
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="light-z" />
+              <p>Light Z</p>
+            </div>
+          </div>
+          <div class="slide-group slide-kamera">
+            <div class="slide-item">
+              <input type="range" min="0" max="360" value="50" class="slider" id="camera" />
+              <p>Camera</p>
+            </div>
+            <div class="slide-item">
+              <input type="range" min="5" max="40" value="10" class="slider" id="zoom" />
+              <p>Zoom</p>
+            </div>
           </div>
         </div>
-        <div class="slider-text">Translation</div>
-        <div class="slide-group">
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="translate-x" />
-            <p>Translate X</p>
+        <div class="slide-group-sendi">
+          <div>
+            torso angle -180 <input id="slider0" type="range" min="-180" max="180" step="10" value="0" />
+            180
           </div>
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="translate-y" />
-            <p>Translate Y</p>
+          <br />
+
+          <div>
+            head1 angle -180 <input id="slider1" type="range" min="-180" max="180" step="10" value="0" />
+            180
           </div>
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="translate-z" />
-            <p>Translate Z</p>
+          <br />
+
+          <div id="slider2">
+            left upper arm angle -180 <input id="slider2" type="range" min="-180" max="180" step="10" value="0" />
+            180
           </div>
-        </div>
-        <div class="slider-text">Scaling</div>
-        <div class="slide-group">
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="scale-x" />
-            <p>Scale X</p>
+          <br />
+          <div>
+            left lower arm angle -180 <input id="slider3" type="range" min="-180" max="180" step="10" value="0" />
+            180
           </div>
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="scale-y" />
-            <p>Scale Y</p>
+          <br />
+          <div>
+            right upper arm angle -180 <input id="slider4" type="range" min="-180" max="180" step="10" value="0" />
+            180
           </div>
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="scale-z" />
-            <p>Scale Z</p>
+          <br />
+          <div>
+            right lower arm angle -180 <input id="slider5" type="range" min="-180" max="180" step="10" value="0" />
+            180
           </div>
-        </div>
-        <div class="slider-text">Lighting</div>
-        <div class="slide-group">
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="light-x" />
-            <p>Light X</p>
+          <br />
+          <div>
+            left upper leg angle -180 <input id="slider6" type="range" min="-180" max="180" step="10" value="0" />
+            180
           </div>
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="light-y" />
-            <p>Light Y</p>
+          <br />
+          <div>
+            left lower leg angle -180 <input id="slider7" type="range" min="-180" max="180" step="10" value="0" />
+            180
           </div>
-          <div class="slide-item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="light-z" />
-            <p>Light Z</p>
+          <br />
+          <div>
+            right upper leg angle -180 <input id="slider8" type="range" min="-180" max="180" step="10" value="0" />
+            180
           </div>
-        </div>
-        <div class="slide-group slide-kamera">
-          <div class="slide-item">
-            <input type="range" min="0" max="360" value="50" class="slider" id="camera" />
-            <p>Camera</p>
+          <br />
+
+          <div>
+            right lower leg angle -180 <input id="slider9" type="range" min="-180" max="180" step="10" value="0" />
+            180
           </div>
-          <div class="slide-item">
-            <input type="range" min="5" max="40" value="10" class="slider" id="zoom" />
-            <p>Zoom</p>
+          <br />
+
+          <div>
+            head2 angle -180 <input id="slider10" type="range" min="-180" max="180" step="10" value="0" />
+            180
           </div>
+          <br />
         </div>
       </div>
-      <div class="slide-group-sendi">
-        <div>
-          torso angle -180 <input id="slider0" type="range" min="-180" max="180" step="10" value="0" />
-          180
-        </div>
-        <br />
-
-        <div>
-          head1 angle -180 <input id="slider1" type="range" min="-180" max="180" step="10" value="0" />
-          180
-        </div>
-        <br />
-
-        <div id="slider2">
-          left upper arm angle -180 <input id="slider2" type="range" min="-180" max="180" step="10" value="0" />
-          180
-        </div>
-        <br />
-        <div>
-          left lower arm angle -180 <input id="slider3" type="range" min="-180" max="180" step="10" value="0" />
-          180
-        </div>
-        <br />
-        <div>
-          right upper arm angle -180 <input id="slider4" type="range" min="-180" max="180" step="10" value="0" />
-          180
-        </div>
-        <br />
-        <div>
-          right lower arm angle -180 <input id="slider5" type="range" min="-180" max="180" step="10" value="0" />
-          180
-        </div>
-        <br />
-        <div>
-          left upper leg angle -180 <input id="slider6" type="range" min="-180" max="180" step="10" value="0" />
-          180
-        </div>
-        <br />
-        <div>
-          left lower leg angle -180 <input id="slider7" type="range" min="-180" max="180" step="10" value="0" />
-          180
-        </div>
-        <br />
-        <div>
-          right upper leg angle -180 <input id="slider8" type="range" min="-180" max="180" step="10" value="0" />
-          180
-        </div>
-        <br />
-
-        <div>
-          right lower leg angle -180 <input id="slider9" type="range" min="-180" max="180" step="10" value="0" />
-          180
-        </div>
-        <br />
-
-        <div>
-          head2 angle -180 <input id="slider10" type="range" min="-180" max="180" step="10" value="0" />
-          180
-        </div>
-        <br />
+      <div>
+        <h2>Texture Mapping Mode</h2>
+        <button id="textureImage">Image</button>
+        <button id="textureEnvirontment">Environment</button>
+        <button id="textureBump">Bump</button>
       </div>
-    </div>
-    <div>
-      <h2>Texture Mapping Mode</h2>
-      <button id="textureImage">Image</button>
-      <button id="textureEnvirontment">Environment</button>
-      <button id="textureBump">Bump</button>
-    </div>
-    <div class="help">
-      <h2>Help</h2>
-    </div>
-    <textarea class="textarea" rows="20" cols="135" readonly>
+      <div class="help">
+        <h2>Help</h2>
+      </div>
+      <textarea class="textarea" rows="20" cols="135" readonly>
         - Untuk memilih salah satu dari 3 objek hollow, silahkan memilih salah satu objek dalam pilihan Feature.
         - Untuk dapat memilih bagaimana projeksi objek hollow tersebut, dapat mencek salah satu opsi dari: 
               1. Orthographic : Pararel proyeksi, yang akan memproyeksi objek 3d ke dalam bentuk 2d.
@@ -334,19 +352,18 @@
         - Untuk merubah posisi kamera, dapat menggeser slider di bawah menu "Camera".
         - Untuk merubah persentase zoom, dapat menggeser slider di bawah menu "Zoom".
       </textarea>
-  </div>
-</body>
-<script src="src/model/object.mjs"></script>
-<script src="src/helpers/mv.mjs"></script>
-<script src="src/model/cube.mjs"></script>
-<script src="src/helpers/texture.mjs"></script>
-<script src="src/helpers/shading.mjs"></script>
-<script src="src/helpers/modelHelper.js"></script>
-<script src="src/helpers/matrix.mjs"></script>
-<script src="src/helpers/helper.mjs"></script>
-<script src="src/helpers/initShaders.mjs"></script>
-<script src="src/helpers/webgl-utils.mjs"></script>
-<script src="src/constants/const.mjs"></script>
-<script src="src/index.mjs"></script>
-
+    </div>
+  </body>
+  <script src="src/model/object.mjs"></script>
+  <script src="src/helpers/mv.mjs"></script>
+  <script src="src/model/cube.mjs"></script>
+  <script src="src/helpers/texture.mjs"></script>
+  <script src="src/helpers/shading.mjs"></script>
+  <script src="src/helpers/modelHelper.js"></script>
+  <script src="src/helpers/matrix.mjs"></script>
+  <script src="src/helpers/helper.mjs"></script>
+  <script src="src/helpers/initShaders.mjs"></script>
+  <script src="src/helpers/webgl-utils.mjs"></script>
+  <script src="src/constants/const.mjs"></script>
+  <script src="src/index.mjs"></script>
 </html>
