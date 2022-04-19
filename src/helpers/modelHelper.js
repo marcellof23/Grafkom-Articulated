@@ -139,6 +139,57 @@ function setUpVariable(myJSON){
 }
 
 
+function download(content, fileName, contentType) {
+  var a = document.createElement("a");
+  var file = new Blob([content], {type: contentType});
+  a.href = URL.createObjectURL(file);
+  a.download = fileName;
+  a.click();
+}
+
+async function save() {
+  var data = {
+    torsoHeight,
+    torsoWidth,
+    upperArmHeight,
+    lowerArmHeight,
+    upperArmWidth,
+    lowerArmWidth,
+    upperLegWidth,
+    lowerLegWidth,
+    lowerLegHeight,
+    upperLegHeight,
+    headHeight,
+    headWidth,
+    neckHeight,
+    neckWidth,
+
+    torsoHeight2,
+    torsoWidth2,
+    upperArmHeight2,
+    lowerArmHeight2,
+    upperArmWidth2,
+    lowerArmWidth2,
+    upperLegWidth2,
+    lowerLegWidth2,
+    lowerLegHeight2,
+    upperLegHeight2,
+    headHeight2,
+    headWidth2,
+
+    numNodes,
+    numAngles,
+    angle,
+
+    initTheta,
+    theta,
+    theta2
+  }
+  let jsonData = JSON.stringify(data);
+  download(jsonData, 'model.json', 'text/plain');
+}
+
+
 
 function initNodes(Id) {
   var m = matrix4();

@@ -243,6 +243,8 @@ function init() {
     //requestAnimationFrame(render);
   });
 
+  document.getElementById("save").onclick = function () { save()};
+
   // JavaScript for Texture View Button
   document.getElementById("textureImage").onclick = function () {
     texture = setTextureType(0);
