@@ -153,6 +153,22 @@ function setUpVariable(myJSON){
   theta = myJSON.theta;
   theta2 = myJSON.theta2;
 
+
+
+  torsoHeights = myJSON.torsoHeights;
+  torsoWidths = myJSON.torsoWidths;
+  upperArmHeights = myJSON.upperArmHeights;
+  lowerArmHeights = myJSON.lowerArmHeights;
+  upperArmWidths = myJSON.upperArmWidths;
+  lowerArmWidths = myJSON.lowerArmWidths;
+  upperLegWidths = myJSON.upperLegWidths;
+  lowerLegWidths = myJSON.lowerLegWidths;
+  lowerLegHeights = myJSON.lowerLegHeights;
+  upperLegHeights = myJSON.upperLegHeights;
+  headHeights = myJSON.headHeights;
+  headWidths = myJSON.headWidths;
+
+
 }
 
 
