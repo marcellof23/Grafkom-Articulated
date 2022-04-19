@@ -54,67 +54,67 @@ function init() {
 
 
 
-   //get data from text
-   document
-   .getElementById("LoadButton")
-   .addEventListener("click", function () {
-       var input = document.createElement("input");
-       input.type = "file";
-       input.accept = ".json";
- 
-       input.onchange = e => {
-           var f = e.target.files[0];
-           var read = new FileReader();
-           read.readAsText(f, 'UTF-8');
- 
-           read.onload = readerEvent => {
-               var arrfile = readerEvent.target.result;
- 
-               const myJSON = JSON.parse(arrfile);
-               console.log(myJSON);
-               positions = myJSON.positions;
-               // pos = myJSON.positions;
-               // top = myJSON.topology;
-               // col = myJSON.colors;
-               // shape = myJSON.shape;
-               setUpVariable(myJSON);
-               modelGL.gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
-               modelGL.gl.clearDepth(1.0);
-               modelGL.gl.clear(modelGL.gl.COLOR_BUFFER_BIT | modelGL.gl.DEPTH_BUFFER_BIT); // Clear everything
-               // resetAll();
- 
-               generateCubeVertice(modelGL, positions);
-               var buffers = initBuffers(modelGL.gl);
-               modelGL.buffers = buffers;
- 
-               var trans = { x: 0, y: 0, z: 0 };
-               var rot = { x: 0, y: 0, z: 0 };
-               var scale = { x: 0, y: 0, z: 0 };
-               var light = { x: 0, y: 0, z: 0 };
- 
-               modelGL.trans = trans;
-               modelGL.rot = rot;
-               modelGL.scale = scale;
-               modelGL.light = light;
- 
-               for (i = 0; i < numNodes; i++) initNodes(i);
-               
-               // const buffers = initBuffers(gl, pos, top, col);
-               // newPos = [-0.0, 0.0, -6.0]
-               // function render() {
-               //     drawScene(gl, programInfo, buffers, top);
-               //     requestAnimationFrame(render);
-               // }
-               // requestAnimationFrame(render);
-               render()
-               // document.getElementById("currModel").innerHTML = shape;
-           }
- 
-       }
-       input.click();
-       
-   });
- 
+  //get data from text
+  document
+    .getElementById("LoadButton")
+    .addEventListener("click", function () {
+      var input = document.createElement("input");
+      input.type = "file";
+      input.accept = ".json";
+
+      input.onchange = e => {
+        var f = e.target.files[0];
+        var read = new FileReader();
+        read.readAsText(f, 'UTF-8');
+
+        read.onload = readerEvent => {
+          var arrfile = readerEvent.target.result;
+
+          const myJSON = JSON.parse(arrfile);
+          console.log(myJSON);
+          positions = myJSON.positions;
+          // pos = myJSON.positions;
+          // top = myJSON.topology;
+          // col = myJSON.colors;
+          // shape = myJSON.shape;
+          setUpVariable(myJSON);
+          modelGL.gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
+          modelGL.gl.clearDepth(1.0);
+          modelGL.gl.clear(modelGL.gl.COLOR_BUFFER_BIT | modelGL.gl.DEPTH_BUFFER_BIT); // Clear everything
+          // resetAll();
+
+          generateCubeVertice(modelGL, positions);
+          var buffers = initBuffers(modelGL.gl);
+          modelGL.buffers = buffers;
+
+          var trans = { x: 0, y: 0, z: 0 };
+          var rot = { x: 0, y: 0, z: 0 };
+          var scale = { x: 0, y: 0, z: 0 };
+          var light = { x: 0, y: 0, z: 0 };
+
+          modelGL.trans = trans;
+          modelGL.rot = rot;
+          modelGL.scale = scale;
+          modelGL.light = light;
+
+          for (i = 0; i < numNodes; i++) initNodes(i);
+
+          // const buffers = initBuffers(gl, pos, top, col);
+          // newPos = [-0.0, 0.0, -6.0]
+          // function render() {
+          //     drawScene(gl, programInfo, buffers, top);
+          //     requestAnimationFrame(render);
+          // }
+          // requestAnimationFrame(render);
+          render()
+          // document.getElementById("currModel").innerHTML = shape;
+        }
+
+      }
+      input.click();
+
+    });
+
 
 
 
@@ -145,7 +145,7 @@ function init() {
   viewMatrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -2, 1];
   modelGL.programInfo = programInfo;
 
-  // texture = loadTexture(modelGL.gl, "/assets/bump.jpg");
+  texture = loadTexture(modelGL.gl, "/assets/bump.jpg");
 
   modelGL.aspect = modelGL.gl.canvas.clientWidth / modelGL.gl.canvas.clientHeight;
   modelGL.ratio = modelGL.gl.canvas.width / modelGL.gl.canvas.height;
@@ -244,7 +244,7 @@ function init() {
     //requestAnimationFrame(render);
   });
 
-  document.getElementById("save").onclick = function () { save()};
+  document.getElementById("save").onclick = function () { save() };
 
   // JavaScript for Texture View Button
   document.getElementById("textureImage").onclick = function () {
@@ -554,7 +554,7 @@ function drawScene() {
       }
     }
   }
-  
+
 }
 
 function main() {
@@ -572,7 +572,7 @@ window.onload = main;
 // });
 
 
-function setUpSlider (){
+function setUpSlider() {
   document.getElementById("slider0").addEventListener("input", function (e) {
     var id;
     if (menu_index == 0) {

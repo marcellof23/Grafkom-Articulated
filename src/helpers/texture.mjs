@@ -1,15 +1,15 @@
 function setTextureType(value) {
   let texture;
-  switch(value) {
-      case 0:
-          texture = this.loadTexture(gl, "/assets/dogfur.jpeg");
-          break;
-      case 1:
-          this.loadEnvironmentTexture();
-          break;
-      case 2:
-          // texture = this.loadTexture(gl, "/assets/bump.jpg");
-          break;
+  switch (value) {
+    case 0:
+      texture = this.loadTexture(gl, "/assets/dogfur.jpeg");
+      break;
+    case 1:
+      this.loadEnvironmentTexture();
+      break;
+    case 2:
+      texture = this.loadTexture(gl, "/assets/bump.jpg");
+      break;
   }
   return texture;
 }
