@@ -59,18 +59,18 @@ var headHeight2;
 var headWidth2;
 
 
-var torsoHeights = [8.0, 5.0];
-var torsoWidths = [3.0, 2.5];
-var upperArmHeights = [5.0, 3.0];
-var lowerArmHeights = [2.0, 2.0];
-var upperArmWidths = [1.3, 0.5];
-var lowerArmWidths = [0.8, 0.5];
-var upperLegWidths = [1.3, 0.5];
-var lowerLegWidths = [0.8, 0.5];
-var lowerLegHeights = [2.0, 2.0];
-var upperLegHeights = [5.0, 3.0];
-var headHeights = [3.5, 1.5];
-var headWidths = [1.5, 1.0];
+var torsoHeights
+var torsoWidths
+var upperArmHeights
+var lowerArmHeights
+var upperArmWidths
+var lowerArmWidths
+var upperLegWidths
+var lowerLegWidths
+var lowerLegHeights
+var upperLegHeights;
+var headHeights;
+var headWidths;
 
 
 
