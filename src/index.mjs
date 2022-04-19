@@ -32,6 +32,8 @@ var idxEnd = 11;
 
 menu_index = 0;
 
+let textureMenu = 0;
+
 function init() {
   // Retrieve  canvas element
   modelGL.canvas = document.getElementById("webgl");
@@ -127,6 +129,8 @@ function init() {
       vertexColor: modelGL.gl.getAttribLocation(shaderProgram, "aVertexColor"),
       vertexNormal: modelGL.gl.getAttribLocation(shaderProgram, "aVertexNormal"),
       textureCoord: modelGL.gl.getAttribLocation(shaderProgram, "aTextureCoord"),
+      vertexTangent: modelGL.gl.getAttribLocation(shaderProgram, 'aVertexTangent'),
+      vertexBitangent: modelGL.gl.getAttribLocation(shaderProgram, 'aVertexBitangent'),
     },
     uniformLocations: {
       projectionMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
@@ -137,6 +141,10 @@ function init() {
       isShading: modelGL.gl.getUniformLocation(shaderProgram, "uShading"),
       isTexture: modelGL.gl.getUniformLocation(shaderProgram, "uTexture"),
       uSampler: modelGL.gl.getUniformLocation(shaderProgram, "uSampler"),
+      uTexture: modelGL.gl.getUniformLocation(shaderProgram, 'uTexture'),
+      worldCameraposition: modelGL.gl.getUniformLocation(shaderProgram, 'uWorldCameraPosition'),
+      textureType1: modelGL.gl.getUniformLocation(shaderProgram, 'textureType1'),
+      textureType2: modelGL.gl.getUniformLocation(shaderProgram, 'textureType2'),
     },
   };
 
@@ -541,6 +549,39 @@ function drawScene() {
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
   modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.isShading, shadingButton.checked);
   modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.isTexture, textureButton.checked);
+
+
+
+  //  Mapping
+  if (textureButton.checked) {
+    if (textureMenu == 0) {
+      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uTexture, 1);
+      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType1, 0);
+      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType2, 0);
+      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uSampler, 0);
+    }
+
+    // Environment Mapping
+    else if (textureMenu == 1) {
+      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uTexture, 0);
+      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType1, 1);
+      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType2, 1);
+      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uSampler, 1);
+    }
+
+    // Bump Mapping
+    else {
+      console.log("Bump Mapping");
+      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uTexture, 1);
+      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType1, 2);
+      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType2, 2);
+      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uSampler, 0);
+    }
+  }
+  // console.log(textureMenu)
+
+
+
   {
     NumOfVertices = CubeVertices;
     //modelGL.gl.drawElements(modelGL.gl.TRIANGLES, NumOfVertices, modelGL.gl.UNSIGNED_SHORT, 0);
