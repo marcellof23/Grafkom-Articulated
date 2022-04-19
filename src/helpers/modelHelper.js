@@ -30,6 +30,18 @@ var rightUpperLegId2 = 23;
 var rightLowerLegId2 = 24;
 var headId22 = 25;
 
+var TORSO_ID_3 = 27;
+var NECK_ID_3 = 28;
+var HEAD_ID_3 = 29;
+var LEFT_FRONT_LEG_ID_3 = 30;
+var LEFT_FRONT_FOOT_ID_3 = 31;
+var RIGHT_FRONT_LEG_ID_3 = 32;
+var RIGHT_FRONT_FOOT_ID_3 = 33;
+var LEFT_BACK_LEG_ID_3 = 34;
+var LEFT_BACK_FOOT_ID_3 = 35;
+var RIGHT_BACK_LEG_ID_3 = 36;
+var RIGHT_BACK_FOOT_ID_3 = 37;
+
 var torsoHeight;
 var torsoWidth;
 var upperArmHeight;
@@ -58,6 +70,21 @@ var upperLegHeight2;
 var headHeight2;
 var headWidth2;
 
+var torsoHeight3;
+var torsoWidth3;
+var upperArmHeight3;
+var lowerArmHeight3;
+var upperArmWidth3;
+var lowerArmWidth3;
+var upperLegWidth3;
+var lowerLegWidth3;
+var lowerLegHeight3;
+var upperLegHeight3;
+var headHeight3;
+var headWidth3;
+var neckHeight3;
+var neckWidth3;
+
 
 var torsoHeights
 var torsoWidths
@@ -71,6 +98,8 @@ var lowerLegHeights
 var upperLegHeights;
 var headHeights;
 var headWidths;
+var neckHeights;
+var neckWidths;
 
 
 
@@ -92,7 +121,7 @@ var modelViewMatrices;
 var projectionMatrices;
 var normalMatrices;
 
-for (var i = 0; i < 26; i++) figure[i] = createNode(null, null, null, null);
+for (var i = 0; i < 38; i++) figure[i] = createNode(null, null, null, null);
 
 function scale4(a, b, c) {
   var result = matrix4();
@@ -146,6 +175,21 @@ function setUpVariable(myJSON){
   headHeight2 = myJSON.headHeight2;
   headWidth2 = myJSON.headWidth2;
 
+  torsoHeight3 = myJSON.torsoHeight3;
+  torsoWidth3 = myJSON.torsoWidth3;
+  upperArmHeight3 = myJSON.upperArmHeight3;
+  lowerArmHeight3 = myJSON.lowerArmHeight3;
+  upperArmWidth3 = myJSON.upperArmWidth3;
+  lowerArmWidth3 = myJSON.lowerArmWidth3;
+  upperLegWidth3 = myJSON.upperLegWidth3;
+  lowerLegWidth3 = myJSON.lowerLegWidth3;
+  lowerLegHeight3 = myJSON.lowerLegHeight3;
+  upperLegHeight3 = myJSON.upperLegHeight3;
+  headHeight3 = myJSON.headHeight3;
+  headWidth3 = myJSON.headWidth3;
+  neckHeight3 = myJSON.neckHeight3;
+  neckWidth3 = myJSON.neckWidth3;
+
   numNodes = myJSON.numNodes;
   numAngles = myJSON.numAngles;
   angle = myJSON.angle;
@@ -167,6 +211,8 @@ function setUpVariable(myJSON){
   upperLegHeights = myJSON.upperLegHeights;
   headHeights = myJSON.headHeights;
   headWidths = myJSON.headWidths;
+  neckHeights = myJSON.neckHeights;
+  neckWidths = myJSON.neckWidths;
 
 
 }
@@ -209,6 +255,21 @@ async function save() {
     upperLegHeight2,
     headHeight2,
     headWidth2,
+
+    torsoHeight3,
+    torsoWidth3,
+    upperArmHeight3,
+    lowerArmHeight3,
+    upperArmWidth3,
+    lowerArmWidth3,
+    upperLegWidth3,
+    lowerLegWidth3,
+    lowerLegHeight3,
+    upperLegHeight3,
+    headHeight3,
+    headWidth3,
+    neckHeight3,
+    neckWidth3,
 
     numNodes,
     numAngles,
@@ -356,6 +417,74 @@ function initNodes(Id) {
       m = mult(m, rotate(theta[rightLowerLegId2], 1, 0, 0));
       figure[rightLowerLegId2] = createNode(m, rightLowerLeg, null, null);
       break;
+
+    case TORSO_ID_3:
+      m = rotate(theta[GLOBAL_ANGLE_ID], 0, 0, 1);
+      m = mult(m, rotate(theta[TORSO_ID_3], 0, 1, 0));
+      figure[TORSO_ID_3] = createNode(m, torso, null, NECK_ID_3);
+      break;
+
+    case NECK_ID_3:
+      m = translate(1.0, torsoHeight3 - neckHeight3 + 6.5, 0.0);
+      m = mult(m, rotate(theta[NECK_ID_3], 1, 0, 0));
+      m = mult(m, rotate(angle, 0, 1, 0));
+      m = mult(m, translate(0.0, -0.8 * neckHeight3, 0.0));
+      figure[NECK_ID_3] = createNode(m, neck, LEFT_FRONT_LEG_ID_3, HEAD_ID_3);
+      break;
+
+    case HEAD_ID_3:
+      m = translate(0.0, -0.1 * headHeight3, 0.0);
+      m = mult(m, rotate(theta[HEAD_ID_3], 1, 0, 0));
+      m = mult(m, translate(0.0, -0.8 * headHeight3, 0.0));
+      figure[HEAD_ID_3] = createNode(m, head, null, null);
+      break;
+    case LEFT_FRONT_LEG_ID_3:
+      m = translate(-(torsoWidth3 / 3 + upperArmWidth3), 0.9 * torsoHeight3, 0.0);
+      m = mult(m, rotate(theta[LEFT_FRONT_LEG_ID_3], 1, 0, 0));
+      figure[LEFT_FRONT_LEG_ID_3] = createNode(m, leftUpperArm, RIGHT_FRONT_LEG_ID_3, LEFT_FRONT_FOOT_ID_3);
+      break;
+
+    case RIGHT_FRONT_LEG_ID_3:
+      m = translate(torsoWidth3 / 3 + upperArmWidth3, 0.9 * torsoHeight3, 0.0);
+      m = mult(m, rotate(theta[RIGHT_FRONT_LEG_ID_3], 1, 0, 0));
+      figure[RIGHT_FRONT_LEG_ID_3] = createNode(m, rightUpperArm, LEFT_BACK_LEG_ID_3, RIGHT_FRONT_FOOT_ID_3);
+      break;
+
+    case LEFT_BACK_LEG_ID_3:
+      m = translate(-(torsoWidth3 / 3 + upperLegWidth3), 0.1 * upperLegHeight3, 0.0);
+      m = mult(m, rotate(theta[LEFT_BACK_LEG_ID_3], 1, 0, 0));
+      figure[LEFT_BACK_LEG_ID_3] = createNode(m, leftUpperLeg, RIGHT_BACK_LEG_ID_3, LEFT_BACK_FOOT_ID_3);
+      break;
+
+    case RIGHT_BACK_LEG_ID_3:
+      m = translate(torsoWidth3 / 3 + upperLegWidth3, 0.1 * upperLegHeight3, 0.0);
+      m = mult(m, rotate(theta[RIGHT_BACK_LEG_ID_3], 1, 0, 0));
+      figure[RIGHT_BACK_LEG_ID_3] = createNode(m, rightUpperLeg, null, RIGHT_BACK_FOOT_ID_3);
+      break;
+
+    case LEFT_FRONT_FOOT_ID_3:
+      m = translate(0.0, upperArmHeight3, 0.0);
+      m = mult(m, rotate(theta[LEFT_FRONT_FOOT_ID_3], 1, 0, 0));
+      figure[LEFT_FRONT_FOOT_ID_3] = createNode(m, leftLowerArm, null, null);
+      break;
+
+    case RIGHT_FRONT_FOOT_ID_3:
+      m = translate(0.0, upperArmHeight3, 0.0);
+      m = mult(m, rotate(theta[RIGHT_FRONT_FOOT_ID_3], 1, 0, 0));
+      figure[RIGHT_FRONT_FOOT_ID_3] = createNode(m, rightLowerArm, null, null);
+      break;
+
+    case LEFT_BACK_FOOT_ID_3:
+      m = translate(0.0, upperLegHeight3, 0.0);
+      m = mult(m, rotate(theta[LEFT_BACK_FOOT_ID_3], 1, 0, 0));
+      figure[LEFT_BACK_FOOT_ID_3] = createNode(m, leftLowerLeg, null, null);
+      break;
+
+    case RIGHT_BACK_FOOT_ID_3:
+      m = translate(0.0, upperLegHeight3, 0.0);
+      m = mult(m, rotate(theta[RIGHT_BACK_FOOT_ID_3], 1, 0, 0));
+      figure[RIGHT_BACK_FOOT_ID_3] = createNode(m, rightLowerLeg, null, null);
+      break;
   }
 }
 
@@ -399,7 +528,7 @@ function head() {
 
 function neck() {
   instanceMatrix = mult(modelViewMatrices, translate(0.0, 0.5 * neckHeight, 0.0));
-  instanceMatrix = mult(instanceMatrix, scale4(neckWidth, neckHeight, neckWidth));
+  instanceMatrix = mult(instanceMatrix, scale4(neckWidths[menu_index], neckHeights[menu_index], neckWidths[menu_index]));
   gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
