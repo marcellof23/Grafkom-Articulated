@@ -257,12 +257,15 @@ function init() {
   // JavaScript for Texture View Button
   document.getElementById("textureImage").onclick = function () {
     texture = setTextureType(0);
+    textureMenu = 0;
   };
   document.getElementById("textureEnvirontment").onclick = function () {
     texture = setTextureType(1);
+    textureMenu = 1;
   };
   document.getElementById("textureBump").onclick = function () {
     texture = setTextureType(2);
+    textureMenu = 2;
   };
 
   mf = document.getElementById("menu-features");
