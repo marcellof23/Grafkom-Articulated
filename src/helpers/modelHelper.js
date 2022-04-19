@@ -30,54 +30,42 @@ var rightUpperLegId2 = 23;
 var rightLowerLegId2 = 24;
 var headId22 = 25;
 
-var torsoHeight = 8.0;
-var torsoWidth = 3.0;
-var upperArmHeight = 5.0;
-var lowerArmHeight = 2.0;
-var upperArmWidth = 1.3;
-var lowerArmWidth = 0.8;
-var upperLegWidth = 1.3;
-var lowerLegWidth = 0.8;
-var lowerLegHeight = 2.0;
-var upperLegHeight = 5.0;
-var headHeight = 3.5;
-var headWidth = 1.5;
-var neckHeight = 4.0;
-var neckWidth = 2.0;
+var torsoHeight;
+var torsoWidth;
+var upperArmHeight;
+var lowerArmHeight;
+var upperArmWidth;
+var lowerArmWidth;
+var upperLegWidth;
+var lowerLegWidth;
+var lowerLegHeight;
+var upperLegHeight;
+var headHeight;
+var headWidth;
+var neckHeight;
+var neckWidth;
 
-var torsoHeight2 = 5.0;
-var torsoWidth2 = 1.0;
-var upperArmHeight2 = 3.0;
-var lowerArmHeight2 = 2.0;
-var upperArmWidth2 = 0.5;
-var lowerArmWidth2 = 0.5;
-var upperLegWidth2 = 0.5;
-var lowerLegWidth2 = 0.5;
-var lowerLegHeight2 = 2.0;
-var upperLegHeight2 = 3.0;
-var headHeight2 = 1.5;
-var headWidth2 = 1.0;
+var torsoHeight2;
+var torsoWidth2;
+var upperArmHeight2;
+var lowerArmHeight2;
+var upperArmWidth2;
+var lowerArmWidth2;
+var upperLegWidth2;
+var lowerLegWidth2;
+var lowerLegHeight2;
+var upperLegHeight2;
+var headHeight2;
+var headWidth2;
 
-var torsoHeights = [8.0, 5.0];
-var torsoWidths = [3.0, 2.5];
-var upperArmHeights = [5.0, 3.0];
-var lowerArmHeights = [2.0, 2.0];
-var upperArmWidths = [1.3, 0.5];
-var lowerArmWidths = [0.8, 0.5];
-var upperLegWidths = [1.3, 0.5];
-var lowerLegWidths = [0.8, 0.5];
-var lowerLegHeights = [2.0, 2.0];
-var upperLegHeights = [5.0, 3.0];
-var headHeights = [3.5, 1.5];
-var headWidths = [1.5, 1.0];
+var numNodes;
+var numAngles;
+var angle;
 
-var numNodes = 25;
-var numAngles = 11;
-var angle = 0;
+var initTheta = [];
+var theta = [];
+var theta2 = [];
 
-var initTheta = [90, 120, 90, 70, 10, 80, 10, 90, 40, 70, 30, 0, -90, 0, 0, 0, 0, 0, 0, 0, 0, 180, 0, 180, 0, 0];
-var theta = [90, 120, 90, 70, 10, 80, 10, 90, 40, 70, 30, 0, -90, 0, 0, 0, 0, 0, 0, 0, 0, 180, 0, 180, 0, 0];
-var theta2 = [0, 0, 0, 0, 0, 0, 180, 0, 180, 0, 0];
 
 var stack = [];
 
@@ -109,6 +97,48 @@ function createNode(matrixTransform, render, sibling, child) {
   };
   return node;
 }
+
+
+function setUpVariable(myJSON){
+  console.log(myJSON)
+  torsoHeight = myJSON.torsoHeight;
+  torsoWidth = myJSON.torsoWidth;
+  upperArmHeight = myJSON.upperArmHeight;
+  lowerArmHeight = myJSON.lowerArmHeight;
+  upperArmWidth =  myJSON.upperArmWidth;
+  lowerArmWidth = myJSON.lowerArmWidth;
+  upperLegWidth = myJSON.upperLegWidth;
+  lowerLegWidth = myJSON.lowerLegWidth;
+  lowerLegHeight = myJSON.lowerLegHeight;
+  upperLegHeight = myJSON.upperLegHeight;
+  headHeight = myJSON.headHeight;
+  headWidth = myJSON.headWidth;
+  neckHeight = myJSON.neckHeight;
+  neckWidth = myJSON.neckWidth;
+
+  torsoHeight2 = myJSON.torsoHeight2;
+  torsoWidth2 = myJSON.torsoWidth2;
+  upperArmHeight2 = myJSON.upperArmHeight2;
+  lowerArmHeight2 = myJSON.lowerArmHeight2;
+  upperArmWidth2 = myJSON.upperArmWidth2;
+  lowerArmWidth2 = myJSON.lowerArmWidth2;
+  upperLegWidth2 = myJSON.upperLegWidth2;
+  lowerLegWidth2 = myJSON.lowerLegWidth2;
+  lowerLegHeight2 = myJSON.lowerLegHeight2;
+  upperLegHeight2 = myJSON.upperLegHeight2;
+  headHeight2 = myJSON.headHeight2;
+  headWidth2 = myJSON.headWidth2;
+
+  numNodes = myJSON.numNodes;
+  numAngles = myJSON.numAngles;
+  angle = myJSON.angle;
+  initTheta = myJSON.initTheta;
+  theta = myJSON.theta;
+  theta2 = myJSON.theta2;
+
+}
+
+
 
 function initNodes(Id) {
   var m = matrix4();

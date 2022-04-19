@@ -2,6 +2,7 @@ var left = -1.0;
 var right = 1.0;
 var top = 1.0;
 var bottom = -1.0;
+var positions = [];
 
 var mf, mfv;
 
@@ -69,7 +70,8 @@ function init() {
                var arrfile = readerEvent.target.result;
  
                const myJSON = JSON.parse(arrfile);
-               console.log(myJSON);
+              //  console.log(myJSON);
+               positions = myJSON.positions;
                // pos = myJSON.positions;
                // top = myJSON.topology;
                // col = myJSON.colors;
@@ -80,7 +82,7 @@ function init() {
                modelGL.gl.clear(modelGL.gl.COLOR_BUFFER_BIT | modelGL.gl.DEPTH_BUFFER_BIT); // Clear everything
                // resetAll();
  
-               generateCubeVertice(modelGL);
+               generateCubeVertice(modelGL, positions);
                var buffers = initBuffers(modelGL.gl);
                modelGL.buffers = buffers;
  
@@ -235,7 +237,7 @@ function init() {
     modelGL.cubePoints = [];
     modelGL.cubeColors = [];
 
-    generateCubeVertice(modelGL);
+    generateCubeVertice(modelGL, positions);
 
     modelGL.buffers = initBuffers(modelGL.gl);
     //requestAnimationFrame(render);
