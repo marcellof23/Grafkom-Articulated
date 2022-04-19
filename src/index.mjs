@@ -261,12 +261,15 @@ function init() {
 
   // JavaScript for Texture View Button
   document.getElementById("textureImage").onclick = function () {
+    textureMenu = 0;
     texture = setTextureType(0);
   };
   document.getElementById("textureEnvirontment").onclick = function () {
+    textureMenu = 1;
     texture = setTextureType(1);
   };
   document.getElementById("textureBump").onclick = function () {
+    textureMenu = 2;
     texture = setTextureType(2);
   };
 
@@ -559,6 +562,7 @@ function drawScene() {
   //  Mapping
   if (textureButton.checked) {
     if (textureMenu == 0) {
+      console.log("image mapping")
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uTexture, 1);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType1, 0);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType2, 0);
@@ -567,6 +571,7 @@ function drawScene() {
 
     // Environment Mapping
     else if (textureMenu == 1) {
+      console.log("Environment Mapping");
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uTexture, 0);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType1, 1);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType2, 1);
