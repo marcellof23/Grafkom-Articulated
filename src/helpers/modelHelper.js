@@ -145,13 +145,13 @@ function createNode(matrixTransform, render, sibling, child) {
 }
 
 
-function setUpVariable(myJSON){
+function setUpVariable(myJSON) {
   console.log(myJSON)
   torsoHeight = myJSON.torsoHeight;
   torsoWidth = myJSON.torsoWidth;
   upperArmHeight = myJSON.upperArmHeight;
   lowerArmHeight = myJSON.lowerArmHeight;
-  upperArmWidth =  myJSON.upperArmWidth;
+  upperArmWidth = myJSON.upperArmWidth;
   lowerArmWidth = myJSON.lowerArmWidth;
   upperLegWidth = myJSON.upperLegWidth;
   lowerLegWidth = myJSON.lowerLegWidth;
@@ -220,7 +220,7 @@ function setUpVariable(myJSON){
 
 function download(content, fileName, contentType) {
   var a = document.createElement("a");
-  var file = new Blob([content], {type: contentType});
+  var file = new Blob([content], { type: contentType });
   a.href = URL.createObjectURL(file);
   a.download = fileName;
   a.click();
@@ -275,9 +275,26 @@ async function save() {
     numAngles,
     angle,
 
+    torsoHeights,
+    torsoWidths,
+    upperArmHeights,
+    lowerArmHeights,
+    upperArmWidths,
+    lowerArmWidths,
+    upperLegWidths,
+    lowerLegWidths,
+    lowerLegHeights,
+    upperLegHeights,
+    headHeights,
+    headWidths,
+    neckHeights,
+    neckWidths,
+
     initTheta,
     theta,
-    theta2
+    theta2,
+
+    positions
   }
   let jsonData = JSON.stringify(data);
   download(jsonData, 'model.json', 'text/plain');
