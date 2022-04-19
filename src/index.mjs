@@ -24,6 +24,7 @@ var setAnimeForward = true;
 // shading button
 var shadingButton = document.getElementById("shading");
 var textureButton = document.getElementById("texture-btn");
+var animationButton = document.getElementById("animation-btn");
 
 var torsoStart = 0;
 var idxStart = 1;
@@ -545,12 +546,15 @@ function drawScene() {
     //modelGL.gl.drawElements(modelGL.gl.TRIANGLES, NumOfVertices, modelGL.gl.UNSIGNED_SHORT, 0);
   }
 
-  for (var i = idxStart; i < idxEnd; i++) {
-    theta[i] += angleSpeed;
-    if (theta[i] > initTheta[i] + 30 || theta[i] < initTheta[i] - 30) {
-      angleSpeed *= -1.0;
+  if (animationButton.checked) {
+    for (var i = idxStart; i < idxEnd; i++) {
+      theta[i] += angleSpeed;
+      if (theta[i] > initTheta[i] + 30 || theta[i] < initTheta[i] - 30) {
+        angleSpeed *= -1.0;
+      }
     }
   }
+  
 }
 
 function main() {
