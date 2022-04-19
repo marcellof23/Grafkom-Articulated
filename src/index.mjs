@@ -53,74 +53,80 @@ function init() {
   // Initialize shaders
   var shaderProgram = initShaders(modelGL.gl, "vertex-shader", "fragment-shader");
 
-
-
-
   //get data from text
-  document
-    .getElementById("LoadButton")
-    .addEventListener("click", function () {
-      var input = document.createElement("input");
-      input.type = "file";
-      input.accept = ".json";
+  document.getElementById("LoadButton").addEventListener("click", function () {
+    var input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json";
 
-      input.onchange = e => {
-        var f = e.target.files[0];
-        var read = new FileReader();
-        read.readAsText(f, 'UTF-8');
+    input.onchange = (e) => {
+      var f = e.target.files[0];
+      var read = new FileReader();
+      read.readAsText(f, "UTF-8");
 
-        read.onload = readerEvent => {
-          var arrfile = readerEvent.target.result;
+      read.onload = (readerEvent) => {
+        var arrfile = readerEvent.target.result;
 
-          const myJSON = JSON.parse(arrfile);
-          console.log(myJSON);
-          positions = myJSON.positions;
-          // pos = myJSON.positions;
-          // top = myJSON.topology;
-          // col = myJSON.colors;
-          // shape = myJSON.shape;
-          setUpVariable(myJSON);
-          modelGL.gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
-          modelGL.gl.clearDepth(1.0);
-          modelGL.gl.clear(modelGL.gl.COLOR_BUFFER_BIT | modelGL.gl.DEPTH_BUFFER_BIT); // Clear everything
-          // resetAll();
+        const myJSON = JSON.parse(arrfile);
+        console.log(myJSON);
+        positions = myJSON.positions;
+        // pos = myJSON.positions;
+        // top = myJSON.topology;
+        // col = myJSON.colors;
+        // shape = myJSON.shape;
+        setUpVariable(myJSON);
+        modelGL.gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
+        modelGL.gl.clearDepth(1.0);
+        modelGL.gl.clear(modelGL.gl.COLOR_BUFFER_BIT | modelGL.gl.DEPTH_BUFFER_BIT); // Clear everything
+        // resetAll();
 
-          generateCubeVertice(modelGL, positions);
-          var buffers = initBuffers(modelGL.gl);
-          modelGL.buffers = buffers;
+        generateCubeVertice(modelGL, positions);
+        var buffers = initBuffers(modelGL.gl);
+        modelGL.buffers = buffers;
 
-          var trans = { x: 0, y: 0, z: 0 };
-          var rot = { x: 0, y: 0, z: 0 };
-          var scale = { x: 0, y: 0, z: 0 };
-          var light = { x: 0, y: 0, z: 0 };
+        var trans = { x: 0, y: 0, z: 0 };
+        var rot = { x: 0, y: 0, z: 0 };
+        var scale = { x: 0, y: 0, z: 0 };
+        var light = { x: 0, y: 0, z: 0 };
 
-          modelGL.trans = trans;
-          modelGL.rot = rot;
-          modelGL.scale = scale;
-          modelGL.light = light;
+        modelGL.trans = trans;
+        modelGL.rot = rot;
+        modelGL.scale = scale;
+        modelGL.light = light;
+        numNodes = myJSON.numNodes;
 
-          for (i = 0; i < numNodes; i++) initNodes(i);
-
-          // const buffers = initBuffers(gl, pos, top, col);
-          // newPos = [-0.0, 0.0, -6.0]
-          // function render() {
-          //     drawScene(gl, programInfo, buffers, top);
-          //     requestAnimationFrame(render);
-          // }
-          // requestAnimationFrame(render);
-          render()
-          // document.getElementById("currModel").innerHTML = shape;
+        console.log("AAAAAAA");
+        console.log(myJSON);
+        console.log(myJSON.name);
+        if (myJSON.name == 0) {
+          menu_index = 0;
+          mf.selectedIndex = menu_index;
+          mf.click();
+        } else if (myJSON.name == 1) {
+          menu_index = 1;
+          mf.selectedIndex = menu_index;
+          mf.click();
+        } else if (myJSON.name == 2) {
+          menu_index = 2;
+          mf.selectedIndex = menu_index;
+          mf.click();
         }
+        render();
+        // for (i = 0; i < numNodes; i++) initNodes(i);
 
-      }
-      input.click();
-
-    });
-
-
-
-
-
+        // // const buffers = initBuffers(gl, pos, top, col);
+        // // newPos = [-0.0, 0.0, -6.0]
+        // // function render() {
+        // //     drawScene(gl, programInfo, buffers, top);
+        // //     requestAnimationFrame(render);
+        // // }
+        // // requestAnimationFrame(render);
+        // render();
+        // document.getElementById("currModel").innerHTML = shape;
+      };
+    };
+    input.click();
+  });
 
   var programInfo = {
     program: shaderProgram,
@@ -129,8 +135,8 @@ function init() {
       vertexColor: modelGL.gl.getAttribLocation(shaderProgram, "aVertexColor"),
       vertexNormal: modelGL.gl.getAttribLocation(shaderProgram, "aVertexNormal"),
       textureCoord: modelGL.gl.getAttribLocation(shaderProgram, "aTextureCoord"),
-      vertexTangent: modelGL.gl.getAttribLocation(shaderProgram, 'aVertexTangent'),
-      vertexBitangent: modelGL.gl.getAttribLocation(shaderProgram, 'aVertexBitangent'),
+      vertexTangent: modelGL.gl.getAttribLocation(shaderProgram, "aVertexTangent"),
+      vertexBitangent: modelGL.gl.getAttribLocation(shaderProgram, "aVertexBitangent"),
     },
     uniformLocations: {
       projectionMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
@@ -141,10 +147,10 @@ function init() {
       isShading: modelGL.gl.getUniformLocation(shaderProgram, "uShading"),
       isTexture: modelGL.gl.getUniformLocation(shaderProgram, "uTexture"),
       uSampler: modelGL.gl.getUniformLocation(shaderProgram, "uSampler"),
-      uTexture: modelGL.gl.getUniformLocation(shaderProgram, 'uTexture'),
-      worldCameraposition: modelGL.gl.getUniformLocation(shaderProgram, 'uWorldCameraPosition'),
-      textureType1: modelGL.gl.getUniformLocation(shaderProgram, 'textureType1'),
-      textureType2: modelGL.gl.getUniformLocation(shaderProgram, 'textureType2'),
+      uTexture: modelGL.gl.getUniformLocation(shaderProgram, "uTexture"),
+      worldCameraposition: modelGL.gl.getUniformLocation(shaderProgram, "uWorldCameraPosition"),
+      textureType1: modelGL.gl.getUniformLocation(shaderProgram, "textureType1"),
+      textureType2: modelGL.gl.getUniformLocation(shaderProgram, "textureType2"),
     },
   };
 
@@ -157,7 +163,6 @@ function init() {
 
   modelGL.aspect = modelGL.gl.canvas.clientWidth / modelGL.gl.canvas.clientHeight;
   modelGL.ratio = modelGL.gl.canvas.width / modelGL.gl.canvas.height;
-
 
   // set listener to sliders
 
@@ -237,9 +242,7 @@ function init() {
     //requestAnimationFrame(render);
   });
 
-
-  setUpSlider()
-
+  setUpSlider();
 
   document.getElementById("colorpicker").addEventListener("change", function (e) {
     colorRgb = hexToRgb(document.getElementById("colorpicker").value);
@@ -252,7 +255,9 @@ function init() {
     //requestAnimationFrame(render);
   });
 
-  document.getElementById("save").onclick = function () { save() };
+  document.getElementById("save").onclick = function () {
+    save();
+  };
 
   // JavaScript for Texture View Button
   document.getElementById("textureImage").onclick = function () {
@@ -281,6 +286,7 @@ function init() {
       idxStart = 28;
       idxEnd = 38;
     }
+    for (i = 0; i < numNodes; i++) initNodes(i);
   });
 
   // Set event listener for export button
@@ -550,8 +556,6 @@ function drawScene() {
   modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.isShading, shadingButton.checked);
   modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.isTexture, textureButton.checked);
 
-
-
   //  Mapping
   if (textureButton.checked) {
     if (textureMenu == 0) {
@@ -580,8 +584,6 @@ function drawScene() {
   }
   // console.log(textureMenu)
 
-
-
   {
     NumOfVertices = CubeVertices;
     //modelGL.gl.drawElements(modelGL.gl.TRIANGLES, NumOfVertices, modelGL.gl.UNSIGNED_SHORT, 0);
@@ -595,7 +597,6 @@ function drawScene() {
       }
     }
   }
-
 }
 
 function main() {
@@ -611,7 +612,6 @@ window.onload = main;
 //   //drawScene();
 //   //toggleShade();
 // });
-
 
 function setUpSlider() {
   document.getElementById("slider0").addEventListener("input", function (e) {
@@ -703,5 +703,4 @@ function setUpSlider() {
     initNodes(RIGHT_BACK_FOOT_ID);
     //requestAnimationFrame(render);
   });
-
 }

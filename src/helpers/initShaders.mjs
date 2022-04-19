@@ -60,23 +60,10 @@ function initBuffers(gl) {
   var arr_colors = [];
   var arr_indices = [];
   var arr_normals = [];
-  if (menu_index == 0) {
-    arr_position = positions;
-    arr_colors = modelGL.cubeColors;
-    arr_indices = modelGL.cubePoints;
-    arr_normals = modelGL.cubeNormals;
-  } else if (menu_index == 1) {
-    arr_position = modelGL.pyramidPositions;
-    arr_position = arr_position.map((x) => x * 0.3);
-    arr_colors = modelGL.cubeColors;
-    arr_indices = modelGL.cubePoints;
-    arr_normals = modelGL.pyramidNormals;
-  } else if (menu_index == 2) {
-    arr_position = modelGL.donutVertices;
-    arr_colors = modelGL.donutColors;
-    arr_indices = modelGL.donutIndices;
-    arr_normals = modelGL.donutNormals;
-  }
+  arr_position = positions;
+  arr_colors = modelGL.cubeColors;
+  arr_indices = modelGL.cubePoints;
+  arr_normals = modelGL.cubeNormals;
 
   const positionBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
