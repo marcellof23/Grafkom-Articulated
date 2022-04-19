@@ -75,13 +75,13 @@
     <title>Document</title>
   </head>
 
-  <body>
+  <body style="height:auto;">
     <div class="flex-vertical">
       <a id="download-link" style="display: none"></a>
       <input style="display: none" type="file" id="upload-button" value="Select Files" />
       <div class="nav-1">
-        <button id="export-button" class="menu-item">Export JSON</button>
-        <button id="import-button" class="menu-item" value="tes">Import JSON</button>
+        <button id="LoadButton" class="menu-item">Export JSON</button>
+        <button id="save" class="menu-item" value="tes">Import JSON</button>
         <button id="reset-button" class="menu-item" value="tes">Reset</button>
         <div class="button-container"></div>
       </div>
@@ -241,14 +241,6 @@
         <button id="textureEnvirontment">Environment</button>
         <button id="textureBump">Bump</button>
       </div>
-      <div style="padding:10px; background-color:#bbb;">
-        <label> Load Model: </label>
-        <button id="LoadButton">Load Button</button>
-        <h2>Load Save Model</h2>
-        <button id="save">Save Model</button>
-        <br>
-        <p>Current model: <span id="currModel">None</span></p>
-        <button id="setDefaultView">Default View</button>
       <div class="help">
         <h2>Help</h2>
       </div>
