@@ -70,6 +70,21 @@
           vLighting = ambientLight + (directionalLightColor * directional);
   
           vTextureCoord = aTextureCoord;
+        } else if (textureType1 == 2) {
+          gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+          ts_frag_pos = vec3(uModelViewMatrix * aVertexPosition);
+          
+          vec3 t = normalize(mat3(uNormalMatrix) * aVertexTangent);
+          vec3 b = normalize(mat3(uNormalMatrix) * aVertexBitangent);
+          vec3 n = normalize(mat3(uNormalMatrix) * aVertexNormal);
+          mat3 tbn = transpose(mat3(t, b, n));
+
+          vec3 light_pos = vec3(1, 2, 0);
+          ts_light_pos = tbn * light_pos;
+          ts_view_pos = tbn * vec3(0, 0, 0);
+          ts_frag_pos = tbn * ts_frag_pos;
+
+          vTextureCoord = aTextureCoord;
         }
         
       }
@@ -116,6 +131,14 @@
            else {
              gl_FragColor = gl_FragColor;
             }
+        } else if (textureType2 == 2) {
+          vec3 light_dir = normalize(ts_light_pos - ts_frag_pos);
+          vec3 view_dir = normalize(ts_view_pos - ts_frag_pos);
+          vec3 albedo = texture2D(uSampler, vTextureCoord).rgb;
+          vec3 ambient = 0.3 * albedo;
+          vec3 norm = normalize(texture2D(uSampler, vTextureCoord).rgb * 2.0 - 1.0);
+          float diffuse = max(dot(light_dir, norm), 0.0);
+          gl_FragColor = vec4(diffuse * albedo + ambient, 1.0);
         }
       
       }

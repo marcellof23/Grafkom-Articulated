@@ -32,7 +32,7 @@ var idxEnd = 11;
 
 menu_index = 0;
 
-let textureMenu = 0;
+let textureMenu = 2;
 
 function init() {
   // Retrieve  canvas element
