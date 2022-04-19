@@ -70,13 +70,13 @@ function init() {
                var arrfile = readerEvent.target.result;
  
                const myJSON = JSON.parse(arrfile);
-              //  console.log(myJSON);
+               console.log(myJSON);
                positions = myJSON.positions;
                // pos = myJSON.positions;
                // top = myJSON.topology;
                // col = myJSON.colors;
                // shape = myJSON.shape;
- 
+               setUpVariable(myJSON);
                modelGL.gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
                modelGL.gl.clearDepth(1.0);
                modelGL.gl.clear(modelGL.gl.COLOR_BUFFER_BIT | modelGL.gl.DEPTH_BUFFER_BIT); // Clear everything
