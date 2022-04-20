@@ -134,6 +134,11 @@
 
       varying highp vec2 vTextureCoord;
 
+      uniform samplerCube u_texture;
+
+      // The position of the camera
+      uniform vec3 u_worldCameraPosition;
+
       uniform float vIsTexture;
       uniform sampler2D uSampler;
 
@@ -151,10 +156,7 @@
 
       varying vec3 v_worldPosition;
       // The texture.
-      uniform samplerCube u_texture;
 
-      // The position of the camera
-      uniform vec3 u_worldCameraPosition;
 
       void main(void) {
         if(textureType2 == 0) {

@@ -21,28 +21,28 @@ function loadEnvironmentTexture(gl) {
 
   const faceInfos = [
     {
-      target: gl.TEXTURE_CUBE_MAP_POSITIVE_X,
-      url: "https://webglfundamentals.org/webgl/resources/images/computer-history-museum/pos-x.jpg",
+      target: this.gl.TEXTURE_CUBE_MAP_POSITIVE_X,
+      url: "../../assets/images/pos-x.jpg",
     },
     {
-      target: gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
-      url: "https://webglfundamentals.org/webgl/resources/images/computer-history-museum/neg-x.jpg",
+      target: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
+      url: "../../assets/images/neg-x.jpg",
     },
     {
-      target: gl.TEXTURE_CUBE_MAP_POSITIVE_Y,
-      url: "https://webglfundamentals.org/webgl/resources/images/computer-history-museum/pos-y.jpg",
+      target: this.gl.TEXTURE_CUBE_MAP_POSITIVE_Y,
+      url: "../../assets/images/pos-y.jpg",
     },
     {
-      target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y,
-      url: "https://webglfundamentals.org/webgl/resources/images/computer-history-museum/neg-y.jpg",
+      target: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_Y,
+      url: "../../assets/images/neg-y.jpg",
     },
     {
-      target: gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
-      url: "https://webglfundamentals.org/webgl/resources/images/computer-history-museum/pos-z.jpg",
+      target: this.gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
+      url: "../../assets/images/pos-z.jpg",
     },
     {
-      target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
-      url: "https://webglfundamentals.org/webgl/resources/images/computer-history-museum/neg-z.jpg",
+      target: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
+      url: "../../assets/images/neg-z.jpg",
     },
   ];
 

@@ -474,7 +474,7 @@ function drawScene() {
   modelGL.gl.useProgram(modelGL.programInfo.program);
 
   // Tell WebGL we want to affect texture unit 0
-  // modelGL.gl.activeTexture(modelGL.gl.TEXTURE0);
+  //modelGL.gl.activeTexture(modelGL.gl.TEXTURE0);
 
   // // Bind the texture to texture unit 0
   // modelGL.gl.bindTexture(modelGL.gl.TEXTURE_2D, texture);
