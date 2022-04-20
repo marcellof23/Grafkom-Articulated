@@ -207,6 +207,12 @@
         <input type="checkbox" id="shading" />
         <div class="slider-text">Texture</div>
         <input type="checkbox" id="texture-btn" />
+        <div>
+          <h2>Texture Mapping Mode</h2>
+          <button id="textureImage">Image</button>
+          <button id="textureEnvirontment">Environment</button>
+          <button id="textureBump">Bump</button>
+        </div>
         <div class="slider-text">Animation</div>
         <input type="checkbox" id="animation-btn" />
         <div class="slider-text">Rotation</div>
@@ -342,24 +348,21 @@
         <br />
       </div>
     </div>
-    <div>
-      <h2>Texture Mapping Mode</h2>
-      <button id="textureImage">Image</button>
-      <button id="textureEnvirontment">Environment</button>
-      <button id="textureBump">Bump</button>
-    </div>
+
     <div class="help">
       <h2>Help</h2>
     </div>
     <textarea class="textarea" rows="20" cols="135" readonly>
-        - Untuk memilih salah satu dari 3 objek hollow, silahkan memilih salah satu objek dalam pilihan Feature.
-        - Untuk dapat memilih bagaimana projeksi objek hollow tersebut, dapat mencek salah satu opsi dari: 
-              1. Orthographic : Pararel proyeksi, yang akan memproyeksi objek 3d ke dalam bentuk 2d.
-              2. Oblique      : Sama seperti orthographic, namun saat sudut lihat tidak pas 90 derajat.
-              3. Perspective  : Memproyeksi objek 3d tetap dalam 3d sehingga semakin jauh objek, semakin kecil objek tersebut.
+        - Untuk menampilkan objek, silahkan import file objek json yang ingin anda tampilkan pada program ini
+        - Untuk memilih texture yang ada pada objek, dapat menekan button salah satu opsi dari: 
+              1. Image : texture yang ditampilkan dengan menempelkan gambar secara langsung
+              2. Environtment      : texture yang ditampilkan dengan latar belakang environtment.
+              3. Bump : Memproyeksi texture yang ditampilkan seperti image, hanya saja terdapat sisi timbulnya.
         - Untuk merubah warna objek, terdapat menu "Color". Pengguna dapat mengklik bagian kotak berwarna dan memilih warna. 
           Setelah itu, cukup mengklik pada bagian model kembali.
         - Untuk menambahkan efek shading, terdapat menu "Shading". Ceklist menu untuk menyalakan dan uncek untuk mematikan
+        - Untuk memberikan efek animation, silahkan centang checkbox animation yang ada pada program, sehingga objek akan bergerak.
+        - Untuk menggerakkan masing masing komponen objek, silahkan geser masing masing slider sesuai judulnya yang terletak di sebelah kanan program
         - Untuk melakukan rotasi, dapat menggeser salah satu slider yang tersedia di menu "Rotation". 
           Terdapat 3 jenis rotasi, yaitu terhadap sumbu x, sumbu y, dan sumbu z.
         - Untuk melakukan translasi, dapat menggeser salah satu slider yang tersedia di menu "Translation". 
