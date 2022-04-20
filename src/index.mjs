@@ -36,7 +36,7 @@ var fieldOfViewRadians = degToRad(60);
 var modelXRotationRadians = degToRad(0);
 var modelYRotationRadians = degToRad(0);
 
-let textureMenu = 2;
+let textureMenu = 0;
 
 function init() {
   // Retrieve  canvas element
@@ -151,8 +151,10 @@ function init() {
       isShading: modelGL.gl.getUniformLocation(shaderProgram, "uShading"),
       isTexture: modelGL.gl.getUniformLocation(shaderProgram, "uTexture"),
       uSampler: modelGL.gl.getUniformLocation(shaderProgram, "uSampler"),
-      uTexture: modelGL.gl.getUniformLocation(shaderProgram, "uTexture"),
+      uTexture: modelGL.gl.getUniformLocation(shaderProgram, "u_texture"),
       worldCameraposition: modelGL.gl.getUniformLocation(shaderProgram, "uWorldCameraPosition"),
+      viewLocation: modelGL.gl.getUniformLocation(shaderProgram, "u_view"),
+      worldLocation: modelGL.gl.getUniformLocation(shaderProgram, "u_world"),
       textureType1: modelGL.gl.getUniformLocation(shaderProgram, "textureType1"),
       textureType2: modelGL.gl.getUniformLocation(shaderProgram, "textureType2"),
     },
@@ -163,7 +165,7 @@ function init() {
   viewMatrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -2, 1];
   modelGL.programInfo = programInfo;
 
-  texture = loadTexture(modelGL.gl, "/assets/bump.jpg");
+  //texture = loadTexture(modelGL.gl, "/assets/bump.jpg");
 
   modelGL.aspect = modelGL.gl.canvas.clientWidth / modelGL.gl.canvas.clientHeight;
   modelGL.ratio = modelGL.gl.canvas.width / modelGL.gl.canvas.height;
@@ -266,69 +268,15 @@ function init() {
   // JavaScript for Texture View Button
   document.getElementById("textureImage").onclick = function () {
     textureMenu = 0;
-    texture = setTextureType(modelGL.gl, 0);
+    setTextureType(modelGL.gl, 0);
   };
   document.getElementById("textureEnvirontment").onclick = function () {
     textureMenu = 1;
-    texture = gl.createTexture();
-    const faceInfos = [
-      {
-        target: modelGL.gl.TEXTURE_CUBE_MAP_POSITIVE_X,
-        url: "resources/images/computer-history-museum/pos-x.jpg",
-      },
-      {
-        target: modelGL.gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
-        url: "resources/images/computer-history-museum/neg-x.jpg",
-      },
-      {
-        target: modelGL.gl.TEXTURE_CUBE_MAP_POSITIVE_Y,
-        url: "resources/images/computer-history-museum/pos-y.jpg",
-      },
-      {
-        target: modelGL.gl.TEXTURE_CUBE_MAP_NEGATIVE_Y,
-        url: "resources/images/computer-history-museum/neg-y.jpg",
-      },
-      {
-        target: modelGL.gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
-        url: "resources/images/computer-history-museum/pos-z.jpg",
-      },
-      {
-        target: modelGL.gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
-        url: "resources/images/computer-history-museum/neg-z.jpg",
-      },
-    ];
-
-    faceInfos.forEach((faceInfo) => {
-      const { target, url } = faceInfo;
-
-      // Upload the canvas to the cubemap face.
-      const level = 0;
-      const internalFormat = gl.RGBA;
-      const width = 512;
-      const height = 512;
-      const format = modelGL.gl.RGBA;
-      const type = modelGL.gl.UNSIGNED_BYTE;
-
-      // setup each face so it's immediately renderable
-      modelGL.gl.texImage2D(target, level, internalFormat, width, height, 0, format, type, null);
-
-      // Asynchronously load an image
-      const image = new Image();
-      image.src = url;
-      image.addEventListener("load", function () {
-        // Now that the image has loaded upload it to the texture.
-        modelGL.gl.bindTexture(modelGL.gl.TEXTURE_CUBE_MAP, texture);
-        modelGL.gl.texImage2D(target, level, internalFormat, format, type, image);
-        modelGL.gl.generateMipmap(modelGL.gl.TEXTURE_CUBE_MAP);
-      });
-    });
-
-    modelGL.gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
-    modelGL.gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+    setTextureType(modelGL.gl, 1);
   };
   document.getElementById("textureBump").onclick = function () {
     textureMenu = 2;
-    texture = setTextureType(modelGL.gl, 2);
+    setTextureType(modelGL.gl, 2);
   };
 
   mf = document.getElementById("menu-features");
@@ -526,13 +474,13 @@ function drawScene() {
   modelGL.gl.useProgram(modelGL.programInfo.program);
 
   // Tell WebGL we want to affect texture unit 0
-  modelGL.gl.activeTexture(modelGL.gl.TEXTURE0);
+  // modelGL.gl.activeTexture(modelGL.gl.TEXTURE0);
 
-  // Bind the texture to texture unit 0
-  modelGL.gl.bindTexture(modelGL.gl.TEXTURE_2D, texture);
+  // // Bind the texture to texture unit 0
+  // modelGL.gl.bindTexture(modelGL.gl.TEXTURE_2D, texture);
 
-  // Tell the shader we bound the texture to texture unit 0
-  modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uSampler, 0);
+  // // Tell the shader we bound the texture to texture unit 0
+  // modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uSampler, 0);
 
   // // set the light direction.
   modelGL.gl.uniform3fv(
