@@ -54,6 +54,7 @@ function init() {
   // Set viewport
   modelGL.gl.viewport(0, 0, modelGL.gl.canvas.width, modelGL.gl.canvas.height);
 
+
   // Initialize shaders
   var shaderProgram = initShaders(modelGL.gl, "vertex-shader", "fragment-shader");
 
@@ -151,7 +152,6 @@ function init() {
       isShading: modelGL.gl.getUniformLocation(shaderProgram, "uShading"),
       isTexture: modelGL.gl.getUniformLocation(shaderProgram, "uTexture"),
       uSampler: modelGL.gl.getUniformLocation(shaderProgram, "uSampler"),
-      uTexture: modelGL.gl.getUniformLocation(shaderProgram, "uTexture"),
       worldCameraposition: modelGL.gl.getUniformLocation(shaderProgram, "uWorldCameraPosition"),
       textureType1: modelGL.gl.getUniformLocation(shaderProgram, "textureType1"),
       textureType2: modelGL.gl.getUniformLocation(shaderProgram, "textureType2"),
@@ -270,40 +270,42 @@ function init() {
   };
   document.getElementById("textureEnvirontment").onclick = function () {
     textureMenu = 1;
-    texture = gl.createTexture();
+    var texture = modelGL.gl.createTexture();
+    modelGL.gl.bindTexture(modelGL.gl.TEXTURE_CUBE_MAP, texture);
     const faceInfos = [
       {
         target: modelGL.gl.TEXTURE_CUBE_MAP_POSITIVE_X,
-        url: "resources/images/computer-history-museum/pos-x.jpg",
+        url: "https://webglfundamentals.org/webgl/resources/images/computer-history-museum/pos-x.jpg",
       },
       {
         target: modelGL.gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
-        url: "resources/images/computer-history-museum/neg-x.jpg",
+        url: "https://webglfundamentals.org/webgl/resources/images/computer-history-museum/neg-x.jpg",
       },
       {
         target: modelGL.gl.TEXTURE_CUBE_MAP_POSITIVE_Y,
-        url: "resources/images/computer-history-museum/pos-y.jpg",
+        url: "https://webglfundamentals.org/webgl/resources/images/computer-history-museum/pos-y.jpg",
       },
       {
         target: modelGL.gl.TEXTURE_CUBE_MAP_NEGATIVE_Y,
-        url: "resources/images/computer-history-museum/neg-y.jpg",
+        url: "https://webglfundamentals.org/webgl/resources/images/computer-history-museum/neg-y.jpg",
       },
       {
         target: modelGL.gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
-        url: "resources/images/computer-history-museum/pos-z.jpg",
+        url: "https://webglfundamentals.org/webgl/resources/images/computer-history-museum/pos-z.jpg",
       },
       {
         target: modelGL.gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
-        url: "resources/images/computer-history-museum/neg-z.jpg",
+        url: "https://webglfundamentals.org/webgl/resources/images/computer-history-museum/neg-z.jpg",
       },
     ];
 
     faceInfos.forEach((faceInfo) => {
       const { target, url } = faceInfo;
+      console.log(url)
 
       // Upload the canvas to the cubemap face.
       const level = 0;
-      const internalFormat = gl.RGBA;
+      const internalFormat = modelGL.gl.RGBA;
       const width = 512;
       const height = 512;
       const format = modelGL.gl.RGBA;
@@ -314,6 +316,7 @@ function init() {
 
       // Asynchronously load an image
       const image = new Image();
+      image.crossOrigin = "anonymous";
       image.src = url;
       image.addEventListener("load", function () {
         // Now that the image has loaded upload it to the texture.
@@ -323,8 +326,8 @@ function init() {
       });
     });
 
-    modelGL.gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
-    modelGL.gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+    modelGL.gl.generateMipmap(modelGL.gl.TEXTURE_CUBE_MAP);
+    modelGL.gl.texParameteri(modelGL.gl.TEXTURE_CUBE_MAP, modelGL.gl.TEXTURE_MIN_FILTER, modelGL.gl.LINEAR_MIPMAP_LINEAR);
   };
   document.getElementById("textureBump").onclick = function () {
     textureMenu = 2;
@@ -463,6 +466,7 @@ function drawScene() {
   modelGL.gl.clearColor(0.25, 0.25, 0.25, 1.0); // Clear to black, fully opaque
   modelGL.gl.clearDepth(1.0); // Clear everything
   modelGL.gl.enable(modelGL.gl.DEPTH_TEST); // Enable depth testing
+  modelGL.gl.enable(modelGL.gl.CULL_FACE);
   modelGL.gl.depthFunc(modelGL.gl.LEQUAL); // Near things obscure far things
 
   modelGL.gl.clear(modelGL.gl.COLOR_BUFFER_BIT | modelGL.gl.DEPTH_BUFFER_BIT);
@@ -621,7 +625,7 @@ function drawScene() {
   if (textureButton.checked) {
     if (textureMenu == 0) {
       console.log("image mapping");
-      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uTexture, 1);
+      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureLocation, 1);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType1, 0);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType2, 0);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uSampler, 0);
@@ -629,8 +633,8 @@ function drawScene() {
 
     // Environment Mapping
     else if (textureMenu == 1) {
-      console.log("Environment Mapping");
-      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uTexture, 0);
+      // console.log("Environment Mapping");
+      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureLocation, 0);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType1, 1);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType2, 1);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uSampler, 1);
@@ -639,7 +643,7 @@ function drawScene() {
     // Bump Mapping
     else {
       console.log("Bump Mapping");
-      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uTexture, 1);
+      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureLocation, 1);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType1, 2);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType2, 2);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uSampler, 0);

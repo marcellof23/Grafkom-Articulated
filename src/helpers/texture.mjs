@@ -5,7 +5,7 @@ function setTextureType(gl, value) {
       texture = this.loadTexture(gl, "/assets/dogfur.jpeg");
       break;
     case 1:
-      this.loadEnvironmentTexture();
+      texture = this.loadEnvironmentTexture(gl);
       break;
     case 2:
       texture = this.loadTexture(gl, "/assets/bump.jpg");
@@ -53,6 +53,69 @@ function loadTexture(gl, url) {
     }
   };
   image.src = url;
+
+  return texture;
+}
+
+function loadEnvironmentTexture(gl) {
+  var texture = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
+  const faceInfos = [
+    {
+      target: gl.TEXTURE_CUBE_MAP_POSITIVE_X,
+      url: "https://webglfundamentals.org/webgl/resources/images/computer-history-museum/pos-x.jpg",
+    },
+    {
+      target: gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
+      url: "https://webglfundamentals.org/webgl/resources/images/computer-history-museum/neg-x.jpg",
+    },
+    {
+      target: gl.TEXTURE_CUBE_MAP_POSITIVE_Y,
+      url: "https://webglfundamentals.org/webgl/resources/images/computer-history-museum/pos-y.jpg",
+    },
+    {
+      target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y,
+      url: "https://webglfundamentals.org/webgl/resources/images/computer-history-museum/neg-y.jpg",
+    },
+    {
+      target: gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
+      url: "https://webglfundamentals.org/webgl/resources/images/computer-history-museum/pos-z.jpg",
+    },
+    {
+      target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
+      url: "https://webglfundamentals.org/webgl/resources/images/computer-history-museum/neg-z.jpg",
+    },
+  ];
+
+  faceInfos.forEach((faceInfo) => {
+    const { target, url } = faceInfo;
+    console.log(url)
+
+    // Upload the canvas to the cubemap face.
+    const level = 0;
+    const internalFormat = gl.RGBA;
+    const width = 512;
+    const height = 512;
+    const format = gl.RGBA;
+    const type = gl.UNSIGNED_BYTE;
+
+    // setup each face so it's immediately renderable
+    gl.texImage2D(target, level, internalFormat, width, height, 0, format, type, null);
+
+    // Asynchronously load an image
+    const image = new Image();
+    image.crossOrigin = "anonymous";
+    image.src = url;
+    image.addEventListener("load", function () {
+      // Now that the image has loaded upload it to the texture.
+      gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
+      gl.texImage2D(target, level, internalFormat, format, type, image);
+      gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
+    });
+  });
+
+  gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
+  gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 
   return texture;
 }
