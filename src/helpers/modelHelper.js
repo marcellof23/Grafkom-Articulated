@@ -442,7 +442,7 @@ function initNodes(Id) {
       break;
 
     case NECK_ID_3:
-      m = translate(1.0, torsoHeight3 - neckHeight3 + 6.5, 0.0);
+      m = translate(0, torsoHeight3 - neckHeight3 + 6.5, 0.0);
       m = mult(m, rotate(theta[NECK_ID_3], 1, 0, 0));
       m = mult(m, rotate(angle, 0, 1, 0));
       m = mult(m, translate(0.0, -0.8 * neckHeight3, 0.0));
