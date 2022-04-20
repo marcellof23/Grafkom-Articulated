@@ -42,7 +42,7 @@ function loadTextureEnvironment(gl) {
     },
   ];
 
-  var texture = gl.createTexture();
+  const texture = gl.createTexture();
   gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
 
   faceInfos.forEach((faceInfo) => {

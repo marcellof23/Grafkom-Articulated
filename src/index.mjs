@@ -476,17 +476,23 @@ function drawScene() {
   // Tell WebGL to use our program when drawing
   modelGL.gl.useProgram(modelGL.programInfo.program);
 
-  // Tell WebGL we want to affect texture unit 0
-  modelGL.gl.activeTexture(modelGL.gl.TEXTURE0);
-
-  // Bind the texture to texture unit 0
-  if (textureMenu != 1) {
-    console.log("PUNTENNNN");
-    modelGL.gl.bindTexture(modelGL.gl.TEXTURE_2D, texture);
+  if (textureMenu == 0) {
+    // Tell WebGL we want to affect texture unit 0
+    modelGL.gl.activeTexture(modelGL.gl.TEXTURE0);
+    //modelGL.gl.bindTexture(modelGL.gl.TEXTURE_2D, texture);
+    // Tell the shader we bound the texture to texture unit 0
+    modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uSampler, 0);
+  } else if (textureMenu == 1) {
+    modelGL.gl.activeTexture(modelGL.gl.TEXTURE1);
+    //modelGL.gl.bindTexture(modelGL.gl.TEXTURE_2D, texture);
+    modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uSampler, 1);
+  } else if (textureMenu == 2) {
+    // Tell WebGL we want to affect texture unit 0
+    modelGL.gl.activeTexture(modelGL.gl.TEXTURE2);
+    //modelGL.gl.bindTexture(modelGL.gl.TEXTURE_2D, texture);
+    // Tell the shader we bound the texture to texture unit 0
+    modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uSampler, 2);
   }
-
-  // Tell the shader we bound the texture to texture unit 0
-  modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uSampler, 0);
 
   // // set the light direction.
   modelGL.gl.uniform3fv(
@@ -595,7 +601,7 @@ function drawScene() {
   if (textureButton.checked) {
     if (textureMenu == 0) {
       console.log("image mapping");
-      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureLocation, 1);
+      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureLocation, 0);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType1, 0);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType2, 0);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uSampler, 0);
@@ -604,7 +610,7 @@ function drawScene() {
     // Environment Mapping
     else if (textureMenu == 1) {
       console.log("Environment Mapping");
-      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureLocation, 0);
+      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureLocation, 1);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType1, 1);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType2, 1);
     }
