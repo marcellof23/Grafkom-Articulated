@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="#" />
-    <link rel="stylesheet" href="style/main.css" />
-    <script id="vertex-shader" type="x-shader/x-vertex">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" href="#" />
+  <link rel="stylesheet" href="style/main.css" />
+  <script id="vertex-shader" type="x-shader/x-vertex">
       precision mediump float;
       attribute vec4 aVertexPosition;
       attribute vec4 aVertexColor;
@@ -122,7 +123,7 @@
 
       }
     </script>
-    <script id="fragment-shader" type="x-shader/x-fragment">
+  <script id="fragment-shader" type="x-shader/x-fragment">
       precision highp float;
       varying lowp vec4 vColor;
 
@@ -192,42 +193,143 @@
       }
     </script>
 
-    <title>Document</title>
-  </head>
+  <title>Document</title>
+</head>
 
-  <body style="height: auto">
-    <div class="flex-vertical">
-      <a id="download-link" style="display: none"></a>
-      <input style="display: none" type="file" id="upload-button" value="Select Files" />
-      <div class="nav-1">
-        <button id="LoadButton" class="menu-item">Import JSON</button>
-        <button id="save" class="menu-item" value="tes">Export JSON</button>
-        <button id="reset-button" class="menu-item" value="tes">Reset</button>
-        <div class="button-container"></div>
+<body style="height: auto;">
+  <div class="row">
+    <div class="column">
+      <canvas width="800" height="600" id="webgl"> Oops ... your browser doesn't support the HTML5 canvas element
+      </canvas>
+      <div style="padding:10px; background-color:#bbb;">
+        <label style="font-size: 20px">Shade</label>
+        <input type="checkbox" id="shading" />
+        <br />
+        <label style="font-size: 20px">Animation</label>
+        <input type="checkbox" id="animation-btn" />
       </div>
-      <div class="canvas-wrapper">
-        <canvas id="webgl"> Oops ... your browser doesn't support the HTML5 canvas element </canvas>
-        <div class="slidecontainer">
-          <div class="slider-text">Color</div>
-          <input type="color" id="colorpicker" value="#ff0000" />
-          <div class="slider-text">Model</div>
-          <select name="menu-features" id="menu-features">
-            <option value="0">Dog</option>
-            <option value="1">Robot</option>
-            <option value="2">Giraffe</option>
-          </select>
-          <div class="slider-text">Shade</div>
-          <input type="checkbox" id="shading" />
+      <div class="help">
+        <h2>Help</h2>
+      </div>
+      <textarea class="textarea" rows="20" cols="135" readonly>
+            - Untuk menampilkan objek, silahkan import file objek json yang ingin anda tampilkan pada program ini
+            - Untuk memilih texture yang ada pada objek, dapat menekan button salah satu opsi dari: 
+                  1. Image : texture yang ditampilkan dengan menempelkan gambar secara langsung
+                  2. Environtment      : texture yang ditampilkan dengan latar belakang environtment.
+                  3. Bump : Memproyeksi texture yang ditampilkan seperti image, hanya saja terdapat sisi timbulnya.
+            - Untuk merubah warna objek, terdapat menu "Color". Pengguna dapat mengklik bagian kotak berwarna dan memilih warna. 
+              Setelah itu, cukup mengklik pada bagian model kembali.
+            - Untuk menambahkan efek shading, terdapat menu "Shading". Ceklist menu untuk menyalakan dan uncek untuk mematikan
+            - Untuk memberikan efek animation, silahkan centang checkbox animation yang ada pada program, sehingga objek akan bergerak.
+            - Untuk menggerakkan masing masing komponen objek, silahkan geser masing masing slider sesuai judulnya yang terletak di sebelah kanan program
+            - Untuk melakukan rotasi, dapat menggeser salah satu slider yang tersedia di menu "Rotation". 
+              Terdapat 3 jenis rotasi, yaitu terhadap sumbu x, sumbu y, dan sumbu z.
+            - Untuk melakukan translasi, dapat menggeser salah satu slider yang tersedia di menu "Translation". 
+              Terdapat 3 jenis translasi, yaitu terhadap sumbu x, sumbu y, dan sumbu z.
+            - Untuk melakukan skalar, dapat menggeser salah satu slider yang tersedia di menu "Scaling". 
+              Terdapat 3 jenis skalar, yaitu terhadap sumbu x, sumbu y, dan sumbu z.
+            - Untuk merubah posisi kamera, dapat menggeser slider di bawah menu "Camera".
+            - Untuk merubah persentase zoom, dapat menggeser slider di bawah menu "Zoom".
+          </textarea>
+    </div>
+    <div class="column" style="padding:20px;">
+
+      <div style="padding:10px; background-color:#bbb;">
+        <a id="download-link" style="display: none"></a>
+        <input style="display: none" type="file" id="upload-button" value="Select Files" />
+        <div class="nav-1" style="text-align: center;">
+          <button id="LoadButton" class="menu-item">Import JSON</button>
+          <button id="save" class="menu-item" value="tes">Export JSON</button>
+          <button id="reset-button" class="menu-item" value="tes">Reset</button>
+          <div class="button-container"></div>
+        </div>
+        <div style="text-align: center;">
+          <div>
+            <div class="slider-text">Color</div>
+            <input type="color" id="colorpicker" value="#ff0000" />
+            <div class="slider-text">Model</div>
+            <select name="menu-features" id="menu-features">
+              <option value="0">Dog</option>
+              <option value="1">Robot</option>
+              <option value="2">Giraffe</option>
+            </select>
+          </div>
           <div class="slider-text">Texture</div>
           <input type="checkbox" id="texture-btn" />
           <div>
-            <h2>Texture Mapping Mode</h2>
-            <button id="textureImage">Image</button>
-            <button id="textureEnvirontment">Environment</button>
-            <button id="textureBump">Bump</button>
+            <div class="slider-text">Texture Mapping Mode</div>
+            <div>
+              <button id="textureImage">Image</button>
+              <button id="textureEnvirontment">Environment</button>
+              <button id="textureBump">Bump</button>
+            </div>
           </div>
-          <div class="slider-text">Animation</div>
-          <input type="checkbox" id="animation-btn" />
+        </div>
+        <br />
+
+        <div class="slide-group-sendi">
+          <div>
+            torso angle -180 <input id="slider0" type="range" min="-180" max="180" step="10" value="0" />
+            180
+          </div>
+          <br />
+
+          <div>
+            head1 angle -180 <input id="slider1" type="range" min="-180" max="180" step="10" value="0" />
+            180
+          </div>
+          <br />
+
+          <div id="slider2">
+            left upper arm angle -180 <input id="slider2" type="range" min="-180" max="180" step="10" value="0" />
+            180
+          </div>
+          <br />
+          <div>
+            left lower arm angle -180 <input id="slider3" type="range" min="-180" max="180" step="10" value="0" />
+            180
+          </div>
+          <br />
+          <div>
+            right upper arm angle -180 <input id="slider4" type="range" min="-180" max="180" step="10" value="0" />
+            180
+          </div>
+          <br />
+          <div>
+            right lower arm angle -180 <input id="slider5" type="range" min="-180" max="180" step="10" value="0" />
+            180
+          </div>
+          <br />
+          <div>
+            left upper leg angle -180 <input id="slider6" type="range" min="-180" max="180" step="10" value="0" />
+            180
+          </div>
+          <br />
+          <div>
+            left lower leg angle -180 <input id="slider7" type="range" min="-180" max="180" step="10" value="0" />
+            180
+          </div>
+          <br />
+          <div>
+            right upper leg angle -180 <input id="slider8" type="range" min="-180" max="180" step="10" value="0" />
+            180
+          </div>
+          <br />
+
+          <div>
+            right lower leg angle -180 <input id="slider9" type="range" min="-180" max="180" step="10" value="0" />
+            180
+          </div>
+          <br />
+
+          <div>
+            head2 angle -180 <input id="slider10" type="range" min="-180" max="180" step="10" value="0" />
+            180
+          </div>
+          <br />
+        </div>
+
+        <div style="text-align: center;">
           <div class="slider-text">Rotation</div>
           <div class="slide-group">
             <div class="slide-item">
@@ -238,161 +340,86 @@
               <input type="range" min="1" max="100" value="50" class="slider" id="rotate-y" />
               <p>Rotate Y</p>
             </div>
-            <div class="slider-text">Translation</div>
-            <div class="slide-group">
-              <div class="slide-item">
-                <input type="range" min="1" max="100" value="50" class="slider" id="translate-x" />
-                <p>Translate X</p>
-              </div>
-              <div class="slide-item">
-                <input type="range" min="1" max="100" value="50" class="slider" id="translate-y" />
-                <p>Translate Y</p>
-              </div>
-              <div class="slide-item">
-                <input type="range" min="1" max="100" value="50" class="slider" id="translate-z" />
-                <p>Translate Z</p>
-              </div>
+          </div>
+          <div class="slider-text">Translation</div>
+          <div class="slide-group">
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="translate-x" />
+              <p>Translate X</p>
             </div>
-            <div class="slider-text">Scaling</div>
-            <div class="slide-group">
-              <div class="slide-item">
-                <input type="range" min="1" max="100" value="50" class="slider" id="scale-x" />
-                <p>Scale X</p>
-              </div>
-              <div class="slide-item">
-                <input type="range" min="1" max="100" value="50" class="slider" id="scale-y" />
-                <p>Scale Y</p>
-              </div>
-              <div class="slide-item">
-                <input type="range" min="1" max="100" value="50" class="slider" id="scale-z" />
-                <p>Scale Z</p>
-              </div>
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="translate-y" />
+              <p>Translate Y</p>
             </div>
-            <div class="slider-text">Lighting</div>
-            <div class="slide-group">
-              <div class="slide-item">
-                <input type="range" min="1" max="100" value="50" class="slider" id="light-x" />
-                <p>Light X</p>
-              </div>
-              <div class="slide-item">
-                <input type="range" min="1" max="100" value="50" class="slider" id="light-y" />
-                <p>Light Y</p>
-              </div>
-              <div class="slide-item">
-                <input type="range" min="1" max="100" value="50" class="slider" id="light-z" />
-                <p>Light Z</p>
-              </div>
-            </div>
-            <div class="slide-group slide-kamera">
-              <div class="slide-item">
-                <input type="range" min="0" max="360" value="50" class="slider" id="camera" />
-                <p>Camera</p>
-              </div>
-              <div class="slide-item">
-                <input type="range" min="5" max="40" value="10" class="slider" id="zoom" />
-                <p>Zoom</p>
-              </div>
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="translate-z" />
+              <p>Translate Z</p>
             </div>
           </div>
-          <div class="slide-group-sendi">
-            <div>
-              torso angle -180 <input id="slider0" type="range" min="-180" max="180" step="10" value="0" />
-              180
+          <div class="slider-text">Scaling</div>
+          <div class="slide-group">
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="scale-x" />
+              <p>Scale X</p>
             </div>
-            <br />
-
-            <div>
-              head1 angle -180 <input id="slider1" type="range" min="-180" max="180" step="10" value="0" />
-              180
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="scale-y" />
+              <p>Scale Y</p>
             </div>
-            <br />
-
-            <div id="slider2">
-              left upper arm angle -180 <input id="slider2" type="range" min="-180" max="180" step="10" value="0" />
-              180
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="scale-z" />
+              <p>Scale Z</p>
             </div>
-            <br />
-            <div>
-              left lower arm angle -180 <input id="slider3" type="range" min="-180" max="180" step="10" value="0" />
-              180
+          </div>
+          <div class="slider-text">Lighting</div>
+          <div class="slide-group">
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="light-x" />
+              <p>Light X</p>
             </div>
-            <br />
-            <div>
-              right upper arm angle -180 <input id="slider4" type="range" min="-180" max="180" step="10" value="0" />
-              180
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="light-y" />
+              <p>Light Y</p>
             </div>
-            <br />
-            <div>
-              right lower arm angle -180 <input id="slider5" type="range" min="-180" max="180" step="10" value="0" />
-              180
+            <div class="slide-item">
+              <input type="range" min="1" max="100" value="50" class="slider" id="light-z" />
+              <p>Light Z</p>
             </div>
-            <br />
-            <div>
-              left upper leg angle -180 <input id="slider6" type="range" min="-180" max="180" step="10" value="0" />
-              180
+          </div>
+          <div class="slide-group slide-kamera">
+            <div class="slide-item">
+              <input type="range" min="0" max="360" value="50" class="slider" id="camera" />
+              <p>Camera</p>
             </div>
-            <br />
-            <div>
-              left lower leg angle -180 <input id="slider7" type="range" min="-180" max="180" step="10" value="0" />
-              180
+            <div class="slide-item">
+              <input type="range" min="5" max="40" value="10" class="slider" id="zoom" />
+              <p>Zoom</p>
             </div>
-            <br />
-            <div>
-              right upper leg angle -180 <input id="slider8" type="range" min="-180" max="180" step="10" value="0" />
-              180
-            </div>
-            <br />
-
-            <div>
-              right lower leg angle -180 <input id="slider9" type="range" min="-180" max="180" step="10" value="0" />
-              180
-            </div>
-            <br />
-
-            <div>
-              head2 angle -180 <input id="slider10" type="range" min="-180" max="180" step="10" value="0" />
-              180
-            </div>
-            <br />
           </div>
         </div>
       </div>
 
-      <div class="help">
-        <h2>Help</h2>
-      </div>
-      <textarea class="textarea" rows="20" cols="135" readonly>
-        - Untuk menampilkan objek, silahkan import file objek json yang ingin anda tampilkan pada program ini
-        - Untuk memilih texture yang ada pada objek, dapat menekan button salah satu opsi dari: 
-              1. Image : texture yang ditampilkan dengan menempelkan gambar secara langsung
-              2. Environtment      : texture yang ditampilkan dengan latar belakang environtment.
-              3. Bump : Memproyeksi texture yang ditampilkan seperti image, hanya saja terdapat sisi timbulnya.
-        - Untuk merubah warna objek, terdapat menu "Color". Pengguna dapat mengklik bagian kotak berwarna dan memilih warna. 
-          Setelah itu, cukup mengklik pada bagian model kembali.
-        - Untuk menambahkan efek shading, terdapat menu "Shading". Ceklist menu untuk menyalakan dan uncek untuk mematikan
-        - Untuk memberikan efek animation, silahkan centang checkbox animation yang ada pada program, sehingga objek akan bergerak.
-        - Untuk menggerakkan masing masing komponen objek, silahkan geser masing masing slider sesuai judulnya yang terletak di sebelah kanan program
-        - Untuk melakukan rotasi, dapat menggeser salah satu slider yang tersedia di menu "Rotation". 
-          Terdapat 3 jenis rotasi, yaitu terhadap sumbu x, sumbu y, dan sumbu z.
-        - Untuk melakukan translasi, dapat menggeser salah satu slider yang tersedia di menu "Translation". 
-          Terdapat 3 jenis translasi, yaitu terhadap sumbu x, sumbu y, dan sumbu z.
-        - Untuk melakukan skalar, dapat menggeser salah satu slider yang tersedia di menu "Scaling". 
-          Terdapat 3 jenis skalar, yaitu terhadap sumbu x, sumbu y, dan sumbu z.
-        - Untuk merubah posisi kamera, dapat menggeser slider di bawah menu "Camera".
-        - Untuk merubah persentase zoom, dapat menggeser slider di bawah menu "Zoom".
-      </textarea>
+
     </div>
-  </body>
-  <script src="src/model/object.mjs"></script>
-  <script src="src/helpers/mv.mjs"></script>
-  <script src="src/model/cube.mjs"></script>
-  <script src="src/helpers/texture.mjs"></script>
-  <script src="src/helpers/shading.mjs"></script>
-  <script src="src/helpers/modelHelper.js"></script>
-  <script src="src/helpers/matrix.mjs"></script>
-  <script src="src/helpers/helper.mjs"></script>
-  <script src="src/helpers/initShaders.mjs"></script>
-  <script src="src/helpers/webgl-utils.mjs"></script>
-  <script src="src/constants/const.mjs"></script>
-  <script src="src/index.mjs"></script>
+  </div>
+
+
+
+
+
+
+</body>
+<script src="src/model/object.mjs"></script>
+<script src="src/helpers/mv.mjs"></script>
+<script src="src/model/cube.mjs"></script>
+<script src="src/helpers/texture.mjs"></script>
+<script src="src/helpers/shading.mjs"></script>
+<script src="src/helpers/modelHelper.js"></script>
+<script src="src/helpers/matrix.mjs"></script>
+<script src="src/helpers/helper.mjs"></script>
+<script src="src/helpers/initShaders.mjs"></script>
+<script src="src/helpers/webgl-utils.mjs"></script>
+<script src="src/constants/const.mjs"></script>
+<script src="src/index.mjs"></script>
+
 </html>
