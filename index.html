@@ -141,6 +141,7 @@
 
       uniform float vIsTexture;
       uniform sampler2D uSampler;
+      uniform sampler2D uSampler2;
 
       uniform bool uShading;
       uniform bool uTexture;
@@ -182,9 +183,9 @@
           if(uTexture) {
             vec3 light_dir = normalize(ts_light_pos - ts_frag_pos);
             vec3 view_dir = normalize(ts_view_pos - ts_frag_pos);
-            vec3 albedo = texture2D(uSampler, vTextureCoord).rgb;
+            vec3 albedo = texture2D(uSampler2, vTextureCoord).rgb;
             vec3 ambient = 0.3 * albedo;
-            vec3 norm = normalize(texture2D(uSampler, vTextureCoord).rgb * 2.0 - 1.0);
+            vec3 norm = normalize(texture2D(uSampler2, vTextureCoord).rgb * 2.0 - 1.0);
             float diffuse = max(dot(light_dir, norm), 0.0);
             gl_FragColor = vec4((diffuse * albedo + ambient), 1.0);
           }

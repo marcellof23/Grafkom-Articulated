@@ -151,6 +151,7 @@ function init() {
       isShading: modelGL.gl.getUniformLocation(shaderProgram, "uShading"),
       isTexture: modelGL.gl.getUniformLocation(shaderProgram, "uTexture"),
       uSampler: modelGL.gl.getUniformLocation(shaderProgram, "uSampler"),
+      uSampler2: modelGL.gl.getUniformLocation(shaderProgram, "uSampler2"),
       uTexture: modelGL.gl.getUniformLocation(shaderProgram, "u_texture"),
       worldCameraposition: modelGL.gl.getUniformLocation(shaderProgram, "uWorldCameraPosition"),
       viewLocation: modelGL.gl.getUniformLocation(shaderProgram, "u_view"),
@@ -469,11 +470,13 @@ function drawScene() {
   // Tell WebGL to use our program when drawing
   modelGL.gl.useProgram(modelGL.programInfo.program);
 
+  modelGL.gl.deleteTexture(texture);
+
   // Tell WebGL we want to affect texture unit 0
-  //modelGL.gl.activeTexture(modelGL.gl.TEXTURE0);
+  modelGL.gl.activeTexture(modelGL.gl.TEXTURE0);
 
   // // Bind the texture to texture unit 0
-  // modelGL.gl.bindTexture(modelGL.gl.TEXTURE_2D, texture);
+  modelGL.gl.bindTexture(modelGL.gl.TEXTURE_2D, texture);
 
   // // Tell the shader we bound the texture to texture unit 0
   // modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uSampler, 0);
@@ -565,7 +568,7 @@ function drawScene() {
   if (textureButton.checked) {
     if (textureMenu == 0) {
       console.log("image mapping");
-      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uTexture, 1);
+      //modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uTexture, 1);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType1, 0);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType2, 0);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uSampler, 0);
@@ -577,16 +580,16 @@ function drawScene() {
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uTexture, 0);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType1, 1);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType2, 1);
-      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uSampler, 1);
+      //modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uSampler, 1);
     }
 
     // Bump Mapping
     else {
       console.log("Bump Mapping");
-      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uTexture, 1);
+      //modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uTexture, 1);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType1, 2);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType2, 2);
-      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uSampler, 0);
+      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uSampler2, 0);
     }
   }
   // console.log(textureMenu)
