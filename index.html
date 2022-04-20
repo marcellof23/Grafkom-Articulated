@@ -6,7 +6,6 @@
     <link rel="shortcut icon" href="#" />
     <link rel="stylesheet" href="style/main.css" />
     <script id="vertex-shader" type="x-shader/x-vertex">
-      precision mediump float;
       attribute vec4 aVertexPosition;
       attribute vec4 aVertexColor;
       attribute vec3 aVertexNormal;
@@ -81,13 +80,13 @@
           vTextureCoord = aTextureCoord;
         } else if (textureType1 == 1) {
           // Multiply the position by the matrix.
-          gl_Position = u_projection * u_view * u_world * a_position;
+          gl_Position = uProjectionMatrix * u_view * u_world * aVertexPosition;
 
           // send the view position to the fragment shader
-          v_worldPosition = (u_world * a_position).xyz;
+          v_worldPosition = (u_world * aVertexPosition).xyz;
 
           // orient the normals and pass to the fragment shader
-          v_worldNormal = mat3(u_world) * a_normal;
+          vWorldNormal = mat3(u_world) * aVertexNormal;
         }
         else if (textureType1 == 2) {
           gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
@@ -109,7 +108,7 @@
       }
     </script>
     <script id="fragment-shader" type="x-shader/x-fragment">
-      precision mediump float;
+      precision highp float;
       varying lowp vec4 vColor;
 
       varying vec3 vWorldPosition;
@@ -135,6 +134,13 @@
       varying vec3 ts_view_pos;
       varying vec3 ts_frag_pos;
 
+      varying vec3 v_worldPosition;
+      // The texture.
+      uniform samplerCube u_texture;
+
+      // The position of the camera
+      uniform vec3 u_worldCameraPosition;
+
       void main(void) {
           if (uShading) {
             gl_FragColor = vec4(vColor.rgb * vLighting, vColor.a);
@@ -142,20 +148,27 @@
             gl_FragColor = vColor;
           }
 
-           vec4 texelColor = texture2D(uSampler, vTextureCoord);
-           if(uTexture){
-             if(textureType2 == 0)
-              gl_FragColor = vec4(texelColor.rgb * vLighting, 1.);
-             else if(textureType2 == 2) {
-              vec3 light_dir = normalize(ts_light_pos - ts_frag_pos);
-              vec3 view_dir = normalize(ts_view_pos - ts_frag_pos);
-              vec3 albedo = texture2D(uSampler, vTextureCoord).rgb;
-              vec3 ambient = 0.3 * albedo;
-              vec3 norm = normalize(texture2D(uSampler, vTextureCoord).rgb * 2.0 - 1.0);
-              float diffuse = max(dot(light_dir, norm), 0.0);
-              gl_FragColor = vec4((diffuse * albedo + ambient), 1.0);
+          vec4 texelColor = texture2D(uSampler, vTextureCoord);
+          if(uTexture){
+              if(textureType2 == 0) {
+                gl_FragColor = vec4(texelColor.rgb * vLighting, 1.);
+              }
+              else if(textureType2 == 1) {
+                //vec3 worldNormal = normalize(vWorldNormal);
+                //vec3 eyeToSurfaceDir = normalize(v_worldPosition - u_worldCameraPosition);
+                //vec3 direction = reflect(eyeToSurfaceDir,worldNormal);
+                //gl_FragColor = textureCube(u_texture, direction);
+              }
+              else if(textureType2 == 2) {
+                vec3 light_dir = normalize(ts_light_pos - ts_frag_pos);
+                vec3 view_dir = normalize(ts_view_pos - ts_frag_pos);
+                vec3 albedo = texture2D(uSampler, vTextureCoord).rgb;
+                vec3 ambient = 0.3 * albedo;
+                vec3 norm = normalize(texture2D(uSampler, vTextureCoord).rgb * 2.0 - 1.0);
+                float diffuse = max(dot(light_dir, norm), 0.0);
+                gl_FragColor = vec4((diffuse * albedo + ambient), 1.0);
              }
-            }
+          }
            else {
              gl_FragColor = gl_FragColor;
           }

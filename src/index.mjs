@@ -155,6 +155,10 @@ function init() {
       worldCameraposition: modelGL.gl.getUniformLocation(shaderProgram, "uWorldCameraPosition"),
       textureType1: modelGL.gl.getUniformLocation(shaderProgram, "textureType1"),
       textureType2: modelGL.gl.getUniformLocation(shaderProgram, "textureType2"),
+      textureLocation: modelGL.gl.getUniformLocation(shaderProgram, "u_texture"),
+      viewLocation: modelGL.gl.getUniformLocation(shaderProgram, "u_view"),
+      worldLocation: modelGL.gl.getUniformLocation(shaderProgram, "u_world"),
+      worldCameraPositionLocation: modelGL.gl.getUniformLocation(shaderProgram, "u_worldCameraPosition"),
     },
   };
 
