@@ -115,6 +115,11 @@ function init() {
           mf.selectedIndex = menu_index;
           mf.click();
         }
+
+        setTextureType(modelGL.gl, 0);
+        if (!textureButton.checked) {
+          textureButton.click();
+        }
         render();
         // for (i = 0; i < numNodes; i++) initNodes(i);
 
@@ -386,7 +391,7 @@ async function render() {
   drawScene();
   // console.log("punten");
 
-  for (var i = idxStart; i < idxEnd; i++) {
+  for (var i = 0; i < numNodes; i++) {
     initNodes(i);
   }
 
