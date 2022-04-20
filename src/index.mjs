@@ -36,7 +36,7 @@ var fieldOfViewRadians = degToRad(60);
 var modelXRotationRadians = degToRad(0);
 var modelYRotationRadians = degToRad(0);
 
-let textureMenu = 2;
+let textureMenu = 1;
 
 function init() {
   // Retrieve  canvas element
@@ -151,7 +151,6 @@ function init() {
       isShading: modelGL.gl.getUniformLocation(shaderProgram, "uShading"),
       isTexture: modelGL.gl.getUniformLocation(shaderProgram, "uTexture"),
       uSampler: modelGL.gl.getUniformLocation(shaderProgram, "uSampler"),
-      uTexture: modelGL.gl.getUniformLocation(shaderProgram, "uTexture"),
       worldCameraposition: modelGL.gl.getUniformLocation(shaderProgram, "uWorldCameraPosition"),
       textureType1: modelGL.gl.getUniformLocation(shaderProgram, "textureType1"),
       textureType2: modelGL.gl.getUniformLocation(shaderProgram, "textureType2"),
@@ -167,7 +166,7 @@ function init() {
   viewMatrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -2, 1];
   modelGL.programInfo = programInfo;
 
-  texture = loadTexture(modelGL.gl, "/assets/bump.jpg");
+  texture = loadTextureEnvironment(modelGL.gl);
 
   modelGL.aspect = modelGL.gl.canvas.clientWidth / modelGL.gl.canvas.clientHeight;
   modelGL.ratio = modelGL.gl.canvas.width / modelGL.gl.canvas.height;
@@ -250,6 +249,8 @@ function init() {
     //requestAnimationFrame(render);
   });
 
+  console.log(textureMenu);
+
   setUpSlider();
 
   document.getElementById("colorpicker").addEventListener("change", function (e) {
@@ -274,61 +275,7 @@ function init() {
   };
   document.getElementById("textureEnvirontment").onclick = function () {
     textureMenu = 1;
-    texture = gl.createTexture();
-    const faceInfos = [
-      {
-        target: modelGL.gl.TEXTURE_CUBE_MAP_POSITIVE_X,
-        url: "resources/images/computer-history-museum/pos-x.jpg",
-      },
-      {
-        target: modelGL.gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
-        url: "resources/images/computer-history-museum/neg-x.jpg",
-      },
-      {
-        target: modelGL.gl.TEXTURE_CUBE_MAP_POSITIVE_Y,
-        url: "resources/images/computer-history-museum/pos-y.jpg",
-      },
-      {
-        target: modelGL.gl.TEXTURE_CUBE_MAP_NEGATIVE_Y,
-        url: "resources/images/computer-history-museum/neg-y.jpg",
-      },
-      {
-        target: modelGL.gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
-        url: "resources/images/computer-history-museum/pos-z.jpg",
-      },
-      {
-        target: modelGL.gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
-        url: "resources/images/computer-history-museum/neg-z.jpg",
-      },
-    ];
-
-    faceInfos.forEach((faceInfo) => {
-      const { target, url } = faceInfo;
-
-      // Upload the canvas to the cubemap face.
-      const level = 0;
-      const internalFormat = gl.RGBA;
-      const width = 512;
-      const height = 512;
-      const format = modelGL.gl.RGBA;
-      const type = modelGL.gl.UNSIGNED_BYTE;
-
-      // setup each face so it's immediately renderable
-      modelGL.gl.texImage2D(target, level, internalFormat, width, height, 0, format, type, null);
-
-      // Asynchronously load an image
-      const image = new Image();
-      image.src = url;
-      image.addEventListener("load", function () {
-        // Now that the image has loaded upload it to the texture.
-        modelGL.gl.bindTexture(modelGL.gl.TEXTURE_CUBE_MAP, texture);
-        modelGL.gl.texImage2D(target, level, internalFormat, format, type, image);
-        modelGL.gl.generateMipmap(modelGL.gl.TEXTURE_CUBE_MAP);
-      });
-    });
-
-    modelGL.gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
-    modelGL.gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+    texture = setTextureType(modelGL.gl, 1);
   };
   document.getElementById("textureBump").onclick = function () {
     textureMenu = 2;
@@ -533,7 +480,10 @@ function drawScene() {
   modelGL.gl.activeTexture(modelGL.gl.TEXTURE0);
 
   // Bind the texture to texture unit 0
-  modelGL.gl.bindTexture(modelGL.gl.TEXTURE_2D, texture);
+  if (textureMenu != 1) {
+    console.log("PUNTENNNN");
+    modelGL.gl.bindTexture(modelGL.gl.TEXTURE_2D, texture);
+  }
 
   // Tell the shader we bound the texture to texture unit 0
   modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uSampler, 0);
@@ -613,19 +563,39 @@ function drawScene() {
 
   traverse(torsoStart, arrayToMat4(modelViewMatrix), projectionMatrix, normalMatrix);
 
+  var cameraPosition = [0, 0, 2];
+  var target = [0, 0, 0];
+  var up = [0, 1, 0];
+  // Compute the camera's matrix using look at.
+  var cameraMatrix = mat4.create();
+  mat4.lookAt(cameraMatrix, cameraPosition, target, up);
+
+  // Make a view matrix from the camera matrix.
+  var viewMatrix = mat4.create();
+  mat4.invert(viewMatrix, cameraMatrix);
+
+  var worldMatrix = mat4.create();
+  mat4.rotate(worldMatrix, worldMatrix, modelXRotationRadians, [1, 0, 0]);
+  mat4.rotate(worldMatrix, worldMatrix, modelYRotationRadians, [0, 1, 0]);
+
+  var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+  mat4.perspective(projectionMatrix, fieldOfViewRadians, aspect, 1, 2000);
   // Set the shader uniforms
-  modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.viewMatrix, false, viewMatrix);
+  //modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.viewMatrix, false, viewMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
+  modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.viewLocation, false, viewMatrix);
+  modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.worldLocation, false, worldMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
   modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.isShading, shadingButton.checked);
   modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.isTexture, textureButton.checked);
 
+  //gl.uniform1i(modelGL.programInfo.uniformLocations.textureLocation, 0);
   //  Mapping
   if (textureButton.checked) {
     if (textureMenu == 0) {
       console.log("image mapping");
-      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uTexture, 1);
+      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureLocation, 1);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType1, 0);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType2, 0);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uSampler, 0);
@@ -634,19 +604,18 @@ function drawScene() {
     // Environment Mapping
     else if (textureMenu == 1) {
       console.log("Environment Mapping");
-      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uTexture, 0);
+      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureLocation, 0);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType1, 1);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType2, 1);
-      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uSampler, 1);
     }
 
     // Bump Mapping
     else {
       console.log("Bump Mapping");
-      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uTexture, 1);
+      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureLocation, 2);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType1, 2);
       modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.textureType2, 2);
-      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uSampler, 0);
+      modelGL.gl.uniform1i(modelGL.programInfo.uniformLocations.uSampler, 1);
     }
   }
   // console.log(textureMenu)
