@@ -208,6 +208,29 @@
         <label style="font-size: 20px">Animation</label>
         <input type="checkbox" id="animation-btn" />
       </div>
+      <div class="help">
+        <h2>Help</h2>
+      </div>
+      <textarea class="textarea" rows="20" cols="135" readonly>
+            - Untuk menampilkan objek, silahkan import file objek json yang ingin anda tampilkan pada program ini
+            - Untuk memilih texture yang ada pada objek, dapat menekan button salah satu opsi dari: 
+                  1. Image : texture yang ditampilkan dengan menempelkan gambar secara langsung
+                  2. Environtment      : texture yang ditampilkan dengan latar belakang environtment.
+                  3. Bump : Memproyeksi texture yang ditampilkan seperti image, hanya saja terdapat sisi timbulnya.
+            - Untuk merubah warna objek, terdapat menu "Color". Pengguna dapat mengklik bagian kotak berwarna dan memilih warna. 
+              Setelah itu, cukup mengklik pada bagian model kembali.
+            - Untuk menambahkan efek shading, terdapat menu "Shading". Ceklist menu untuk menyalakan dan uncek untuk mematikan
+            - Untuk memberikan efek animation, silahkan centang checkbox animation yang ada pada program, sehingga objek akan bergerak.
+            - Untuk menggerakkan masing masing komponen objek, silahkan geser masing masing slider sesuai judulnya yang terletak di sebelah kanan program
+            - Untuk melakukan rotasi, dapat menggeser salah satu slider yang tersedia di menu "Rotation". 
+              Terdapat 3 jenis rotasi, yaitu terhadap sumbu x, sumbu y, dan sumbu z.
+            - Untuk melakukan translasi, dapat menggeser salah satu slider yang tersedia di menu "Translation". 
+              Terdapat 3 jenis translasi, yaitu terhadap sumbu x, sumbu y, dan sumbu z.
+            - Untuk melakukan skalar, dapat menggeser salah satu slider yang tersedia di menu "Scaling". 
+              Terdapat 3 jenis skalar, yaitu terhadap sumbu x, sumbu y, dan sumbu z.
+            - Untuk merubah posisi kamera, dapat menggeser slider di bawah menu "Camera".
+            - Untuk merubah persentase zoom, dapat menggeser slider di bawah menu "Zoom".
+          </textarea>
     </div>
     <div class="column" style="padding:20px;">
 
@@ -379,35 +402,12 @@
 
     </div>
   </div>
-  </div>
-  </div>
 
 
 
-  <div class="help">
-    <h2>Help</h2>
-  </div>
-  <textarea class="textarea" rows="20" cols="135" readonly>
-        - Untuk menampilkan objek, silahkan import file objek json yang ingin anda tampilkan pada program ini
-        - Untuk memilih texture yang ada pada objek, dapat menekan button salah satu opsi dari: 
-              1. Image : texture yang ditampilkan dengan menempelkan gambar secara langsung
-              2. Environtment      : texture yang ditampilkan dengan latar belakang environtment.
-              3. Bump : Memproyeksi texture yang ditampilkan seperti image, hanya saja terdapat sisi timbulnya.
-        - Untuk merubah warna objek, terdapat menu "Color". Pengguna dapat mengklik bagian kotak berwarna dan memilih warna. 
-          Setelah itu, cukup mengklik pada bagian model kembali.
-        - Untuk menambahkan efek shading, terdapat menu "Shading". Ceklist menu untuk menyalakan dan uncek untuk mematikan
-        - Untuk memberikan efek animation, silahkan centang checkbox animation yang ada pada program, sehingga objek akan bergerak.
-        - Untuk menggerakkan masing masing komponen objek, silahkan geser masing masing slider sesuai judulnya yang terletak di sebelah kanan program
-        - Untuk melakukan rotasi, dapat menggeser salah satu slider yang tersedia di menu "Rotation". 
-          Terdapat 3 jenis rotasi, yaitu terhadap sumbu x, sumbu y, dan sumbu z.
-        - Untuk melakukan translasi, dapat menggeser salah satu slider yang tersedia di menu "Translation". 
-          Terdapat 3 jenis translasi, yaitu terhadap sumbu x, sumbu y, dan sumbu z.
-        - Untuk melakukan skalar, dapat menggeser salah satu slider yang tersedia di menu "Scaling". 
-          Terdapat 3 jenis skalar, yaitu terhadap sumbu x, sumbu y, dan sumbu z.
-        - Untuk merubah posisi kamera, dapat menggeser slider di bawah menu "Camera".
-        - Untuk merubah persentase zoom, dapat menggeser slider di bawah menu "Zoom".
-      </textarea>
-  </div>
+
+
+
 </body>
 <script src="src/model/object.mjs"></script>
 <script src="src/helpers/mv.mjs"></script>
