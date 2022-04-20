@@ -182,11 +182,6 @@ function init() {
     modelGL.rot.y = rotation;
     //requestAnimationFrame(render);
   });
-  document.getElementById("rotate-z").addEventListener("input", function (e) {
-    var rotation = (parseInt(document.getElementById("rotate-z").value) - 50) / 50;
-    modelGL.rot.z = rotation;
-    //requestAnimationFrame(render);
-  });
 
   document.getElementById("translate-x").addEventListener("input", function (e) {
     var translate = (5 * (parseInt(document.getElementById("translate-x").value) - 50)) / 100;
@@ -415,6 +410,7 @@ function drawScene() {
 
   modelGL.gl.clear(modelGL.gl.COLOR_BUFFER_BIT | modelGL.gl.DEPTH_BUFFER_BIT);
 
+  if (textureButton.checked) generateCubeVertice(modelGL, positions);
   projectionMatrix = mat4.create();
   modelViewMatrix = mat4.create();
 

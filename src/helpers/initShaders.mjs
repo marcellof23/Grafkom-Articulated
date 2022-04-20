@@ -65,6 +65,8 @@ function initBuffers(gl) {
   arr_indices = modelGL.cubePoints;
   arr_normals = modelGL.cubeNormals;
 
+  console.log("AAAAAAA");
+  console.log(arr_colors);
   const positionBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(arr_position), gl.STATIC_DRAW);

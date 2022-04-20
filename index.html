@@ -155,8 +155,6 @@
       varying vec3 ts_frag_pos;
 
       varying vec3 v_worldPosition;
-      // The texture.
-
 
       void main(void) {
         if(textureType2 == 0) {
@@ -222,6 +220,12 @@
           <input type="checkbox" id="shading" />
           <div class="slider-text">Texture</div>
           <input type="checkbox" id="texture-btn" />
+          <div>
+            <h2>Texture Mapping Mode</h2>
+            <button id="textureImage">Image</button>
+            <button id="textureEnvirontment">Environment</button>
+            <button id="textureBump">Bump</button>
+          </div>
           <div class="slider-text">Animation</div>
           <input type="checkbox" id="animation-btn" />
           <div class="slider-text">Rotation</div>
@@ -234,147 +238,140 @@
               <input type="range" min="1" max="100" value="50" class="slider" id="rotate-y" />
               <p>Rotate Y</p>
             </div>
-            <div class="slide-item">
-              <input type="range" min="1" max="100" value="50" class="slider" id="rotate-z" />
-              <p>Rotate Z</p>
+            <div class="slider-text">Translation</div>
+            <div class="slide-group">
+              <div class="slide-item">
+                <input type="range" min="1" max="100" value="50" class="slider" id="translate-x" />
+                <p>Translate X</p>
+              </div>
+              <div class="slide-item">
+                <input type="range" min="1" max="100" value="50" class="slider" id="translate-y" />
+                <p>Translate Y</p>
+              </div>
+              <div class="slide-item">
+                <input type="range" min="1" max="100" value="50" class="slider" id="translate-z" />
+                <p>Translate Z</p>
+              </div>
+            </div>
+            <div class="slider-text">Scaling</div>
+            <div class="slide-group">
+              <div class="slide-item">
+                <input type="range" min="1" max="100" value="50" class="slider" id="scale-x" />
+                <p>Scale X</p>
+              </div>
+              <div class="slide-item">
+                <input type="range" min="1" max="100" value="50" class="slider" id="scale-y" />
+                <p>Scale Y</p>
+              </div>
+              <div class="slide-item">
+                <input type="range" min="1" max="100" value="50" class="slider" id="scale-z" />
+                <p>Scale Z</p>
+              </div>
+            </div>
+            <div class="slider-text">Lighting</div>
+            <div class="slide-group">
+              <div class="slide-item">
+                <input type="range" min="1" max="100" value="50" class="slider" id="light-x" />
+                <p>Light X</p>
+              </div>
+              <div class="slide-item">
+                <input type="range" min="1" max="100" value="50" class="slider" id="light-y" />
+                <p>Light Y</p>
+              </div>
+              <div class="slide-item">
+                <input type="range" min="1" max="100" value="50" class="slider" id="light-z" />
+                <p>Light Z</p>
+              </div>
+            </div>
+            <div class="slide-group slide-kamera">
+              <div class="slide-item">
+                <input type="range" min="0" max="360" value="50" class="slider" id="camera" />
+                <p>Camera</p>
+              </div>
+              <div class="slide-item">
+                <input type="range" min="5" max="40" value="10" class="slider" id="zoom" />
+                <p>Zoom</p>
+              </div>
             </div>
           </div>
-          <div class="slider-text">Translation</div>
-          <div class="slide-group">
-            <div class="slide-item">
-              <input type="range" min="1" max="100" value="50" class="slider" id="translate-x" />
-              <p>Translate X</p>
+          <div class="slide-group-sendi">
+            <div>
+              torso angle -180 <input id="slider0" type="range" min="-180" max="180" step="10" value="0" />
+              180
             </div>
-            <div class="slide-item">
-              <input type="range" min="1" max="100" value="50" class="slider" id="translate-y" />
-              <p>Translate Y</p>
+            <br />
+
+            <div>
+              head1 angle -180 <input id="slider1" type="range" min="-180" max="180" step="10" value="0" />
+              180
             </div>
-            <div class="slide-item">
-              <input type="range" min="1" max="100" value="50" class="slider" id="translate-z" />
-              <p>Translate Z</p>
+            <br />
+
+            <div id="slider2">
+              left upper arm angle -180 <input id="slider2" type="range" min="-180" max="180" step="10" value="0" />
+              180
             </div>
-          </div>
-          <div class="slider-text">Scaling</div>
-          <div class="slide-group">
-            <div class="slide-item">
-              <input type="range" min="1" max="100" value="50" class="slider" id="scale-x" />
-              <p>Scale X</p>
+            <br />
+            <div>
+              left lower arm angle -180 <input id="slider3" type="range" min="-180" max="180" step="10" value="0" />
+              180
             </div>
-            <div class="slide-item">
-              <input type="range" min="1" max="100" value="50" class="slider" id="scale-y" />
-              <p>Scale Y</p>
+            <br />
+            <div>
+              right upper arm angle -180 <input id="slider4" type="range" min="-180" max="180" step="10" value="0" />
+              180
             </div>
-            <div class="slide-item">
-              <input type="range" min="1" max="100" value="50" class="slider" id="scale-z" />
-              <p>Scale Z</p>
+            <br />
+            <div>
+              right lower arm angle -180 <input id="slider5" type="range" min="-180" max="180" step="10" value="0" />
+              180
             </div>
-          </div>
-          <div class="slider-text">Lighting</div>
-          <div class="slide-group">
-            <div class="slide-item">
-              <input type="range" min="1" max="100" value="50" class="slider" id="light-x" />
-              <p>Light X</p>
+            <br />
+            <div>
+              left upper leg angle -180 <input id="slider6" type="range" min="-180" max="180" step="10" value="0" />
+              180
             </div>
-            <div class="slide-item">
-              <input type="range" min="1" max="100" value="50" class="slider" id="light-y" />
-              <p>Light Y</p>
+            <br />
+            <div>
+              left lower leg angle -180 <input id="slider7" type="range" min="-180" max="180" step="10" value="0" />
+              180
             </div>
-            <div class="slide-item">
-              <input type="range" min="1" max="100" value="50" class="slider" id="light-z" />
-              <p>Light Z</p>
+            <br />
+            <div>
+              right upper leg angle -180 <input id="slider8" type="range" min="-180" max="180" step="10" value="0" />
+              180
             </div>
-          </div>
-          <div class="slide-group slide-kamera">
-            <div class="slide-item">
-              <input type="range" min="0" max="360" value="50" class="slider" id="camera" />
-              <p>Camera</p>
+            <br />
+
+            <div>
+              right lower leg angle -180 <input id="slider9" type="range" min="-180" max="180" step="10" value="0" />
+              180
             </div>
-            <div class="slide-item">
-              <input type="range" min="5" max="40" value="10" class="slider" id="zoom" />
-              <p>Zoom</p>
+            <br />
+
+            <div>
+              head2 angle -180 <input id="slider10" type="range" min="-180" max="180" step="10" value="0" />
+              180
             </div>
+            <br />
           </div>
         </div>
-        <div class="slide-group-sendi">
-          <div>
-            torso angle -180 <input id="slider0" type="range" min="-180" max="180" step="10" value="0" />
-            180
-          </div>
-          <br />
-
-          <div>
-            head1 angle -180 <input id="slider1" type="range" min="-180" max="180" step="10" value="0" />
-            180
-          </div>
-          <br />
-
-          <div id="slider2">
-            left upper arm angle -180 <input id="slider2" type="range" min="-180" max="180" step="10" value="0" />
-            180
-          </div>
-          <br />
-          <div>
-            left lower arm angle -180 <input id="slider3" type="range" min="-180" max="180" step="10" value="0" />
-            180
-          </div>
-          <br />
-          <div>
-            right upper arm angle -180 <input id="slider4" type="range" min="-180" max="180" step="10" value="0" />
-            180
-          </div>
-          <br />
-          <div>
-            right lower arm angle -180 <input id="slider5" type="range" min="-180" max="180" step="10" value="0" />
-            180
-          </div>
-          <br />
-          <div>
-            left upper leg angle -180 <input id="slider6" type="range" min="-180" max="180" step="10" value="0" />
-            180
-          </div>
-          <br />
-          <div>
-            left lower leg angle -180 <input id="slider7" type="range" min="-180" max="180" step="10" value="0" />
-            180
-          </div>
-          <br />
-          <div>
-            right upper leg angle -180 <input id="slider8" type="range" min="-180" max="180" step="10" value="0" />
-            180
-          </div>
-          <br />
-
-          <div>
-            right lower leg angle -180 <input id="slider9" type="range" min="-180" max="180" step="10" value="0" />
-            180
-          </div>
-          <br />
-
-          <div>
-            head2 angle -180 <input id="slider10" type="range" min="-180" max="180" step="10" value="0" />
-            180
-          </div>
-          <br />
-        </div>
       </div>
-      <div>
-        <h2>Texture Mapping Mode</h2>
-        <button id="textureImage">Image</button>
-        <button id="textureEnvirontment">Environment</button>
-        <button id="textureBump">Bump</button>
-      </div>
+
       <div class="help">
         <h2>Help</h2>
       </div>
       <textarea class="textarea" rows="20" cols="135" readonly>
-        - Untuk memilih salah satu dari 3 objek hollow, silahkan memilih salah satu objek dalam pilihan Feature.
-        - Untuk dapat memilih bagaimana projeksi objek hollow tersebut, dapat mencek salah satu opsi dari: 
-              1. Orthographic : Pararel proyeksi, yang akan memproyeksi objek 3d ke dalam bentuk 2d.
-              2. Oblique      : Sama seperti orthographic, namun saat sudut lihat tidak pas 90 derajat.
-              3. Perspective  : Memproyeksi objek 3d tetap dalam 3d sehingga semakin jauh objek, semakin kecil objek tersebut.
+        - Untuk menampilkan objek, silahkan import file objek json yang ingin anda tampilkan pada program ini
+        - Untuk memilih texture yang ada pada objek, dapat menekan button salah satu opsi dari: 
+              1. Image : texture yang ditampilkan dengan menempelkan gambar secara langsung
+              2. Environtment      : texture yang ditampilkan dengan latar belakang environtment.
+              3. Bump : Memproyeksi texture yang ditampilkan seperti image, hanya saja terdapat sisi timbulnya.
         - Untuk merubah warna objek, terdapat menu "Color". Pengguna dapat mengklik bagian kotak berwarna dan memilih warna. 
           Setelah itu, cukup mengklik pada bagian model kembali.
         - Untuk menambahkan efek shading, terdapat menu "Shading". Ceklist menu untuk menyalakan dan uncek untuk mematikan
+        - Untuk memberikan efek animation, silahkan centang checkbox animation yang ada pada program, sehingga objek akan bergerak.
+        - Untuk menggerakkan masing masing komponen objek, silahkan geser masing masing slider sesuai judulnya yang terletak di sebelah kanan program
         - Untuk melakukan rotasi, dapat menggeser salah satu slider yang tersedia di menu "Rotation". 
           Terdapat 3 jenis rotasi, yaitu terhadap sumbu x, sumbu y, dan sumbu z.
         - Untuk melakukan translasi, dapat menggeser salah satu slider yang tersedia di menu "Translation". 
