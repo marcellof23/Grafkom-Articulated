@@ -410,7 +410,7 @@ function drawScene() {
 
   modelGL.gl.clear(modelGL.gl.COLOR_BUFFER_BIT | modelGL.gl.DEPTH_BUFFER_BIT);
 
-  if (textureButton.checked) generateCubeVertice(modelGL, positions);
+  if (!textureButton.checked) generateCubeVertice(modelGL, positions);
   projectionMatrix = mat4.create();
   modelViewMatrix = mat4.create();
 
